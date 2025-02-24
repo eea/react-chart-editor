@@ -3,15 +3,15 @@ import createPlotComponent from 'react-plotly.js/factory';
 import PropTypes from 'prop-types';
 import {DEFAULT_FONTS} from 'lib/constants';
 
-// import EditorControls from './EditorControls';
-// import DataSourcesEditor from './DataSourcesEditor';
+import EditorControls from './EditorControls';
+import DataSourcesEditor from './DataSourcesEditor';
 
 class PlotlyEditor extends Component {
   constructor(props) {
     super();
     this.state = {graphDiv: {}};
     this.editor = createRef();
-    // this.PlotComponent = createPlotComponent(props.plotly);
+    this.PlotComponent = createPlotComponent(props.plotly);
     this.handleRender = this.handleRender.bind(this);
   }
 
@@ -21,70 +21,62 @@ class PlotlyEditor extends Component {
       this.props.onRender(graphDiv.data, graphDiv.layout, graphDiv._transitionData._frames);
     }
   }
-
-  componentDidMount() {
-    console.log('HERE', this.editor);
-  }
-
   render() {
-    return <h1>Hello world</h1>;
+    return (
+      <div className="plotly_editor plotly-editor--theme-provider">
+        {!this.props.hideControls && (
+          <EditorControls
+            ref={this.editor}
+            customColors={this.props.customColors}
+            graphDiv={this.state.graphDiv}
+            dataSources={this.props.dataSources}
+            dataSourceOptions={this.props.dataSourceOptions}
+            defaults={this.props.defaults}
+            plotly={this.props.plotly}
+            onUpdate={this.props.onUpdate}
+            onUpdateDataSources={this.props.onUpdateDataSources}
+            advancedTraceTypeSelector={this.props.advancedTraceTypeSelector}
+            locale={this.props.locale}
+            traceTypesConfig={this.props.traceTypesConfig}
+            dictionaries={this.props.dictionaries}
+            showFieldTooltips={this.props.showFieldTooltips}
+            srcConverters={this.props.srcConverters}
+            makeDefaultTrace={this.props.makeDefaultTrace}
+            glByDefault={this.props.glByDefault}
+            mapBoxAccess={Boolean(this.props.config && this.props.config.mapboxAccessToken)}
+            fontOptions={this.props.fontOptions}
+            chartHelp={this.props.chartHelp}
+            customConfig={this.props.customConfig}
+          >
+            {this.props.children}
+          </EditorControls>
+        )}
+        <div className="grid_and_plot">
+          <DataSourcesEditor
+            data={this.props.data}
+            layout={this.props.layout}
+            dataSources={this.props.dataSources}
+            srcConverters={this.props.srcConverters}
+            onUpdate={this.editor.current?.handleUpdate.bind(this.editor.current)}
+          />
+          <div className="plot_panel">
+            <this.PlotComponent
+              data={this.props.data}
+              layout={this.props.layout}
+              frames={this.props.frames}
+              config={this.props.config}
+              useResizeHandler={this.props.useResizeHandler}
+              debug={this.props.debug}
+              onInitialized={this.handleRender}
+              onUpdate={this.handleRender}
+              style={{width: '100%', height: '100%'}}
+              divId={this.props.divId}
+            />
+          </div>
+        </div>
+      </div>
+    );
   }
-  // render() {
-  //   return (
-  //     <div className="plotly_editor plotly-editor--theme-provider">
-  //       {!this.props.hideControls && (
-  //         <EditorControls
-  //           ref={this.editor}
-  //           customColors={this.props.customColors}
-  //           graphDiv={this.state.graphDiv}
-  //           dataSources={this.props.dataSources}
-  //           dataSourceOptions={this.props.dataSourceOptions}
-  //           defaults={this.props.defaults}
-  //           plotly={this.props.plotly}
-  //           onUpdate={this.props.onUpdate}
-  //           onUpdateDataSources={this.props.onUpdateDataSources}
-  //           advancedTraceTypeSelector={this.props.advancedTraceTypeSelector}
-  //           locale={this.props.locale}
-  //           traceTypesConfig={this.props.traceTypesConfig}
-  //           dictionaries={this.props.dictionaries}
-  //           showFieldTooltips={this.props.showFieldTooltips}
-  //           srcConverters={this.props.srcConverters}
-  //           makeDefaultTrace={this.props.makeDefaultTrace}
-  //           glByDefault={this.props.glByDefault}
-  //           mapBoxAccess={Boolean(this.props.config && this.props.config.mapboxAccessToken)}
-  //           fontOptions={this.props.fontOptions}
-  //           chartHelp={this.props.chartHelp}
-  //           customConfig={this.props.customConfig}
-  //         >
-  //           {this.props.children}
-  //         </EditorControls>
-  //       )}
-  //       <div className="grid_and_plot">
-  //         <DataSourcesEditor
-  //           data={this.props.data}
-  //           layout={this.props.layout}
-  //           dataSources={this.props.dataSources}
-  //           srcConverters={this.props.srcConverters}
-  //           onUpdate={this.editor.current?.handleUpdate.bind(this.editor.current)}
-  //         />
-  //         <div className="plot_panel">
-  //           <this.PlotComponent
-  //             data={this.props.data}
-  //             layout={this.props.layout}
-  //             frames={this.props.frames}
-  //             config={this.props.config}
-  //             useResizeHandler={this.props.useResizeHandler}
-  //             debug={this.props.debug}
-  //             onInitialized={this.handleRender}
-  //             onUpdate={this.handleRender}
-  //             style={{width: '100%', height: '100%'}}
-  //             divId={this.props.divId}
-  //           />
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 }
 
 PlotlyEditor.propTypes = {

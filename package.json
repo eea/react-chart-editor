@@ -11,7 +11,7 @@
     "build:arrows": "node scripts/makeArrows.js",
     "build:translation-keys": "node scripts/findTranslationKeys.js",
     "build:combined-translation-keys": "npm run build:translation-keys && node scripts/combineTranslationKeys.js",
-    "build:css": "mkdirp lib && sass src/styles/main.scss:lib/react-chart-editor.css && postcss lib/react-chart-editor.css -o lib/react-chart-editor.min.css ",
+    "build:css": "mkdirp lib && sass --load-path=node_modules src/styles/main.scss:lib/react-chart-editor.css && postcss lib/react-chart-editor.css -o lib/react-chart-editor.min.css ",
     "build:js": "mkdirp lib && babel src --out-dir lib --ignore=__tests__/* --source-maps",
     "build": "BABEL_ENV=production rimraf lib && mkdir lib && npm run build:js && npm run build:css && npm run build:combined-translation-keys",
     "watch": "webpack serve --hot --mode development",

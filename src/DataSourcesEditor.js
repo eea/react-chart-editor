@@ -14,11 +14,11 @@ import {
   DragToScroll,
   DropdownMenu,
   Formulas,
-  ManualColumnMove,
   ManualColumnResize,
   UndoRedo,
 } from 'handsontable/plugins';
 import {EDITOR_ACTIONS, TRACE_SRC_ATTRIBUTES, LAYOUT_SRC_ATTRIBUTES} from './lib/constants';
+import {getColumnNames} from 'lib/dereference';
 
 // Register plugins
 registerPlugin(AutoColumnSize);
@@ -29,13 +29,13 @@ registerPlugin(ContextMenu);
 registerPlugin(DragToScroll);
 registerPlugin(DropdownMenu);
 registerPlugin(Formulas);
-registerPlugin(ManualColumnMove);
 registerPlugin(ManualColumnResize);
 registerPlugin(UndoRedo);
 
 const MIN_ROWS = 10;
 const MIN_COLS = 10;
 const MIN_GRID_HEIGHT = 50;
+const MIN_PLOT_HEIGHT = 450;
 
 function getContextMenuItemTrigger(hot, name, trigger) {
   return hot.getPlugin('ContextMenu').itemsFactory.predefinedItems[name]?.[trigger]?.bind(hot);
@@ -173,40 +173,48 @@ class DataSourcesEditor extends Component {
         if (source === 'loadData') {
           return;
         }
-        self.onUpdate(changes, 'edit');
+        self.onUpdate({
+          editedColumns: changes.map((change) => self.colHeaders[change[1]]),
+        });
       },
       afterUpdateSettings(settings) {
         if (settings.colHeaders && settings.colHeaders.length === self.colHeaders.length) {
-          self.onUpdate(
-            settings.colHeaders.reduce((acc, header, index) => {
-              if (!acc.old || !acc.new) {
-                acc.old = [];
-                acc.new = [];
-              }
-              if (header !== self.colHeaders[index]) {
-                acc.old.push(self.colHeaders[index]);
-                acc.new.push(header);
+          self.onUpdate({
+            renamedColumns: self.colHeaders.reduce((acc, header, index) => {
+              if (header !== settings.colHeaders[index]) {
+                acc.push(index);
               }
               return acc;
-            }, {}),
-            'edit-headers'
-          );
+            }, []),
+          });
         }
         if (settings.colHeaders && settings.colHeaders.length !== self.colHeaders.length) {
-          self.onUpdate(settings.colHeaders, 'replace-headers');
+          self.onUpdate({
+            removedColumns: self.colHeaders.reduce((acc, header) => {
+              if (!settings.colHeaders.includes(header)) {
+                acc.push(header);
+              }
+              return acc;
+            }, []),
+          });
         }
       },
       afterCreateCol(index, amount) {
-        self.onUpdate({index, amount}, 'create-col');
+        self.onUpdate({createdColumns: Array.from({length: amount}, (_, i) => index + i)});
       },
       afterCreateRow(index, amount) {
-        self.onUpdate({index, amount}, 'create-row');
+        self.onUpdate({createdRows: Array.from({length: amount}, (_, i) => index + i)});
       },
-      afterColumnMove(movedColumns, finalIndex, dropIndex, movePossible, orderChanged) {
-        self.onUpdate(
-          {movedColumns, finalIndex, dropIndex, movePossible, orderChanged},
-          'move-col'
-        );
+      afterRemoveCol(index, amount) {
+        const columns = Array.from({length: amount}, (_, i) => index + i);
+        self.onUpdate({
+          removedColumns: columns.map((index) => self.colHeaders[index]),
+        });
+      },
+      afterRemoveRow() {
+        self.onUpdate({
+          editedColumns: self.colHeaders,
+        });
       },
       afterOnCellMouseDown(e, coords) {
         const isButton = e.target?.nodeName === 'BUTTON';
@@ -271,31 +279,122 @@ class DataSourcesEditor extends Component {
     return dataSources;
   }
 
-  onUpdate(changes, source) {
+  onUpdate(changes) {
     requestAnimationFrame(() => {
-      const update = {};
+      const update = {
+        layout: {},
+        traces: [],
+      };
+      const prevColHeaders = this.colHeaders;
       const dataSources = this.serialize();
+      const dataSourceOptions = Object.keys(dataSources).map((name) => ({
+        value: name,
+        label: name,
+      }));
 
-      this.props.data.forEach((trace, i) => {
-        const attrs = getAttrsPath(trace, TRACE_SRC_ATTRIBUTES);
+      const {editedColumns = [], renamedColumns = [], removedColumns = []} = changes;
 
-        Object.entries(attrs).forEach(([attr]) => {
-          const srcAttr = getSrcAttr(trace, attr, this.props.srcConverters);
+      const attrs = [
+        ...this.props.data.reduce((acc, trace, index) => {
+          Object.entries(getAttrsPath(trace, TRACE_SRC_ATTRIBUTES)).forEach(([attr]) => {
+            acc.push({
+              attr,
+              index,
+              trace: true,
+            });
+          });
+          return acc;
+        }, []),
+        ...Object.entries(getAttrsPath(this.props.layout, LAYOUT_SRC_ATTRIBUTES)).reduce(
+          (acc, [attr]) => {
+            acc.push({
+              attr,
+              layout: true,
+            });
+            return acc;
+          },
+          []
+        ),
+      ];
 
-          switch (source) {
-            case 'edit': {
-              const colHeader = this.hot.getColHeader(changes.map((change) => change[1]));
-              if (inSrcAttr(srcAttr, colHeader)) {
-                const data = getData(trace, srcAttr, dataSources);
-                update[attr] = data;
-              }
-              break;
-            }
-            default:
-              break;
+      attrs.forEach(({attr, trace, layout, index}) => {
+        function updateAttr(attr, value) {
+          if (trace && !update.traces[index]) {
+            update.traces[index] = {};
+          }
+          if (trace) {
+            update.traces[index][attr] = value;
+          }
+          if (layout) {
+            update.layout[attr] = value;
+          }
+        }
+
+        const container = trace ? this.props.data[index] : this.props.layout;
+
+        const srcAttr = getSrcAttr(container, attr, this.props.srcConverters);
+
+        // Handle edited columns
+        editedColumns.forEach((col) => {
+          if (inSrcAttr(srcAttr, col)) {
+            const data = getData(container, srcAttr, dataSources);
+            updateAttr(attr, data);
           }
         });
-        console.log(update);
+
+        // Handle renamed columns
+        renamedColumns.forEach((colIndex) => {
+          const oldCol = prevColHeaders[colIndex];
+          const newCol = this.colHeaders[colIndex];
+          if (inSrcAttr(srcAttr, oldCol)) {
+            if (Array.isArray(srcAttr.value)) {
+              srcAttr.value = srcAttr.value.reduce((acc, value) => {
+                if (value === oldCol) {
+                  acc.push(newCol);
+                } else {
+                  acc.push(value);
+                }
+                return acc;
+              }, []);
+              updateAttr(srcAttr.key, srcAttr.value);
+              updateAttr(
+                `meta.columnNames.${attr}`,
+                getColumnNames(srcAttr.value, dataSourceOptions)
+              );
+            }
+            if (typeof srcAttr.value === 'string' && srcAttr.value === oldCol) {
+              srcAttr.value = newCol;
+              updateAttr(srcAttr.key, newCol);
+              updateAttr(
+                `meta.columnNames.${attr}`,
+                getColumnNames([srcAttr.value], dataSourceOptions)
+              );
+            }
+          }
+        });
+
+        // Handle removed columns
+        removedColumns.forEach((col) => {
+          if (inSrcAttr(srcAttr, col)) {
+            let data;
+            if (Array.isArray(srcAttr.value)) {
+              srcAttr.value = srcAttr.value.filter((value) => value !== col);
+              data = getData(container, srcAttr, dataSources);
+            }
+            if (typeof srcAttr.value === 'string' && srcAttr.value === col) {
+              srcAttr.value = null;
+              data = null;
+            }
+            updateAttr(srcAttr.key, srcAttr.value);
+            updateAttr(attr, data);
+          }
+        });
+      });
+
+      update.traces.forEach((update, i) => {
+        if (!Object.keys(update).length) {
+          return;
+        }
         this.props.onUpdate({
           type: EDITOR_ACTIONS.UPDATE_TRACES,
           payload: {
@@ -304,6 +403,15 @@ class DataSourcesEditor extends Component {
           },
         });
       });
+
+      if (Object.keys(update.layout).length) {
+        this.props.onUpdate({
+          type: EDITOR_ACTIONS.UPDATE_LAYOUT,
+          payload: {
+            update: update.layout,
+          },
+        });
+      }
 
       this.props.onUpdate({
         type: EDITOR_ACTIONS.UPDATE_DATA_SOURCES,
@@ -353,21 +461,35 @@ class DataSourcesEditor extends Component {
           className="grid_panel__resize-bar"
           onMouseDown={(e) => {
             e.preventDefault();
+            const gridEl = document.querySelector('.grid_and_plot .grid_panel');
+            const previewEl = document.querySelector('.grid_and_plot .grid_panel__resize-preview');
+            const plotEl = document.querySelector('.grid_and_plot .plot_panel');
             const startY = e.clientY;
             const startHeight = this.hot.getSettings().height;
+            let height = startHeight;
 
             const handleMouseMove = (e) => {
               e.preventDefault();
               const deltaY = e.clientY - startY;
-              const newHeight = Math.max(MIN_GRID_HEIGHT, startHeight + deltaY);
-              this.hot.updateSettings({
-                height: newHeight,
-              });
+              previewEl.style.top = deltaY + 'px';
+              height = Math.max(MIN_GRID_HEIGHT, startHeight + deltaY);
             };
 
             const handleMouseUp = () => {
               document.removeEventListener('mousemove', handleMouseMove);
               document.removeEventListener('mouseup', handleMouseUp);
+              previewEl.style.top = '0px';
+              this.hot.updateSettings({
+                height,
+              });
+              requestAnimationFrame(() => {
+                plotEl.style.height =
+                  Math.max(
+                    MIN_PLOT_HEIGHT,
+                    window.innerHeight - (gridEl.offsetHeight + previewEl.offsetHeight)
+                  ) + 'px';
+                window.dispatchEvent(new Event('resize'));
+              });
             };
 
             document.addEventListener('mousemove', handleMouseMove);
@@ -375,6 +497,7 @@ class DataSourcesEditor extends Component {
           }}
         >
           <div className="grid_panel__resize-divider" />
+          <div className="grid_panel__resize-preview" />
         </div>
       </>
     );
