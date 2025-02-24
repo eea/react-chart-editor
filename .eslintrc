@@ -59,7 +59,7 @@
     "import/no-duplicates": ["error"],
     "import/no-named-as-default": ["off"],
     "new-cap": ["error"],
-    "no-alert": [1],
+    "no-alert": ["off"],
     "no-caller": ["error"],
     "no-case-declarations": ["error"],
     "no-console": ["error"],

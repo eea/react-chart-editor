@@ -36,6 +36,8 @@ import striptags from './striptags';
 import {capitalize, lowerCase, upperCase, removeNonWord, camelCase, pascalCase} from './strings';
 import {getColorscale} from 'react-colorscales';
 import {templateString} from 'plotly.js/src/lib';
+import * as constants from './constants';
+import {getAttrsPath, getSrcAttr, getData, inSrcAttr} from './dataSources';
 
 const TOO_LIGHT_FACTOR = 0.8;
 
@@ -244,12 +246,17 @@ export {
   connectTransformToTrace,
   connectUpdateMenuToLayout,
   containerConnectedContextTypes,
+  constants,
   dereference,
   getAllAxes,
+  getAttrsPath,
+  getData,
+  getSrcAttr,
   getAxisTitle,
   getDisplayName,
   getFullTrace,
   getSubplotTitle,
+  inSrcAttr,
   isPlainObject,
   hasValidCustomConfigVisibilityRules,
   localize,

@@ -13,11 +13,6 @@ import ACCESS_TOKENS from '../accessTokens';
 
 // import {customConfigTest} from './customConfigTest';
 
-const dataSourceOptions = Object.keys(dataSources).map((name) => ({
-  value: name,
-  label: name,
-}));
-
 const config = {mapboxAccessToken: ACCESS_TOKENS.MAPBOX, editable: true};
 
 // eslint-disable-next-line no-unused-vars
@@ -110,6 +105,7 @@ class App extends Component {
       data: [],
       layout: {},
       frames: [],
+      dataSources,
       currentMockIndex: -1,
       mocks: [],
     };
@@ -165,6 +161,11 @@ class App extends Component {
   }
 
   render() {
+    const dataSourceOptions = Object.keys(this.state.dataSources).map((name) => ({
+      value: name,
+      label: name,
+    }));
+
     return (
       <div className="app">
         <PlotlyEditor
@@ -172,10 +173,11 @@ class App extends Component {
           layout={this.state.layout}
           frames={this.state.frames}
           config={config}
-          dataSources={dataSources}
+          dataSources={this.state.dataSources}
           dataSourceOptions={dataSourceOptions}
           plotly={plotly}
           onUpdate={this.updateState}
+          onUpdateDataSources={(dataSources) => this.setState({dataSources})}
           divId="gd"
           useResizeHandler
           debug

@@ -29,27 +29,32 @@ const StyleLayoutPanel = (props, {localize: _}) => (
         <ColorwayPicker
           label={_('Categorical')}
           attr="colorway"
-          disableCategorySwitch
           labelWidth={80}
+          editable
         />
         <ColorscalePicker
+          initialCategory="sequential"
           label={_('Sequential')}
           attr="colorscale.sequential"
           disableCategorySwitch
           labelWidth={80}
+          editable
         />
         <ColorscalePicker
+          initialCategory="divergent"
           label={_('Diverging')}
           attr="colorscale.diverging"
-          initialCategory="divergent"
           disableCategorySwitch
           labelWidth={80}
+          editable
         />
         <ColorscalePicker
+          initialCategory="sequential"
           label={_('Negative Sequential')}
           attr="colorscale.sequentialminus"
           disableCategorySwitch
           labelWidth={80}
+          editable
         />
       </PlotlySection>
       <PlotlySection name={_('Text')} attr="font.family">
@@ -87,6 +92,12 @@ const StyleLayoutPanel = (props, {localize: _}) => (
       <Numeric label={_('Font Size')} attr="title.font.size" units="px" />
       <ColorPicker label={_('Font Color')} attr="title.font.color" />
       <Numeric label={_('Horizontal Position')} showSlider step={0.02} attr="title.x" />
+      <PlotlySection name={_('Subtitle')} attr="title.subtitle">
+        <TextEditor attr="title.subtitle.text" />
+        <FontSelector label={_('Typeface')} attr="title.subtitle.font.family" clearable={false}/>
+        <Numeric label={_('Font Size')} attr="title.subtitle.font.size" units="px" />
+        <ColorPicker label={_('Font Color')} attr="title.subtitle.font.color"/>
+      </PlotlySection>
     </PlotlyFold>
 
     <PlotlyFold name={_('Modebar')}>

@@ -479,8 +479,8 @@ export const PositioningNumeric = connectToContainer(UnconnectedNumericOrDate, {
     ) {
       plotProps.units = '%';
       plotProps.showSlider = true;
-      plotProps.max = 100;
-      plotProps.min = 0;
+      plotProps.max = 200;
+      plotProps.min = -100;
       plotProps.step = 1;
       if (isNumeric(fullValue)) {
         plotProps.fullValue = Math.round(100 * fullValue);

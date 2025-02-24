@@ -132,8 +132,10 @@ class UnconnectedMarkerColor extends Component {
           <ColorscalePicker
             suppressMultiValuedMessage
             attr="marker.colorscale"
+            initialCategory="sequential"
             updatePlot={this.setColorScale}
             colorscale={this.state.colorscale}
+            editable
           />
         )}
       </Field>

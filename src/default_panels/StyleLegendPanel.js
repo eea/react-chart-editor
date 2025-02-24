@@ -33,6 +33,7 @@ const StyleLegendPanel = (props, {localize: _}) => (
         <FontSelector label={_('Typeface')} attr="legend.font.family" />
         <Numeric label={_('Size')} attr="legend.font.size" units="px" />
         <ColorPicker label={_('Color')} attr="legend.font.color" />
+        <Numeric label={_('Indentation')} attr="legend.indentation" units="px" />
       </PlotlySection>
       <PlotlySection name={_('Legend Box')}>
         <Numeric label={_('Border Width')} attr="legend.borderwidth" units="px" />
@@ -51,7 +52,7 @@ const StyleLegendPanel = (props, {localize: _}) => (
             {label: _('Right'), value: 'right'},
           ]}
         />
-        <Numeric label={_('Position')} showSlider step={0.02} attr="legend.x" />
+        <Numeric label={_('Position')} showSlider step={0.02} min={-1} max={2} attr="legend.x" />
       </PlotlySection>
       <PlotlySection name={_('Vertical Positioning')}>
         <Dropdown
@@ -65,7 +66,7 @@ const StyleLegendPanel = (props, {localize: _}) => (
             {label: _('Bottom'), value: 'bottom'},
           ]}
         />
-        <Numeric label={_('Position')} showSlider step={0.02} attr="legend.y" />
+        <Numeric label={_('Position')} showSlider step={0.02} min={-1} max={2} attr="legend.y" />
         <Dropdown
           label={_('Text Alignment')}
           clearable={false}
@@ -106,6 +107,26 @@ const StyleLegendPanel = (props, {localize: _}) => (
           ]}
         />
         <Numeric label={_('Gap Between Groups')} attr="legend.tracegroupgap" units="px" />
+      </PlotlySection>
+      <PlotlySection name={_('Interactions')}>
+        <Dropdown
+          label={_('Legend item click')}
+          attr="legend.itemclick"
+          options={[
+            {label: _('Toggle'), value: 'toggle'},
+            {label: _('Toggle others'), value: 'toggleothers'},
+            {label: _('Disabled'), value: false},
+          ]}
+        />
+        <Dropdown
+          label={_('Legend item double click')}
+          attr="legend.itemdoubleclick"
+          options={[
+            {label: _('Toggle'), value: 'toggle'},
+            {label: _('Toggle others'), value: 'toggleothers'},
+            {label: _('Disabled'), value: false},
+          ]}
+        />
       </PlotlySection>
     </PlotlyFold>
   </TraceRequiredPanel>

@@ -103,7 +103,7 @@ const StyleTracesPanel = (props, {localize: _}) => (
       mode="trace"
     >
       <LayoutSection attr="name">
-        <ColorwayPicker label={_('Colors')} attr="piecolorway" />
+        <ColorwayPicker label={_('Colors')} attr="piecolorway" editable />
         <Radio
           label={_('Extended Colors')}
           attr="extendpiecolors"
@@ -112,8 +112,8 @@ const StyleTracesPanel = (props, {localize: _}) => (
             {label: _('Off'), value: false},
           ]}
         />
-        <ColorwayPicker label={_('Colors')} attr="sunburstcolorway" />
-        <ColorwayPicker label={_('Colors')} attr="treemapcolorway" />
+        <ColorwayPicker label={_('Colors')} attr="sunburstcolorway" editable />
+        <ColorwayPicker label={_('Colors')} attr="treemapcolorway" editable />
         <Radio
           label={_('Extended Colors')}
           attr="extendsunburstcolors"
@@ -130,7 +130,7 @@ const StyleTracesPanel = (props, {localize: _}) => (
             {label: _('Off'), value: false},
           ]}
         />
-        <ColorwayPicker label={_('Colors')} attr="funnelareacolorway" />
+        <ColorwayPicker label={_('Colors')} attr="funnelareacolorway" editable />
         <Radio
           label={_('Extended Colors')}
           attr="extendfunnelareacolors"

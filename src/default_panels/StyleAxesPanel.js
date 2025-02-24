@@ -23,6 +23,8 @@ import {
   TickFormat,
 } from '../components';
 
+import { HoverColor} from '../components/fields/derived';
+
 class StyleAxesPanel extends Component {
   render() {
     const {localize: _} = this.context;
@@ -33,9 +35,18 @@ class StyleAxesPanel extends Component {
           axisFilter={(axis) => !(axis._name.includes('angular') || axis._subplot.includes('geo'))}
         >
           <TextEditor attr="title.text" />
+          <Numeric label={_('Standoff')} attr="title.standoff" units="px" />
           <FontSelector label={_('Typeface')} attr="title.font.family" />
           <Numeric label={_('Font Size')} attr="title.font.size" units="px" />
           <ColorPicker label={_('Font Color')} attr="title.font.color" />
+          <Radio
+            label={_('Position')}
+            attr="title.position"
+            options={[
+              {label: _('Vertical'), value: 'vertical'},
+              {label: _('Horizontal'), value: 'horizontal'},
+            ]}
+          />
         </AxesFold>
 
         <AxesFold name={_('Range')}>
@@ -63,13 +74,14 @@ class StyleAxesPanel extends Component {
             <AxesRange label={_('Min')} attr="range[0]" />
             <AxesRange label={_('Max')} attr="range[1]" />
             <Numeric label={_('Min')} attr="min" />
-          </PlotlySection>
-          <PlotlySection name={_('Zoom Interactivity')} attr="fixedrange">
-            <Radio
-              attr="fixedrange"
+            <Dropdown
+              attr="rangemode"
+              label={_('Range Mode')}
+              clearable={false}
               options={[
-                {label: _('Enable'), value: false},
-                {label: _('Disable'), value: true},
+                {label: _('Normal'), value: 'normal'},
+                {label: _('To Zero'), value: 'tozero'},
+                {label: _('Non-Negative'), value: 'nonnegative'},
               ]}
             />
           </PlotlySection>
@@ -211,20 +223,27 @@ class StyleAxesPanel extends Component {
                   {label: _('180'), value: 180},
                 ]}
               />
-
               <TickFormat
                 label={_('Label Format')}
                 attr="tickformat"
                 dafaultOpt=""
                 clearable={false}
               />
-              <Radio
-                label={_('Separate Thousands')}
-                attr="separatethousands"
-                options={[
-                  {label: _('True'), value: true},
-                  {label: _('False'), value: false},
-                ]}
+              <TickFormat
+                label={_('Hover Format')}
+                attr="hoverformat"
+                dafaultOpt=""
+                clearable={false}
+              />
+              <Numeric
+                label={_('Label Shift')}
+                attr="ticklabelshift"
+                units="px"
+              />
+              <Numeric
+                label={_('Label Standoff')}
+                attr="ticklabelstandoff"
+                units="px"
               />
               <Dropdown
                 label={_('Exponents')}
@@ -369,7 +388,10 @@ class StyleAxesPanel extends Component {
           </PlotlySection>
         </AxesFold>
 
-        <AxesFold name={_('Range Slider')} axisFilter={(axis) => axis._subplot.includes('xaxis')}>
+        <AxesFold
+          name={_('Range Slider')}
+          axisFilter={(axis) => axis._subplot.includes('xaxis')}
+        >
           <RangesliderVisible
             attr="rangeslider.visible"
             options={[
@@ -378,14 +400,26 @@ class StyleAxesPanel extends Component {
             ]}
           />
           <NumericFraction label={_('Height')} attr="rangeslider.thickness" />
-          <ColorPicker label={_('Background Color')} attr="rangeslider.bgcolor" />
-          <Numeric label={_('Border Width')} attr="rangeslider.borderwidth" units="px" />
-          <ColorPicker label={_('Border Color')} attr="rangeslider.bordercolor" />
+          <ColorPicker
+            label={_('Background Color')}
+            attr="rangeslider.bgcolor"
+          />
+          <Numeric
+            label={_('Border Width')}
+            attr="rangeslider.borderwidth"
+            units="px"
+          />
+          <ColorPicker
+            label={_('Border Color')}
+            attr="rangeslider.bordercolor"
+          />
         </AxesFold>
 
         <AxesFold
           name={_('Timescale Buttons')}
-          axisFilter={(axis) => axis._subplot.includes('xaxis') && axis.type === 'date'}
+          axisFilter={(axis) =>
+            axis._subplot.includes('xaxis') && axis.type === 'date'
+          }
         >
           <Radio
             attr="rangeselector.visible"
@@ -480,17 +514,43 @@ class StyleAxesPanel extends Component {
               {label: _('Hide'), value: false},
             ]}
           />
-          <Radio
-            attr="spikesides"
-            label={_('Show Sides')}
+          <Dropdown
+            attr="spikemode"
+            label={_('Mode')}
             options={[
-              {label: _('Show'), value: true},
-              {label: _('Hide'), value: false},
+              {label: _('To Axis'), value: 'toaxis'},
+              {label: _('To Marker'), value: 'marker'},
+              {label: _('Across'), value: 'across'},
             ]}
           />
-
+          <Dropdown
+            attr="spikedash"
+            label={_('Dash')}
+            options={[
+              {label: _('Dash'), value: 'dash'},
+              {label: _('Solid'), value: 'solid'},
+              {label: _('Dot'), value: 'dot'},
+              {label: _('Long Dash'), value: 'longdash'},
+              {label: _('Dash Dot'), value: 'dashdot'},
+              {label: _('Long Dash Dot'), value: 'longdashdot'},
+            ]}
+          />
+          <Dropdown
+            attr="spikesnap"
+            label={_('Snap')}
+            options={[
+              {label: _('Hovered data'), value: 'hovered data'},
+              {label: _('Data'), value: 'data'},
+              {label: _('Cursor'), value: 'cursor'},
+            ]}
+          />
           <Numeric label={_('Thickness')} attr="spikethickness" units="px" />
-          <ColorPicker label={_('Color')} attr="spikecolor" />
+          <HoverColor
+            label={_('Color')}
+            attr="spikecolor"
+            defaultColor="#808285"
+            handleEmpty
+          />
         </AxesFold>
       </LayoutPanel>
     );

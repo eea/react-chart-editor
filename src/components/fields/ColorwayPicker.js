@@ -1,4 +1,4 @@
-import ColorscalePickerWidget from '../widgets/ColorscalePicker';
+import ColorscalePicker from '../widgets/ColorscalePicker';
 import Field from './Field';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
@@ -8,11 +8,13 @@ class UnconnectedColorwayPicker extends Component {
   render() {
     return (
       <Field {...this.props}>
-        <ColorscalePickerWidget
+        <ColorscalePicker
           selected={this.props.fullValue}
           onColorscaleChange={this.props.updatePlot}
-          initialCategory="categorical"
+          initialCategory={this.props.initialCategory || 'categorical'}
           disableCategorySwitch={this.props.disableCategorySwitch}
+          attr={this.props.attr}
+          editable={this.props.editable}
         />
       </Field>
     );

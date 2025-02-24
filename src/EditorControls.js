@@ -44,11 +44,13 @@ class EditorControls extends Component {
     return {
       advancedTraceTypeSelector: this.props.advancedTraceTypeSelector,
       config: gd._context,
+      customColors: this.props.customColors || [],
       srcConverters: this.props.srcConverters,
       data: gd.data,
       dataSourceComponents: this.props.dataSourceComponents,
       dataSourceOptions: this.props.dataSourceOptions,
       dataSources: this.props.dataSources,
+      defaults: this.props.defaults || {},
       dictionaries: this.props.dictionaries || {},
       localize: this.localize,
       frames: gd._transitionData ? gd._transitionData._frames : [],
@@ -149,6 +151,12 @@ class EditorControls extends Component {
             Object.assign({}, graphDiv.layout),
             graphDiv._transitionData._frames
           );
+        }
+        break;
+
+      case EDITOR_ACTIONS.UPDATE_DATA_SOURCES:
+        if (this.props.onUpdateDataSources) {
+          this.props.onUpdateDataSources(payload.dataSources);
         }
         break;
 
@@ -370,9 +378,7 @@ class EditorControls extends Component {
     return (
       <div
         className={
-          bem('editor_controls') +
-          ' plotly-editor--theme-provider' +
-          `${this.props.className ? ` ${this.props.className}` : ''}`
+          bem('editor_controls') + `${this.props.className ? ` ${this.props.className}` : ''}`
         }
       >
         <ModalProvider>
@@ -403,6 +409,7 @@ EditorControls.propTypes = {
   beforeUpdateTraces: PropTypes.func,
   children: PropTypes.node,
   className: PropTypes.string,
+  customColors: PropTypes.array,
   srcConverters: PropTypes.shape({
     toSrc: PropTypes.func.isRequired,
     fromSrc: PropTypes.func.isRequired,
@@ -410,10 +417,12 @@ EditorControls.propTypes = {
   dataSourceComponents: PropTypes.object,
   dataSourceOptions: PropTypes.array,
   dataSources: PropTypes.object,
+  defaults: PropTypes.object,
   dictionaries: PropTypes.object,
   graphDiv: PropTypes.object,
   locale: PropTypes.string,
   onUpdate: PropTypes.func,
+  onUpdateDataSources: PropTypes.func,
   plotly: PropTypes.object,
   showFieldTooltips: PropTypes.bool,
   traceTypesConfig: PropTypes.object,
@@ -439,6 +448,7 @@ EditorControls.defaultProps = {
 EditorControls.childContextTypes = {
   advancedTraceTypeSelector: PropTypes.bool,
   config: PropTypes.object,
+  customColors: PropTypes.array,
   srcConverters: PropTypes.shape({
     toSrc: PropTypes.func.isRequired,
     fromSrc: PropTypes.func.isRequired,
@@ -447,6 +457,7 @@ EditorControls.childContextTypes = {
   dataSourceComponents: PropTypes.object,
   dataSourceOptions: PropTypes.array,
   dataSources: PropTypes.object,
+  defaults: PropTypes.object,
   dictionaries: PropTypes.object,
   frames: PropTypes.array,
   fullData: PropTypes.array,

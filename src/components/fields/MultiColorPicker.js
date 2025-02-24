@@ -111,6 +111,7 @@ class UnconnectedMultiColorPicker extends Component {
               updatePlot={this.setColors}
               fullValue={this.props.fullValue}
               initialCategory={'categorical'}
+              editable
             />
           )}
         </Field>

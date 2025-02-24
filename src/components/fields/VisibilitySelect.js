@@ -44,6 +44,7 @@ export class UnconnectedVisibilitySelect extends Component {
             fullValue={this.mode}
             updatePlot={this.setMode}
             clearable={clearable}
+            onChange={this.props.onChange}
           />
         ) : (
           <Radio
@@ -52,6 +53,7 @@ export class UnconnectedVisibilitySelect extends Component {
             options={options}
             fullValue={this.mode}
             updatePlot={this.setMode}
+            onChange={this.props.onChange}
           />
         )}
         {(Array.isArray(showOn) && showOn.includes(this.mode)) || this.mode === showOn
@@ -65,6 +67,7 @@ export class UnconnectedVisibilitySelect extends Component {
 UnconnectedVisibilitySelect.propTypes = {
   fullValue: PropTypes.any,
   updatePlot: PropTypes.func,
+  onChange: PropTypes.func,
   dropdown: PropTypes.bool,
   clearable: PropTypes.bool,
   showOn: PropTypes.oneOfType([

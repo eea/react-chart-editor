@@ -1,4 +1,4 @@
-import ColorscalePickerWidget from '../widgets/ColorscalePicker';
+import ColorscalePicker from '../widgets/ColorscalePicker';
 import Field from './Field';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
@@ -23,13 +23,15 @@ export class UnconnectedColorscalePicker extends Component {
         }),
         colorscaleType
       );
-      this.context.onUpdate({
-        type: EDITOR_ACTIONS.UPDATE_TRACES,
-        payload: {
-          update: {autocolorscale: false},
-          traceIndexes: [this.props.fullContainer.index],
-        },
-      });
+      if (this.props.fullContainer.index !== undefined) {
+        this.context.onUpdate({
+          type: EDITOR_ACTIONS.UPDATE_TRACES,
+          payload: {
+            update: {autocolorscale: false},
+            traceIndexes: [this.props.fullContainer.index],
+          },
+        });
+      }
     }
   }
 
@@ -39,11 +41,12 @@ export class UnconnectedColorscalePicker extends Component {
 
     return (
       <Field {...this.props} fieldContainerClassName="field__colorscale">
-        <ColorscalePickerWidget
+        <ColorscalePicker
           selected={colorscale}
           onColorscaleChange={this.onUpdate}
           initialCategory={this.props.initialCategory}
           disableCategorySwitch={this.props.disableCategorySwitch}
+          editable={this.props.editable}
         />
       </Field>
     );

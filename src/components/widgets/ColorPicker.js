@@ -38,6 +38,7 @@ class Custom extends Component {
 Custom.propTypes = {
   rgb: PropTypes.object,
   onChangeComplete: PropTypes.func,
+  onVisibilityChange: PropTypes.func,
 };
 
 const CustomColorPicker = customPicker(Custom);
@@ -65,7 +66,12 @@ class ColorPicker extends Component {
   }
 
   toggleVisible() {
-    this.setState({isVisible: !this.state.isVisible});
+    this.setState(
+      (prevState) => ({isVisible: !prevState.isVisible}),
+      () => {
+        this.props.onVisibilityChange?.(this.state.isVisible);
+      }
+    );
   }
 
   render() {
@@ -77,7 +83,7 @@ class ColorPicker extends Component {
 
     // Convert rgba to rgb if necessary
     const rgbString =
-      selectedColor._a !== 0
+      selectedColor._a >= 0
         ? selectedColor.toRgbString()
         : `rgb(${selectedColor._r},${selectedColor._g},${selectedColor._b})`;
 
@@ -111,6 +117,7 @@ class ColorPicker extends Component {
 
 ColorPicker.propTypes = {
   onColorChange: PropTypes.func.isRequired,
+  onVisibilityChange: PropTypes.func,
   selectedColor: PropTypes.string,
 };
 

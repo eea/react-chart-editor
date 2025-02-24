@@ -1,4 +1,4 @@
-import ColorPickerWidget from '../widgets/ColorPicker';
+import ColorPicker from '../widgets/ColorPicker';
 import Field from './Field';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
@@ -8,21 +8,29 @@ export class UnconnectedColorPicker extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      empty: !this.props.fullValue && this.props.handleEmpty,
+      colorComponentVisibility: false,
     };
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+  }
+
+  handleVisibilityChange(isVisible) {
+    const newColorComponentVisibility = isVisible;
+    this.setState({
+      colorComponentVisibility: newColorComponentVisibility,
+    });
   }
 
   render() {
     const {localize: _} = this.context;
+    const empty = !this.props.fullValue && this.props.handleEmpty;
 
-    if (this.state.empty) {
+    if (empty) {
       return (
         <Field {...this.props}>
           <div className="js-test-info">
             {_('This color is computed from other parts of the figure but you can')}{' '}
             <a
               onClick={() => {
-                this.setState({empty: false});
                 this.props.updatePlot(this.props.defaultColor);
               }}
             >
@@ -36,9 +44,25 @@ export class UnconnectedColorPicker extends Component {
 
     return (
       <Field {...this.props}>
-        <ColorPickerWidget
+        {this.props.handleEmpty && (
+          <div className="js-test-info" style={{marginBottom: '0.5rem'}}>
+            This color can be computed from other parts of the figure by{' '}
+            <a
+              onClick={() => {
+                this.props.updatePlot(null);
+              }}
+            >
+              clearing it
+            </a>
+            .
+          </div>
+        )}
+        <ColorPicker
           selectedColor={this.props.fullValue}
           onColorChange={this.props.updatePlot}
+          onVisibilityChange={(isVisible) =>
+            this.handleVisibilityChange(isVisible)
+          }
         />
       </Field>
     );

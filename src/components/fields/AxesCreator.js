@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import {EDITOR_ACTIONS} from 'lib/constants';
 import Button from '../widgets/Button';
 import {PlusIcon} from 'plotly-icons';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   connectToContainer,
   traceTypeToAxisType,
@@ -46,6 +47,17 @@ class UnconnectedAxisCreator extends Component {
       type: EDITOR_ACTIONS.UPDATE_LAYOUT,
       payload: {
         update: {
+          ...Object.keys({
+            ...(this.context.defaults.axis || {}),
+          }).reduce((acc, key) => {
+            acc[`${attr + (lastAxisNumber + 1)}.${key}`] = cloneDeep(
+              this.context.defaults.axis[key]
+            );
+            return acc;
+          }, {}),
+          [`${attr + (lastAxisNumber + 1)}.showgrid`]: false,
+          [`${attr + (lastAxisNumber + 1)}.showticklabels`]: false,
+          [`${attr + (lastAxisNumber + 1)}.zeroline`]: false,
           [`${attr + (lastAxisNumber + 1)}.side`]: side,
           [`${attr + (lastAxisNumber + 1)}.overlaying`]: !(attr === 'yaxis' || attr === 'xaxis')
             ? null
@@ -112,6 +124,7 @@ UnconnectedAxisCreator.propTypes = {
 
 UnconnectedAxisCreator.contextTypes = {
   fullLayout: PropTypes.object,
+  defaults: PropTypes.object,
   data: PropTypes.array,
   fullData: PropTypes.array,
   onUpdate: PropTypes.func,

@@ -3,6 +3,7 @@ import {LayoutPanel} from './derived';
 import {PanelMessage} from './PanelEmpty';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 import {connectAnnotationToLayout, getParsedTemplateString} from 'lib';
 
 const AnnotationFold = connectAnnotationToLayout(PlotlyFold);
@@ -10,6 +11,7 @@ const AnnotationFold = connectAnnotationToLayout(PlotlyFold);
 class AnnotationAccordion extends Component {
   render() {
     const {
+      defaults,
       layout: {annotations = [], meta = []},
       localize: _,
     } = this.context;
@@ -41,7 +43,8 @@ class AnnotationAccordion extends Component {
         }
 
         const key = `annotations[${annotationIndex}]`;
-        const value = {text: _('new text')};
+        const value = cloneDeep(defaults.annotation || {});
+        value.text = _('new text');
 
         if (updateContainer) {
           updateContainer({[key]: value});
@@ -71,6 +74,7 @@ class AnnotationAccordion extends Component {
 AnnotationAccordion.contextTypes = {
   layout: PropTypes.object,
   localize: PropTypes.func,
+  defaults: PropTypes.object,
 };
 
 AnnotationAccordion.propTypes = {

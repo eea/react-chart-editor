@@ -21,12 +21,12 @@ export class Fold extends Component {
     if (!this.foldVisible && !this.props.messageIfEmpty) {
       return null;
     }
-    const {deleteContainer, moveContainer} = this.context;
     const {
+      canFold = true,
+      canReorder = true,
       canDelete,
       children,
       className,
-      folded,
       foldInfo,
       toggleFold,
       hideHeader,
@@ -36,6 +36,12 @@ export class Fold extends Component {
       canMoveUp,
       canMoveDown,
     } = this.props;
+    const moveContainer =
+      this.props.moveContainer || this.context.moveContainer;
+    const deleteContainer =
+      this.props.deleteContainer || this.context.deleteContainer;
+
+    const folded = canFold ? this.props.folded : false;
 
     const contentClass = classnames('fold__content', {
       'fold__content--noheader': hideHeader,
@@ -67,6 +73,9 @@ export class Fold extends Component {
             e.stopPropagation();
             deleteContainer(foldInfo);
           }}
+          role="button"
+          tabIndex="0"
+          onKeyUp={() => {}}
         >
           <CloseIcon />
         </div>
@@ -75,7 +84,9 @@ export class Fold extends Component {
     const movingControls = (canMoveDown || canMoveUp) && (
       <div className="fold__top__moving-controls">
         <span
-          className={`fold__top__moving-controls--up${canMoveUp ? '' : '--disabled'}`}
+          className={`fold__top__moving-controls--up${
+            canMoveUp ? '' : '--disabled'
+          }`}
           onClick={(e) => {
             // prevents fold toggle to happen when clicking on moving arrow controls
             e.stopPropagation();
@@ -87,11 +98,16 @@ export class Fold extends Component {
               moveContainer('up');
             }
           }}
+          role="button"
+          tabIndex="0"
+          onKeyUp={() => {}}
         >
           <AngleDownIcon />
         </span>
         <span
-          className={`fold__top__moving-controls--down${canMoveDown ? '' : '--disabled'}`}
+          className={`fold__top__moving-controls--down${
+            canMoveDown ? '' : '--disabled'
+          }`}
           onClick={(e) => {
             // prevents fold toggle to happen when clicking on moving arrow controls
             e.stopPropagation();
@@ -111,11 +127,11 @@ export class Fold extends Component {
     const foldHeader = !hideHeader && (
       <div className={headerClass} onClick={toggleFold}>
         <div className="fold__top__arrow-title">
-          {arrowDownIcon}
+          {canFold && arrowDownIcon}
           {icon}
           <div className="fold__top__title">{striptags(name)}</div>
         </div>
-        {movingControls}
+        {canReorder && movingControls}
         {deleteButton}
       </div>
     );
