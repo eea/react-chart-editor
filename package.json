@@ -33,7 +33,6 @@
     "draft-js-utils": "^1.4.1",
     "fast-isnumeric": "^1.1.4",
     "handsontable": "^15.1.0",
-    "moment": "2.30.1",
     "hyperformula": "^3.0.0",
     "immutability-helper": "^3.1.1",
     "lodash": "^4.17.21",
@@ -117,7 +116,8 @@
     "react-dom": ">=16.14.0"
   },
   "resolutions": {
-    "jackspeak": "2.1.1"
+    "jackspeak": "2.1.1",
+    "moment": "<=2.29.4"
   },
   "engines": {
     "node": ">=12.13.0"
