@@ -71,7 +71,7 @@
       background-color: var(--color-button-primary-base-fill);
       min-height: 11px;
       cursor: row-resize;
-      margin: 0 1rem 0.5rem;
+      margin: 0 1rem;
       z-index: 200;
     }
 
@@ -96,7 +96,7 @@
 
   .plot_panel {
     height: -webkit-fill-available;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem 0;
   }
 }
 
