@@ -3653,6 +3653,7 @@
   opacity: 0.3;
 }
 .grid_and_plot .plot_panel {
+  height: -webkit-fill-available;
   padding: 0 1rem;
 }
 
