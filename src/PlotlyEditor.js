@@ -1,7 +1,7 @@
 import React, {Component, createRef} from 'react';
 import createPlotComponent from 'react-plotly.js/factory';
 import PropTypes from 'prop-types';
-import {DEFAULT_FONTS} from 'lib/constants';
+import {DEFAULT_FONTS, MIN_PLOT_HEIGHT} from 'lib/constants';
 
 import EditorControls from './EditorControls';
 import DataSourcesEditor from './DataSourcesEditor';
@@ -13,6 +13,7 @@ class PlotlyEditor extends Component {
     this.editor = createRef();
     this.PlotComponent = createPlotComponent(props.plotly);
     this.handleRender = this.handleRender.bind(this);
+    this.onPlotResize = this.onPlotResize.bind(this);
   }
 
   handleRender(fig, graphDiv) {
@@ -21,6 +22,23 @@ class PlotlyEditor extends Component {
       this.props.onRender(graphDiv.data, graphDiv.layout, graphDiv._transitionData._frames);
     }
   }
+
+  onPlotResize() {
+    const containerEl = document.querySelector('.grid_and_plot');
+    const gridEl = containerEl.querySelector('.grid_panel');
+    const previewEl = containerEl.querySelector('.grid_panel__resize-preview');
+    const plotEl = containerEl.querySelector('.plot_panel');
+
+    requestAnimationFrame(() => {
+      plotEl.style.height =
+        Math.max(
+          MIN_PLOT_HEIGHT,
+          containerEl.offsetHeight - (gridEl.offsetHeight + previewEl.offsetHeight)
+        ) + 'px';
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
   render() {
     return (
       <div className="plotly_editor plotly-editor--theme-provider">
@@ -58,6 +76,7 @@ class PlotlyEditor extends Component {
             dataSources={this.props.dataSources}
             srcConverters={this.props.srcConverters}
             onUpdate={this.editor.current?.handleUpdate.bind(this.editor.current)}
+            onPlotResize={this.onPlotResize}
           />
           <div className="plot_panel">
             <this.PlotComponent
@@ -67,7 +86,10 @@ class PlotlyEditor extends Component {
               config={this.props.config}
               useResizeHandler={this.props.useResizeHandler}
               debug={this.props.debug}
-              onInitialized={this.handleRender}
+              onInitialized={(...args) => {
+                this.handleRender(...args);
+                this.onPlotResize();
+              }}
               onUpdate={this.handleRender}
               style={{width: '100%', height: '100%'}}
               divId={this.props.divId}

@@ -214,3 +214,6 @@ export const TRACE_SRC_ATTRIBUTES = [
 ];
 
 export const LAYOUT_SRC_ATTRIBUTES = ['meta'];
+
+export const MIN_GRID_HEIGHT = 50;
+export const MIN_PLOT_HEIGHT = 450;

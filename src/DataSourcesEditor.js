@@ -17,7 +17,12 @@ import {
   ManualColumnResize,
   UndoRedo,
 } from 'handsontable/plugins';
-import {EDITOR_ACTIONS, TRACE_SRC_ATTRIBUTES, LAYOUT_SRC_ATTRIBUTES} from './lib/constants';
+import {
+  EDITOR_ACTIONS,
+  TRACE_SRC_ATTRIBUTES,
+  LAYOUT_SRC_ATTRIBUTES,
+  MIN_GRID_HEIGHT,
+} from './lib/constants';
 import {getColumnNames} from 'lib/dereference';
 
 // Register plugins
@@ -34,8 +39,6 @@ registerPlugin(UndoRedo);
 
 const MIN_ROWS = 10;
 const MIN_COLS = 10;
-const MIN_GRID_HEIGHT = 50;
-const MIN_PLOT_HEIGHT = 450;
 
 function getContextMenuItemTrigger(hot, name, trigger) {
   return hot.getPlugin('ContextMenu').itemsFactory.predefinedItems[name]?.[trigger]?.bind(hot);
@@ -225,6 +228,9 @@ class DataSourcesEditor extends Component {
         setTimeout(() => {
           self.renameColumn(coords.col);
         }, 100);
+      },
+      init: () => {
+        window.dispatchEvent(new Event('resize'));
       },
     });
   }
@@ -462,9 +468,8 @@ class DataSourcesEditor extends Component {
           className="grid_panel__resize-bar"
           onMouseDown={(e) => {
             e.preventDefault();
-            const gridEl = document.querySelector('.grid_and_plot .grid_panel');
-            const previewEl = document.querySelector('.grid_and_plot .grid_panel__resize-preview');
-            const plotEl = document.querySelector('.grid_and_plot .plot_panel');
+            const containerEl = document.querySelector('.grid_and_plot');
+            const previewEl = containerEl.querySelector('.grid_panel__resize-preview');
             const startY = e.clientY;
             const startHeight = this.hot.getSettings().height;
             let height = startHeight;
@@ -484,12 +489,7 @@ class DataSourcesEditor extends Component {
                 height,
               });
               requestAnimationFrame(() => {
-                plotEl.style.height =
-                  Math.max(
-                    MIN_PLOT_HEIGHT,
-                    window.innerHeight - (gridEl.offsetHeight + previewEl.offsetHeight)
-                  ) + 'px';
-                window.dispatchEvent(new Event('resize'));
+                this.props.onPlotResize();
               });
             };
 
@@ -514,6 +514,7 @@ DataSourcesEditor.propTypes = {
     fromSrc: PropTypes.func.isRequired,
   }),
   onUpdate: PropTypes.func,
+  onPlotResize: PropTypes.func,
 };
 
 export default DataSourcesEditor;
