@@ -55,9 +55,10 @@ class DataSourcesEditor extends Component {
   }
 
   componentDidMount() {
+    this.colHeaders = Object.keys(this.props.dataSources || {});
     const self = this;
     const container = document.getElementById('hot-table');
-    this.colHeaders = Object.keys(this.props.dataSources);
+    const data = this.deserialize();
 
     const contextMenu = {
       items: {
@@ -145,7 +146,7 @@ class DataSourcesEditor extends Component {
     };
 
     this.hot = new Handsontable(container, {
-      data: this.deserialize(),
+      ...(data.length ? {data} : {}),
       width: '100%',
       height: 320,
       rowHeaders: true,
@@ -229,12 +230,12 @@ class DataSourcesEditor extends Component {
   }
 
   componentWillUnmount() {
-    this.hot.destroy();
+    this.hot?.destroy();
   }
 
   deserialize() {
     let col = 0;
-    return Object.entries(this.props.dataSources).reduce((acc, [_, value]) => {
+    return Object.entries(this.props.dataSources || {}).reduce((acc, [_, value]) => {
       value.forEach((_, i) => {
         if (!acc[i]) {
           acc[i] = [];
