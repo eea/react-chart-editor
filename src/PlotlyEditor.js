@@ -33,7 +33,7 @@ class PlotlyEditor extends Component {
       plotEl.style.height =
         Math.max(
           MIN_PLOT_HEIGHT,
-          containerEl.offsetHeight - (gridEl.offsetHeight + previewEl.offsetHeight)
+          containerEl.clientHeight - (gridEl.offsetHeight + previewEl.offsetHeight)
         ) + 'px';
       window.dispatchEvent(new Event('resize'));
     });
