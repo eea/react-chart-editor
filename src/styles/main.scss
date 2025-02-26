@@ -39,11 +39,12 @@
     cursor: pointer;
   }
   span.action {
-    color: colors.$color-dodger-shade;
+    color: colors.$color-dodger-shade-mid;
     cursor: pointer;
 
-    &:hover {
-      color: colors.$color-dodger-shade-mid;
+    &:hover,
+    &:focus {
+      color: colors.$color-dodger-shade;
     }
   }
 }

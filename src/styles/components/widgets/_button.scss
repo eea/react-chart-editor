@@ -99,8 +99,9 @@ button {
     height: auto;
     padding: 0;
     border: none;
-    &:hover {
-      border: none;
+    &:hover,
+    &:active {
+      border: none !important;
     }
   }
 }
