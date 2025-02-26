@@ -38,6 +38,14 @@
     color: colors.$color-dodger-shade;
     cursor: pointer;
   }
+  span.action {
+    color: colors.$color-dodger-shade;
+    cursor: pointer;
+
+    &:hover {
+      color: colors.$color-dodger-shade-mid;
+    }
+  }
 }
 
 .plotly_editor {

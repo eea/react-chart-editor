@@ -1548,12 +1548,12 @@
 .editor_controls .button--link {
   --spacing-half-unit: 0;
   --spacing-base-unit: 0;
-  height: auto;
-  padding: 0;
-  border: none;
   background-color: var(--color-button-link-base-fill);
   border-color: var(--color-button-link-base-border);
   color: var(--color-button-link-base-text);
+  height: auto;
+  padding: 0;
+  border: none;
 }
 .editor_controls .button--link:hover:not(.button--no-text--disabled) {
   background-color: var(--color-button-link-hover-fill);
@@ -1564,6 +1564,9 @@
   background-color: var(--color-button-link-active-fill);
   border: 1px solid var(--color-button-link-active-border);
   color: var(--color-button-link-active-text);
+}
+.editor_controls .button--link:hover {
+  border: none;
 }
 .editor_controls .checkbox__group {
   text-align: left;
@@ -3630,6 +3633,13 @@
 .editor_controls a {
   color: #0d76bf;
   cursor: pointer;
+}
+.editor_controls span.action {
+  color: #0d76bf;
+  cursor: pointer;
+}
+.editor_controls span.action:hover {
+  color: #0f89df;
 }
 
 .plotly_editor {

@@ -95,9 +95,12 @@ button {
   &--link {
     --spacing-half-unit: 0;
     --spacing-base-unit: 0;
+    @include button(link);
     height: auto;
     padding: 0;
     border: none;
-    @include button(link);
+    &:hover {
+      border: none;
+    }
   }
 }
