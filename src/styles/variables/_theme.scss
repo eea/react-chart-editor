@@ -178,6 +178,21 @@ $buttons: (
     border: var(--color-dodger-shade),
     text: var(--color-dodger-shade),
   ),
+  link-base: (
+    fill: transparent,
+    border: transparent,
+    text: var(--color-accent),
+  ),
+  link-hover: (
+    fill: transparent,
+    border: transparent,
+    text: var(--color-accent-shade),
+  ),
+  link-active: (
+    fill: transparent,
+    border: transparent,
+    text: var(--color-accent-shade),
+  ),
 );
 
 $theme: (

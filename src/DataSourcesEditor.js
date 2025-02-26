@@ -37,8 +37,8 @@ registerPlugin(Formulas);
 registerPlugin(ManualColumnResize);
 registerPlugin(UndoRedo);
 
-const MIN_ROWS = 10;
-const MIN_COLS = 10;
+const MIN_ROWS = 20;
+const MIN_COLS = 26;
 
 function getContextMenuItemTrigger(hot, name, trigger) {
   return hot.getPlugin('ContextMenu').itemsFactory.predefinedItems[name]?.[trigger]?.bind(hot);

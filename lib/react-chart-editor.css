@@ -258,6 +258,15 @@
   --color-button-header-active-fill: transparent;
   --color-button-header-active-border: var(--color-dodger-shade);
   --color-button-header-active-text: var(--color-dodger-shade);
+  --color-button-link-base-fill: transparent;
+  --color-button-link-base-border: transparent;
+  --color-button-link-base-text: var(--color-accent);
+  --color-button-link-hover-fill: transparent;
+  --color-button-link-hover-border: transparent;
+  --color-button-link-hover-text: var(--color-accent-shade);
+  --color-button-link-active-fill: transparent;
+  --color-button-link-active-border: transparent;
+  --color-button-link-active-text: var(--color-accent-shade);
   --spacing-base-unit: 24px;
   --spacing-half-unit: 12px;
   --spacing-quarter-unit: 6px;
@@ -472,6 +481,7 @@
   animation: fsbr 0.1s forwards cubic-bezier(0.19, 1, 0.22, 1);
 }
 .editor_controls .sidebar {
+  display: flex;
   user-select: none;
   height: 100%;
   min-width: var(--sidebar-width);
@@ -484,6 +494,7 @@
   float: left;
   border-right: var(--border-default);
   flex-grow: 1;
+  flex-flow: column;
   -webkit-overflow-scrolling: touch;
 }
 .editor_controls .sidebar::-webkit-scrollbar {
@@ -1533,6 +1544,26 @@
   background-color: var(--color-button-header-active-fill);
   border: 1px solid var(--color-button-header-active-border);
   color: var(--color-button-header-active-text);
+}
+.editor_controls .button--link {
+  --spacing-half-unit: 0;
+  --spacing-base-unit: 0;
+  height: auto;
+  padding: 0;
+  border: none;
+  background-color: var(--color-button-link-base-fill);
+  border-color: var(--color-button-link-base-border);
+  color: var(--color-button-link-base-text);
+}
+.editor_controls .button--link:hover:not(.button--no-text--disabled) {
+  background-color: var(--color-button-link-hover-fill);
+  border: 1px solid var(--color-button-link-hover-border);
+  color: var(--color-button-link-hover-text);
+}
+.editor_controls .button--link:active:not(.button--no-text--disabled) {
+  background-color: var(--color-button-link-active-fill);
+  border: 1px solid var(--color-button-link-active-border);
+  color: var(--color-button-link-active-text);
 }
 .editor_controls .checkbox__group {
   text-align: left;
@@ -3621,7 +3652,7 @@
   overflow: auto;
 }
 .grid_and_plot .grid_panel {
-  padding: 1rem 1rem 0.5rem;
+  padding: 1rem 1rem 0;
 }
 .grid_and_plot .grid_panel__resize-bar {
   position: relative;
@@ -3630,14 +3661,14 @@
   justify-content: center;
   width: calc(100% - 2rem);
   background-color: var(--color-button-primary-base-fill);
-  min-height: 11px;
+  min-height: 9px;
   cursor: row-resize;
   margin: 0 1rem;
   z-index: 200;
 }
 .grid_and_plot .grid_panel__resize-divider {
-  width: 18px;
-  height: 3px;
+  width: 20px;
+  height: 2px;
   border: 1px solid #fff;
   border-width: 1px 0 1px 0;
   clear: both;
@@ -3647,7 +3678,7 @@
   position: absolute;
   top: 0px;
   width: 100%;
-  height: 11px;
+  height: 9px;
   background-color: var(--color-button-primary-base-fill);
   opacity: 0.3;
 }

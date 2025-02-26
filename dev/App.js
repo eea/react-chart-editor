@@ -61,40 +61,67 @@ const traceTypesConfig = {
 
 // eslint-disable-next-line no-unused-vars
 const chartHelp = {
-  area: {
-    helpDoc: 'https://help.plot.ly/make-an-area-graph/',
-    examplePlot: () => {
-      // eslint-disable-next-line no-console
-      console.log('example bar plot!');
-    },
-  },
+  scatter: {helpDoc: 'https://plotly.com/javascript/line-and-scatter/', feedQuery: true},
   bar: {
-    helpDoc: 'https://help.plot.ly/stacked-bar-chart/',
-    examplePlot: () => {
-      // eslint-disable-next-line no-console
-      console.log('example bar plot!');
-    },
+    helpDoc: 'https://plotly.com/javascript/bar-charts/',
+    feedQuery: true,
   },
-  box: {helpDoc: 'https://help.plot.ly/make-a-box-plot/'},
-  candlestick: {helpDoc: 'https://help.plot.ly/make-a-candlestick/'},
-  choropleth: {helpDoc: 'https://help.plot.ly/make-a-choropleth-map/'},
-  contour: {helpDoc: 'https://help.plot.ly/make-a-contour-plot/'},
-  heatmap: {helpDoc: 'https://help.plot.ly/make-a-heatmap/'},
-  histogram2d: {helpDoc: 'https://help.plot.ly/make-a-2d-histogram-heatmap/'},
-  histogram2dcontour: {helpDoc: 'https://help.plot.ly/make-a-histogram/'},
-  line: {helpDoc: 'https://help.plot.ly/make-a-line-graph/'},
-  mesh3d: {helpDoc: null},
-  ohlc: {helpDoc: 'https://help.plot.ly/make-a-ohlc/'},
-  pie: {helpDoc: 'https://help.plot.ly/make-a-pie-chart/'},
-  scatter3d: {helpDoc: 'https://help.plot.ly/make-a-3d-scatter-plot/'},
-  line3d: {helpDoc: null},
-  scatter: {helpDoc: 'https://help.plot.ly/how-to-make-a-scatter-plot/'},
-  scattergeo: {helpDoc: 'https://help.plot.ly/make-scatter-map/'},
-  scattermapbox: {helpDoc: 'https://help.plot.ly/make-a-mapbox-map/'},
-  scatterternary: {helpDoc: 'https://help.plot.ly/ternary-scatter-plot/'},
-  surface: {helpDoc: 'https://help.plot.ly/make-a-3d-surface-plot/'},
-  table: {helpDoc: null},
-  timeseries: {helpDoc: 'https://help.plot.ly/range-slider/'},
+  line: {
+    helpDoc: 'https://plotly.com/javascript/line-charts/',
+    feedQuery: true,
+  },
+  area: {
+    helpDoc: 'https://plotly.com/javascript/filled-area-plots/',
+    feedQuery: true,
+  },
+  heatmap: {helpDoc: 'https://plotly.com/javascript/heatmaps/', feedQuery: true},
+  table: {helpDoc: 'https://plotly.com/javascript/table/', feedQuery: true},
+  contour: {helpDoc: 'https://plotly.com/javascript/contour-plots/', feedQuery: true},
+  pie: {helpDoc: 'https://plotly.com/javascript/pie-charts/', feedQuery: true},
+  box: {helpDoc: 'https://plotly.com/javascript/box-plots/', feedQuery: true},
+  histogram: {helpDoc: 'https://plotly.com/javascript/histograms/', feedQuery: true},
+  histogram2d: {helpDoc: 'https://plotly.com/javascript/2D-Histogram/', feedQuery: true},
+  histogram2dcontour: {
+    helpDoc: 'https://plotly.com/javascript/2d-histogram-contour/',
+    feedQuery: true,
+  },
+  scatter3d: {helpDoc: 'https://plotly.com/javascript/3d-scatter-plots/', feedQuery: true},
+  line3d: {helpDoc: 'https://plotly.com/javascript/3d-line-plots/', feedQuery: true},
+  surface: {helpDoc: 'https://plotly.com/javascript/3d-surface-plots/', feedQuery: true},
+  mesh3d: {helpDoc: 'https://plotly.com/javascript/3d-mesh/', feedQuery: true},
+  cone: {helpDoc: 'https://plotly.com/javascript/cone-plot/', feedQuery: true},
+  streamtube: {helpDoc: 'https://plotly.com/javascript/streamtube-plot/', feedQuery: true},
+  scattermapbox: {
+    helpDoc: 'https://plotly.com/javascript/scatter-tile-maps/',
+    feedQuery: true,
+  },
+  scattergeo: {
+    helpDoc: 'https://plotly.com/javascript/scatter-plots-on-maps/',
+    feedQuery: true,
+  },
+  choroplethmapbox: {
+    helpDoc: 'https://plotly.com/javascript/tile-county-choropleth/',
+    feedQuery: true,
+  },
+  choropleth: {helpDoc: 'https://plotly.com/javascript/choropleth-maps/', feedQuery: true},
+  densitymapbox: {
+    helpDoc: 'https://plotly.com/javascript/tile-density-heatmaps/',
+    feedQuery: true,
+  },
+  candlestick: {helpDoc: 'https://plotly.com/javascript/candlestick-charts/', feedQuery: true},
+  ohlc: {helpDoc: 'https://plotly.com/javascript/ohlc-charts/', feedQuery: true},
+  waterfall: {helpDoc: 'https://plotly.com/javascript/waterfall-charts/', feedQuery: true},
+  funnel: {helpDoc: 'https://plotly.com/javascript/funnel-charts/', feedQuery: true},
+  funnelarea: {
+    helpDoc: 'https://plotly.com/javascript/funnel-charts/#funnelarea-plot',
+    feedQuery: true,
+  },
+  scatterpolar: {helpDoc: 'https://plotly.com/javascript/polar-chart/', feedQuery: true},
+  barpolar: {helpDoc: '', feedQuery: true},
+  scatterternary: {helpDoc: 'https://plotly.com/javascript/ternary-plots/', feedQuery: true},
+  sunburst: {helpDoc: 'https://plotly.com/javascript/sunburst-charts/', feedQuery: true},
+  treemap: {helpDoc: 'https://plotly.com/javascript/treemaps/', feedQuery: true},
+  sankey: {helpDoc: 'https://plotly.com/javascript/sankey-diagram/', feedQuery: true},
 };
 
 class App extends Component {
@@ -183,11 +210,12 @@ class App extends Component {
           debug
           advancedTraceTypeSelector
           showFieldTooltips
+          makeDefaultTrace={() => ({type: 'bar', orientation: 'v'})}
           // glByDefault
           // traceTypesConfig={traceTypesConfig}
           // makeDefaultTrace={() => ({type: 'scattergl', mode: 'markers'})}
           // fontOptions={[{label:'Arial', value: 'arial'}]}
-          // chartHelp={chartHelp}
+          chartHelp={chartHelp}
           // customConfig={customConfigTest}
         >
           <DefaultEditor

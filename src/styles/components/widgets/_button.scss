@@ -92,4 +92,12 @@ button {
   &--header {
     @include button(header);
   }
+  &--link {
+    --spacing-half-unit: 0;
+    --spacing-base-unit: 0;
+    height: auto;
+    padding: 0;
+    border: none;
+    @include button(link);
+  }
 }

@@ -110,7 +110,11 @@ class TraceTypeSelector extends Component {
           ((e) =>
             onClick(e, () =>
               window.open(
-                `https://plot.ly/feed/?q=${chartHelp[value] ? chartHelp[value].feedQuery : value}`,
+                `https://chart-studio.plotly.com/feed/?q=filetype:plot%20plottype:${
+                  typeof chartHelp[value].feedQuery === 'string'
+                    ? chartHelp[value].feedQuery
+                    : value
+                }`,
                 '_blank'
               )
             )),
