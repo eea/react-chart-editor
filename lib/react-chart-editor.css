@@ -3671,6 +3671,7 @@
   justify-content: center;
   width: calc(100% - 2rem);
   background-color: var(--color-button-primary-base-fill);
+  box-sizing: content-box;
   min-height: 9px;
   cursor: row-resize;
   margin: 0 1rem;
@@ -3724,6 +3725,40 @@
   --ht-icon-button-hover-border-color: rgba(255, 255, 255, 0);
   --ht-icon-active-button-border-color: var(--color-button-primary-base-fill);
   --ht-icon-active-button-hover-border-color: var(--color-button-primary-base-fill);
+  --ht-wrapper-border-color: var(--color-border-default);
+  --ht-wrapper-border-width: 1px;
+  --ht-wrapper-border-radius: 0px;
+}
+
+.ht-table-wrapper {
+  position: relative;
+  border-radius: var(--ht-wrapper-border-radius);
+  overflow: hidden;
+}
+.ht-table-wrapper .border {
+  position: absolute;
+  background-color: var(--ht-wrapper-border-color);
+  z-index: 999;
+}
+.ht-table-wrapper .border-top,
+.ht-table-wrapper .border-bottom {
+  width: 100%;
+  height: var(--ht-wrapper-border-width);
+}
+.ht-table-wrapper .border-left,
+.ht-table-wrapper .border-right {
+  width: var(--ht-wrapper-border-width);
+  height: 100%;
+}
+.ht-table-wrapper .border-bottom {
+  bottom: 0;
+}
+.ht-table-wrapper .border-right {
+  right: 0;
+}
+
+.handsontable.ht-wrapper::before {
+  content: none;
 }
 
 /*# sourceMappingURL=react-chart-editor.css.map */
