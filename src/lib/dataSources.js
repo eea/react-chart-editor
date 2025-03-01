@@ -1,5 +1,5 @@
 import nestedProperty from 'plotly.js/src/lib/nested_property';
-import {maybeTransposeData} from '.';
+import {maybeTransposeData} from 'lib';
 
 export function getAttrsPath(container, allowedAttributes) {
   const srcAttributes = {};

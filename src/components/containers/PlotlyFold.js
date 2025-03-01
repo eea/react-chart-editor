@@ -36,10 +36,8 @@ export class Fold extends Component {
       canMoveUp,
       canMoveDown,
     } = this.props;
-    const moveContainer =
-      this.props.moveContainer || this.context.moveContainer;
-    const deleteContainer =
-      this.props.deleteContainer || this.context.deleteContainer;
+    const moveContainer = this.props.moveContainer || this.context.moveContainer;
+    const deleteContainer = this.props.deleteContainer || this.context.deleteContainer;
 
     const folded = canFold ? this.props.folded : false;
 
@@ -84,9 +82,7 @@ export class Fold extends Component {
     const movingControls = (canMoveDown || canMoveUp) && (
       <div className="fold__top__moving-controls">
         <span
-          className={`fold__top__moving-controls--up${
-            canMoveUp ? '' : '--disabled'
-          }`}
+          className={`fold__top__moving-controls--up${canMoveUp ? '' : '--disabled'}`}
           onClick={(e) => {
             // prevents fold toggle to happen when clicking on moving arrow controls
             e.stopPropagation();
@@ -105,9 +101,7 @@ export class Fold extends Component {
           <AngleDownIcon />
         </span>
         <span
-          className={`fold__top__moving-controls--down${
-            canMoveDown ? '' : '--disabled'
-          }`}
+          className={`fold__top__moving-controls--down${canMoveDown ? '' : '--disabled'}`}
           onClick={(e) => {
             // prevents fold toggle to happen when clicking on moving arrow controls
             e.stopPropagation();
@@ -164,11 +158,15 @@ Fold.plotly_editor_traits = {foldable: true};
 
 Fold.propTypes = {
   canDelete: PropTypes.bool,
+  canFold: PropTypes.bool,
+  canReorder: PropTypes.bool,
   children: PropTypes.node,
   className: PropTypes.string,
   folded: PropTypes.bool,
   foldInfo: PropTypes.object,
   toggleFold: PropTypes.func,
+  moveContainer: PropTypes.func,
+  deleteContainer: PropTypes.func,
   hideHeader: PropTypes.bool,
   icon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   messageIfEmpty: PropTypes.string,

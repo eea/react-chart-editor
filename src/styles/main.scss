@@ -78,6 +78,7 @@
       justify-content: center;
       width: calc(100% - 2rem);
       background-color: var(--color-button-primary-base-fill);
+      box-sizing: content-box;
       min-height: 9px;
       cursor: row-resize;
       margin: 0 1rem;

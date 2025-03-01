@@ -31,6 +31,11 @@
   --ht-icon-active-button-border-color: var(--color-button-primary-base-fill);
   --ht-icon-active-button-hover-border-color: var(--color-button-primary-base-fill);
 
+  // Wrapper
+  --ht-wrapper-border-color: var(--color-border-default);
+  --ht-wrapper-border-width: 1px;
+  --ht-wrapper-border-radius: 0px;
+
   // --ht-font-size: 14px;
   // --ht-line-height: 20px;
   // --ht-font-weight: 400;
@@ -225,4 +230,42 @@
 .ht-theme-main-dark,
 .ht-theme-main-dark-auto {
   @include light();
+}
+
+.ht-table-wrapper {
+  position: relative;
+  border-radius: var(--ht-wrapper-border-radius);
+  overflow: hidden;
+
+  .border {
+    position: absolute;
+    background-color: var(--ht-wrapper-border-color);
+    z-index: 999;
+  }
+
+  .border-top,
+  .border-bottom {
+    width: 100%;
+    height: var(--ht-wrapper-border-width);
+  }
+
+  .border-left,
+  .border-right {
+    width: var(--ht-wrapper-border-width);
+    height: 100%;
+  }
+
+  .border-bottom {
+    bottom: 0;
+  }
+
+  .border-right {
+    right: 0;
+  }
+}
+
+.handsontable.ht-wrapper {
+  &::before {
+    content: none;
+  }
 }

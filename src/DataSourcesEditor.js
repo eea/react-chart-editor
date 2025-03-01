@@ -49,7 +49,8 @@ class DataSourcesEditor extends Component {
     super();
     this.hot = null;
     this.colHeaders = null;
-    this.gridPanelRef = React.createRef();
+    this.tableEl = React.createRef();
+    this.previewEl = React.createRef();
     this.deserialize = this.deserialize.bind(this);
     this.serialize = this.serialize.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
@@ -60,7 +61,6 @@ class DataSourcesEditor extends Component {
   componentDidMount() {
     this.colHeaders = Object.keys(this.props.dataSources || {});
     const self = this;
-    const container = document.getElementById('hot-table');
     const data = this.deserialize();
 
     const contextMenu = {
@@ -148,7 +148,7 @@ class DataSourcesEditor extends Component {
       },
     };
 
-    this.hot = new Handsontable(container, {
+    this.hot = new Handsontable(this.tableEl.current, {
       ...(data.length ? {data} : {}),
       width: '100%',
       height: 320,
@@ -461,15 +461,19 @@ class DataSourcesEditor extends Component {
   render() {
     return (
       <>
-        <div className="grid_panel" ref={this.gridPanelRef}>
-          <div id="hot-table" className="ht-theme-main" />
+        <div className="grid_panel">
+          <div className="ht-table-wrapper ht-theme-main">
+            <div className="border border-top" />
+            <div className="border border-bottom" />
+            <div className="border border-left" />
+            <div className="border border-right" />
+            <div ref={this.tableEl} />
+          </div>
         </div>
         <div
           className="grid_panel__resize-bar"
           onMouseDown={(e) => {
             e.preventDefault();
-            const containerEl = document.querySelector('.grid_and_plot');
-            const previewEl = containerEl.querySelector('.grid_panel__resize-preview');
             const startY = e.clientY;
             const startHeight = this.hot.getSettings().height;
             let height = startHeight;
@@ -477,14 +481,14 @@ class DataSourcesEditor extends Component {
             const handleMouseMove = (e) => {
               e.preventDefault();
               const deltaY = e.clientY - startY;
-              previewEl.style.top = deltaY + 'px';
+              this.previewEl.current.style.top = deltaY + 'px';
               height = Math.max(MIN_GRID_HEIGHT, startHeight + deltaY);
             };
 
             const handleMouseUp = () => {
               document.removeEventListener('mousemove', handleMouseMove);
               document.removeEventListener('mouseup', handleMouseUp);
-              previewEl.style.top = '0px';
+              this.previewEl.current.style.top = '0px';
               this.hot.updateSettings({
                 height,
               });
@@ -498,7 +502,7 @@ class DataSourcesEditor extends Component {
           }}
         >
           <div className="grid_panel__resize-divider" />
-          <div className="grid_panel__resize-preview" />
+          <div className="grid_panel__resize-preview" ref={this.previewEl} />
         </div>
       </>
     );

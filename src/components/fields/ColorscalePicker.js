@@ -1,3 +1,4 @@
+import isUndefined from 'lodash/isUndefined';
 import ColorscalePicker from '../widgets/ColorscalePicker';
 import Field from './Field';
 import PropTypes from 'prop-types';
@@ -23,7 +24,7 @@ export class UnconnectedColorscalePicker extends Component {
         }),
         colorscaleType
       );
-      if (this.props.fullContainer.index !== undefined) {
+      if (isUndefined(this.props.fullContainer.index)) {
         this.context.onUpdate({
           type: EDITOR_ACTIONS.UPDATE_TRACES,
           payload: {
