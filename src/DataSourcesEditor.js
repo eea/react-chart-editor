@@ -291,6 +291,14 @@ class DataSourcesEditor extends Component {
     return dataSources;
   }
 
+  loadData(dataSources) {
+    const data = this.deserialize(dataSources);
+    this.hot.loadData(data);
+    this.hot.updateSettings({
+      colHeaders: Object.keys(dataSources),
+    });
+  }
+
   onUpdate(changes) {
     requestAnimationFrame(() => {
       const update = {
