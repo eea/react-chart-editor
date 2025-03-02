@@ -40,6 +40,8 @@ class PlotlyEditor extends Component {
   }
 
   render() {
+    const GridAndPlotSlot = this.props.slots['grid-and-plot'];
+
     return (
       <div className="plotly_editor plotly-editor--theme-provider">
         {!this.props.hideControls && (
@@ -71,6 +73,7 @@ class PlotlyEditor extends Component {
           </EditorControls>
         )}
         <div className="grid_and_plot">
+          {GridAndPlotSlot && <GridAndPlotSlot />}
           <DataSourcesEditor
             data={this.props.data}
             layout={this.props.layout}
@@ -135,6 +138,7 @@ PlotlyEditor.propTypes = {
   chartHelp: PropTypes.object,
   customConfig: PropTypes.object,
   ctx: PropTypes.object,
+  slots: PropTypes.objectOf(PropTypes.element),
 };
 
 PlotlyEditor.defaultProps = {
