@@ -26,12 +26,7 @@ const StyleLayoutPanel = (props, {localize: _}) => (
       <ColorPicker label={_('Plot Background')} attr="plot_bgcolor" />
       <ColorPicker label={_('Margin Color')} attr="paper_bgcolor" />
       <PlotlySection name={_('Colorscales')} attr="colorway">
-        <ColorwayPicker
-          label={_('Categorical')}
-          attr="colorway"
-          labelWidth={80}
-          editable
-        />
+        <ColorwayPicker label={_('Categorical')} attr="colorway" labelWidth={80} editable />
         <ColorscalePicker
           initialCategory="sequential"
           label={_('Sequential')}
@@ -94,9 +89,9 @@ const StyleLayoutPanel = (props, {localize: _}) => (
       <Numeric label={_('Horizontal Position')} showSlider step={0.02} attr="title.x" />
       <PlotlySection name={_('Subtitle')} attr="title.subtitle">
         <TextEditor attr="title.subtitle.text" />
-        <FontSelector label={_('Typeface')} attr="title.subtitle.font.family" clearable={false}/>
+        <FontSelector label={_('Typeface')} attr="title.subtitle.font.family" clearable={false} />
         <Numeric label={_('Font Size')} attr="title.subtitle.font.size" units="px" />
-        <ColorPicker label={_('Font Color')} attr="title.subtitle.font.color"/>
+        <ColorPicker label={_('Font Color')} attr="title.subtitle.font.color" />
       </PlotlySection>
     </PlotlyFold>
 

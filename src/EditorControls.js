@@ -72,6 +72,7 @@ class EditorControls extends Component {
       hasValidCustomConfigVisibilityRules: hasValidCustomConfigVisibilityRules(
         this.props.customConfig
       ),
+      ctx: this.props.ctx,
     };
   }
 
@@ -432,6 +433,7 @@ EditorControls.propTypes = {
   fontOptions: PropTypes.array,
   chartHelp: PropTypes.object,
   customConfig: PropTypes.object,
+  ctx: PropTypes.object,
 };
 
 EditorControls.defaultProps = {
@@ -477,6 +479,7 @@ EditorControls.childContextTypes = {
   chartHelp: PropTypes.object,
   customConfig: PropTypes.object,
   hasValidCustomConfigVisibilityRules: PropTypes.bool,
+  ctx: PropTypes.object,
 };
 
 export default EditorControls;

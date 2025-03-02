@@ -24,7 +24,7 @@ export class UnconnectedColorscalePicker extends Component {
         }),
         colorscaleType
       );
-      if (isUndefined(this.props.fullContainer.index)) {
+      if (!isUndefined(this.props.fullContainer.index)) {
         this.context.onUpdate({
           type: EDITOR_ACTIONS.UPDATE_TRACES,
           payload: {

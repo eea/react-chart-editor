@@ -65,6 +65,7 @@ class PlotlyEditor extends Component {
             fontOptions={this.props.fontOptions}
             chartHelp={this.props.chartHelp}
             customConfig={this.props.customConfig}
+            ctx={this.props.ctx}
           >
             {this.props.children}
           </EditorControls>
@@ -133,6 +134,7 @@ PlotlyEditor.propTypes = {
   fontOptions: PropTypes.array,
   chartHelp: PropTypes.object,
   customConfig: PropTypes.object,
+  ctx: PropTypes.object,
 };
 
 PlotlyEditor.defaultProps = {

@@ -60,9 +60,7 @@ export class UnconnectedColorPicker extends Component {
         <ColorPicker
           selectedColor={this.props.fullValue}
           onColorChange={this.props.updatePlot}
-          onVisibilityChange={(isVisible) =>
-            this.handleVisibilityChange(isVisible)
-          }
+          onVisibilityChange={(isVisible) => this.handleVisibilityChange(isVisible)}
         />
       </Field>
     );

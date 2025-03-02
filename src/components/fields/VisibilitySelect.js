@@ -28,7 +28,17 @@ export class UnconnectedVisibilitySelect extends Component {
   }
 
   setMode(mode) {
-    this.props.updateContainer({[this.props.attr]: mode});
+    const update = {
+      [this.props.attr]: mode,
+    };
+    if (this.props.attr === 'autosize') {
+      update.width = mode ? null : this.context.fullContainer.width;
+      update.height = mode ? null : this.context.fullContainer.height;
+    }
+    this.props.updateContainer(update);
+    if (this.props.onUpdate) {
+      this.props.onUpdate(mode);
+    }
   }
 
   render() {
@@ -44,7 +54,6 @@ export class UnconnectedVisibilitySelect extends Component {
             fullValue={this.mode}
             updatePlot={this.setMode}
             clearable={clearable}
-            onChange={this.props.onChange}
           />
         ) : (
           <Radio
@@ -53,7 +62,6 @@ export class UnconnectedVisibilitySelect extends Component {
             options={options}
             fullValue={this.mode}
             updatePlot={this.setMode}
-            onChange={this.props.onChange}
           />
         )}
         {(Array.isArray(showOn) && showOn.includes(this.mode)) || this.mode === showOn
@@ -84,6 +92,7 @@ UnconnectedVisibilitySelect.propTypes = {
 
 UnconnectedVisibilitySelect.contextTypes = {
   updateContainer: PropTypes.func,
+  fullContainer: PropTypes.object,
 };
 
 UnconnectedVisibilitySelect.displayName = 'UnconnectedVisibilitySelect';
