@@ -14,6 +14,7 @@ class PlotlyEditor extends Component {
     this.PlotComponent = createPlotComponent(props.plotly);
     this.handleRender = this.handleRender.bind(this);
     this.onPlotResize = this.onPlotResize.bind(this);
+    this.renderSlot = this.renderSlot.bind(this);
   }
 
   handleRender(fig, graphDiv) {
@@ -39,9 +40,11 @@ class PlotlyEditor extends Component {
     });
   }
 
-  render() {
-    const GridAndPlotSlot = this.props.slots['grid-and-plot'];
+  renderSlot(slot) {
+    return this.props.slots?.[slot] || null;
+  }
 
+  render() {
     return (
       <div className="plotly_editor plotly-editor--theme-provider">
         {!this.props.hideControls && (
@@ -73,7 +76,7 @@ class PlotlyEditor extends Component {
           </EditorControls>
         )}
         <div className="grid_and_plot">
-          {GridAndPlotSlot && <GridAndPlotSlot />}
+          {this.renderSlot('grid-and-plot')}
           <DataSourcesEditor
             data={this.props.data}
             layout={this.props.layout}
