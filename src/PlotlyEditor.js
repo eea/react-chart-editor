@@ -11,6 +11,7 @@ class PlotlyEditor extends Component {
     super();
     this.state = {graphDiv: {}};
     this.editor = createRef();
+    this.dataSourcesEditor = createRef();
     this.PlotComponent = createPlotComponent(props.plotly);
     this.handleRender = this.handleRender.bind(this);
     this.onPlotResize = this.onPlotResize.bind(this);
@@ -78,6 +79,7 @@ class PlotlyEditor extends Component {
         <div className="grid_and_plot">
           {this.renderSlot('grid-and-plot')}
           <DataSourcesEditor
+            ref={this.dataSourcesEditor}
             data={this.props.data}
             layout={this.props.layout}
             dataSources={this.props.dataSources}

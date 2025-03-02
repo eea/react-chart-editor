@@ -244,24 +244,6 @@ class DataSourcesEditor extends Component {
     this.hot?.destroy();
   }
 
-  componentDidUpdate() {
-    const dataSources = this.serialize();
-    console.log(
-      '==> UPDATE',
-      dataSources,
-      this.props.dataSources,
-      this.deserialize(),
-      this.colHeaders
-    );
-    if (!isEqual(dataSources, this.props.dataSources)) {
-      this.colHeaders = Object.keys(this.props.dataSources);
-      this.hot.updateSettings({
-        colHeaders: this.colHeaders,
-      });
-      this.hot.updateData(this.deserialize());
-    }
-  }
-
   deserialize() {
     let col = 0;
     return Object.entries(this.props.dataSources || {}).reduce((acc, [_, value]) => {
