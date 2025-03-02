@@ -246,6 +246,13 @@ class DataSourcesEditor extends Component {
 
   componentDidUpdate() {
     const dataSources = this.serialize();
+    console.log(
+      '==> UPDATE',
+      dataSources,
+      this.props.dataSources,
+      this.deserialize(),
+      this.colHeaders
+    );
     if (!isEqual(dataSources, this.props.dataSources)) {
       this.colHeaders = Object.keys(this.props.dataSources);
       this.hot.updateSettings({
