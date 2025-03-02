@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import isNil from 'lodash/isNil';
+import isEqual from 'lodash/isEqual';
 import {HyperFormula} from 'hyperformula';
 import Handsontable from 'handsontable/base';
 import {getAttrsPath, getData, getSrcAttr, inSrcAttr} from 'lib';
@@ -237,6 +238,16 @@ class DataSourcesEditor extends Component {
 
   componentWillUnmount() {
     this.hot?.destroy();
+  }
+
+  getSnapshotBeforeUpdate() {
+    const dataSources = this.serialize();
+    if (!isEqual(dataSources, this.props.dataSources)) {
+      console.log('===> update:dataSources <===');
+      this.hot.updateData(this.deserialize());
+      return 'update:dataSources';
+    }
+    return null;
   }
 
   deserialize() {
