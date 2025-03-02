@@ -240,14 +240,12 @@ class DataSourcesEditor extends Component {
     this.hot?.destroy();
   }
 
-  getSnapshotBeforeUpdate() {
+  componentDidUpdate() {
     const dataSources = this.serialize();
     if (!isEqual(dataSources, this.props.dataSources)) {
       console.log('===> update:dataSources <===');
       this.hot.updateData(this.deserialize());
-      return 'update:dataSources';
     }
-    return null;
   }
 
   deserialize() {
