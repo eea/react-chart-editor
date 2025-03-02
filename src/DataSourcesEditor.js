@@ -62,7 +62,7 @@ class DataSourcesEditor extends Component {
   componentDidMount() {
     this.colHeaders = Object.keys(this.props.dataSources || {});
     const self = this;
-    const data = this.deserialize();
+    const data = this.deserialize(this.props.dataSources);
 
     const contextMenu = {
       items: {
@@ -244,9 +244,9 @@ class DataSourcesEditor extends Component {
     this.hot?.destroy();
   }
 
-  deserialize() {
+  deserialize(dataSources) {
     let col = 0;
-    return Object.entries(this.props.dataSources || {}).reduce((acc, [_, value]) => {
+    return Object.entries(dataSources || {}).reduce((acc, [_, value]) => {
       value.forEach((_, i) => {
         if (!acc[i]) {
           acc[i] = [];
