@@ -175,7 +175,7 @@ class DataSourcesEditor extends Component {
       },
       // Hooks
       afterChange(changes, source) {
-        if (source === 'loadData') {
+        if (['updateData', 'loadData'].includes(source)) {
           return;
         }
         self.onUpdate({
@@ -183,7 +183,11 @@ class DataSourcesEditor extends Component {
         });
       },
       afterUpdateSettings(settings) {
-        if (settings.colHeaders && settings.colHeaders.length === self.colHeaders.length) {
+        const colHeadersChanged = !isEqual(settings.colHeaders, self.colHeaders);
+        if (!settings.colHeaders) {
+          return;
+        }
+        if (settings.colHeaders.length === self.colHeaders.length && colHeadersChanged) {
           self.onUpdate({
             renamedColumns: self.colHeaders.reduce((acc, header, index) => {
               if (header !== settings.colHeaders[index]) {
@@ -193,7 +197,7 @@ class DataSourcesEditor extends Component {
             }, []),
           });
         }
-        if (settings.colHeaders && settings.colHeaders.length !== self.colHeaders.length) {
+        if (settings.colHeaders.length !== self.colHeaders.length) {
           self.onUpdate({
             removedColumns: self.colHeaders.reduce((acc, header) => {
               if (!settings.colHeaders.includes(header)) {
@@ -243,7 +247,10 @@ class DataSourcesEditor extends Component {
   componentDidUpdate() {
     const dataSources = this.serialize();
     if (!isEqual(dataSources, this.props.dataSources)) {
-      console.log('===> update:dataSources <===');
+      this.colHeaders = Object.keys(this.props.dataSources);
+      this.hot.updateSettings({
+        colHeaders: this.colHeaders,
+      });
       this.hot.updateData(this.deserialize());
     }
   }
