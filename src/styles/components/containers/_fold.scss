@@ -8,6 +8,7 @@
     display: flex;
     justify-content: space-between;
     clear: both;
+    box-sizing: content-box;
     padding: var(--spacing-quarter-unit) var(--spacing-half-unit);
     color: var(--fold-header-text-color-closed);
     font-size: var(--font-size-base);
