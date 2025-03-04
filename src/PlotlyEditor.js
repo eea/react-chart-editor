@@ -110,6 +110,9 @@ class PlotlyEditor extends Component {
               onInitialized={(...args) => {
                 this.handleRender(...args);
                 this.onPlotResize();
+                if (this.props.onInitialized) {
+                  this.props.onInitialized(...args);
+                }
               }}
               onUpdate={this.handleRender}
               style={{width: '100%', height: '100%'}}
@@ -135,6 +138,7 @@ PlotlyEditor.propTypes = {
   onUpdate: PropTypes.func,
   onUpdateDataSources: PropTypes.func,
   onRender: PropTypes.func,
+  onInitialized: PropTypes.func,
   plotly: PropTypes.object,
   useResizeHandler: PropTypes.bool,
   debug: PropTypes.bool,
