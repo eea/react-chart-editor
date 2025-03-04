@@ -177,11 +177,16 @@ class DataSourcesEditor extends Component {
       // Hooks
       afterChange(changes, source) {
         if (['updateData', 'loadData'].includes(source)) {
+          self.onUpdate({
+            editedColumns: self.colHeaders,
+          });
           return;
         }
-        self.onUpdate({
-          editedColumns: changes.map((change) => self.colHeaders[change[1]]),
-        });
+        if (changes) {
+          self.onUpdate({
+            editedColumns: changes.map((change) => self.colHeaders[change[1]]),
+          });
+        }
       },
       afterUpdateSettings(settings) {
         const colHeadersChanged = !isEqual(settings.colHeaders, self.colHeaders);
@@ -294,9 +299,10 @@ class DataSourcesEditor extends Component {
 
   loadDataSources(dataSources) {
     const data = this.deserialize(dataSources);
+    this.colHeaders = Object.keys(dataSources);
     this.hot.loadData(data);
     this.hot.updateSettings({
-      colHeaders: Object.keys(dataSources),
+      colHeaders: this.colHeaders,
     });
   }
 
