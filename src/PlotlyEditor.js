@@ -10,10 +10,12 @@ class PlotlyEditor extends Component {
   constructor(props) {
     super();
     this.state = {graphDiv: {}};
-    this.editor = createRef();
-    this.dataSourcesEditor = createRef();
+    this.EditorControls = createRef();
+    this.DataSourcesEditor = createRef();
     this.PlotComponent = createPlotComponent(props.plotly);
     this.handleRender = this.handleRender.bind(this);
+    this.onUpdate = this.onUpdate.bind(this);
+    this.loadDataSources = this.loadDataSources.bind(this);
     this.onPlotResize = this.onPlotResize.bind(this);
     this.renderSlot = this.renderSlot.bind(this);
   }
@@ -23,6 +25,16 @@ class PlotlyEditor extends Component {
     if (this.props.onRender) {
       this.props.onRender(graphDiv.data, graphDiv.layout, graphDiv._transitionData._frames);
     }
+  }
+
+  onUpdate({type, payload}) {
+    const editor = this.EditorControls.current;
+    return editor.handleUpdate({type, payload}).bind(editor);
+  }
+
+  loadDataSources(dataSources) {
+    const editor = this.DataSourcesEditor.current;
+    return editor.loadDataSources(dataSources).bind(editor);
   }
 
   onPlotResize() {
@@ -50,7 +62,7 @@ class PlotlyEditor extends Component {
       <div className="plotly_editor plotly-editor--theme-provider">
         {!this.props.hideControls && (
           <EditorControls
-            ref={this.editor}
+            ref={this.EditorControls}
             customColors={this.props.customColors}
             graphDiv={this.state.graphDiv}
             dataSources={this.props.dataSources}
@@ -79,12 +91,12 @@ class PlotlyEditor extends Component {
         <div className="grid_and_plot">
           {this.renderSlot('grid-and-plot')}
           <DataSourcesEditor
-            ref={this.dataSourcesEditor}
+            ref={this.DataSourcesEditor}
             data={this.props.data}
             layout={this.props.layout}
             dataSources={this.props.dataSources}
             srcConverters={this.props.srcConverters}
-            onUpdate={this.editor.current?.handleUpdate.bind(this.editor.current)}
+            onUpdate={this.onUpdate}
             onPlotResize={this.onPlotResize}
           />
           <div className="plot_panel">
