@@ -54,7 +54,7 @@ class DataSourcesEditor extends Component {
     this.previewEl = React.createRef();
     this.deserialize = this.deserialize.bind(this);
     this.serialize = this.serialize.bind(this);
-    this.loadData = this.loadData.bind(this);
+    this.loadDataSources = this.loadDataSources.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
     this.isSingleColumnSelected = this.isSingleColumnSelected.bind(this);
     this.renameColumn = this.renameColumn.bind(this);
@@ -292,7 +292,7 @@ class DataSourcesEditor extends Component {
     return dataSources;
   }
 
-  loadData(dataSources) {
+  loadDataSources(dataSources) {
     const data = this.deserialize(dataSources);
     this.hot.loadData(data);
     this.hot.updateSettings({

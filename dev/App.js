@@ -132,7 +132,15 @@ class App extends Component {
       data: [],
       layout: {},
       frames: [],
-      dataSources,
+      dataSources: {
+        Day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        'Time of day': ['Morning', 'Afternoon', 'Evening'],
+        'Monday t': ['22', '12', '10'],
+        'Tuesday t': ['22', '32', '4'],
+        'Wednesday t': ['3', '44', '12'],
+        'Thursday t': ['3', '43', '22'],
+        'Friday T': ['13', '14', '3'],
+      },
       currentMockIndex: -1,
       mocks: [],
     };
