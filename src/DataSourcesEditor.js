@@ -484,6 +484,8 @@ class DataSourcesEditor extends Component {
         });
       }
 
+      console.log('UPDATE SOURCES', update);
+
       this.update = {};
     });
   }
