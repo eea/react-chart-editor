@@ -3732,4 +3732,35 @@
   --ht-wrapper-border-radius: 0px;
 }
 
+.ht-table-wrapper {
+  position: relative;
+  border-radius: var(--ht-wrapper-border-radius);
+  overflow: hidden;
+}
+.ht-table-wrapper .border {
+  position: absolute;
+  background-color: var(--ht-wrapper-border-color);
+  z-index: 999;
+}
+.ht-table-wrapper .border-top,
+.ht-table-wrapper .border-bottom {
+  width: 100%;
+  height: var(--ht-wrapper-border-width);
+}
+.ht-table-wrapper .border-left,
+.ht-table-wrapper .border-right {
+  width: var(--ht-wrapper-border-width);
+  height: 100%;
+}
+.ht-table-wrapper .border-bottom {
+  bottom: 0;
+}
+.ht-table-wrapper .border-right {
+  right: 0;
+}
+
+.handsontable.ht-wrapper::before {
+  content: none;
+}
+
 /*# sourceMappingURL=react-chart-editor.css.map */

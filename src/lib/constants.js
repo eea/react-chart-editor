@@ -208,9 +208,9 @@ export const TRACE_SRC_ATTRIBUTES = [
   'intensity',
   'facecolor',
   'vertexcolor',
-  'groups',
-  'target',
   'text',
+  'groups',
+  'transforms[].target',
 ];
 
 export const LAYOUT_SRC_ATTRIBUTES = ['meta'];

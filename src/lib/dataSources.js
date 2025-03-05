@@ -5,16 +5,25 @@ export function getAttrsPath(container, allowedAttributes) {
   const srcAttributes = {};
 
   function recursiveSearch(container, path = '') {
+    if (!container || typeof container !== 'object') {
+      return;
+    }
+
+    if (Array.isArray(container)) {
+      container.forEach((value, index) => {
+        recursiveSearch(value, `${path}[${index}]`);
+      });
+      return;
+    }
+
     Object.entries(container).forEach(([key, value]) => {
       const newPath = path ? `${path}.${key}` : key;
 
-      if (allowedAttributes.includes(newPath) && Array.isArray(value)) {
+      if (allowedAttributes.includes(newPath.replace(/\[\d+\]/g, '[]')) && Array.isArray(value)) {
         srcAttributes[newPath] = value;
       }
 
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        recursiveSearch(value, newPath);
-      }
+      recursiveSearch(value, newPath);
     });
   }
 

@@ -232,40 +232,40 @@
   @include light();
 }
 
-// .ht-table-wrapper {
-//   position: relative;
-//   border-radius: var(--ht-wrapper-border-radius);
-//   overflow: hidden;
+.ht-table-wrapper {
+  position: relative;
+  border-radius: var(--ht-wrapper-border-radius);
+  overflow: hidden;
 
-//   .border {
-//     position: absolute;
-//     background-color: var(--ht-wrapper-border-color);
-//     z-index: 999;
-//   }
+  .border {
+    position: absolute;
+    background-color: var(--ht-wrapper-border-color);
+    z-index: 999;
+  }
 
-//   .border-top,
-//   .border-bottom {
-//     width: 100%;
-//     height: var(--ht-wrapper-border-width);
-//   }
+  .border-top,
+  .border-bottom {
+    width: 100%;
+    height: var(--ht-wrapper-border-width);
+  }
 
-//   .border-left,
-//   .border-right {
-//     width: var(--ht-wrapper-border-width);
-//     height: 100%;
-//   }
+  .border-left,
+  .border-right {
+    width: var(--ht-wrapper-border-width);
+    height: 100%;
+  }
 
-//   .border-bottom {
-//     bottom: 0;
-//   }
+  .border-bottom {
+    bottom: 0;
+  }
 
-//   .border-right {
-//     right: 0;
-//   }
-// }
+  .border-right {
+    right: 0;
+  }
+}
 
-// .handsontable.ht-wrapper {
-//   &::before {
-//     content: none;
-//   }
-// }
+.handsontable.ht-wrapper {
+  &::before {
+    content: none;
+  }
+}
