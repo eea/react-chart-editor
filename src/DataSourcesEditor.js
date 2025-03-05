@@ -50,6 +50,7 @@ class DataSourcesEditor extends Component {
     super();
     this.hot = null;
     this.colHeaders = null;
+    this.update = {};
     this.tableEl = React.createRef();
     this.previewEl = React.createRef();
     this.deserialize = this.deserialize.bind(this);
@@ -297,20 +298,23 @@ class DataSourcesEditor extends Component {
     return dataSources;
   }
 
-  loadDataSources(dataSources) {
+  loadDataSources(dataSources, update) {
     const data = this.deserialize(dataSources);
     this.colHeaders = Object.keys(dataSources);
     this.hot.loadData(data);
     this.hot.updateSettings({
       colHeaders: this.colHeaders,
     });
+    if (update) {
+      this.update = update;
+    }
   }
 
   onUpdate(changes) {
     requestAnimationFrame(() => {
       const update = {
-        layout: {},
-        traces: [],
+        layout: this.update?.layout || {},
+        traces: this.update?.traces || [],
       };
       const prevColHeaders = this.colHeaders;
       const dataSources = this.serialize();
@@ -346,14 +350,17 @@ class DataSourcesEditor extends Component {
 
       attrs.forEach(({attr, trace, layout, index}) => {
         function updateAttr(attr, value) {
+          if (layout && attr.includes('meta.columnNames')) {
+            return;
+          }
           if (trace && !update.traces[index]) {
             update.traces[index] = {};
           }
           if (trace) {
-            update.traces[index][attr] = value;
+            update.traces[index][attr] = update.traces[index][attr] || value;
           }
           if (layout) {
-            update.layout[attr] = value;
+            update.layout[attr] = update.layout[attr] || value;
           }
         }
 
@@ -476,6 +483,8 @@ class DataSourcesEditor extends Component {
           },
         });
       }
+
+      this.update = {};
     });
   }
 
