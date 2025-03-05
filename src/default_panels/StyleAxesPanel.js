@@ -217,6 +217,7 @@ class StyleAxesPanel extends Component {
                 clearable={false}
                 options={[
                   {label: _('Auto'), value: 'auto'},
+                  {label: _('0'), value: 0},
                   {label: _('45'), value: 45},
                   {label: _('90'), value: 90},
                   {label: _('135'), value: 135},

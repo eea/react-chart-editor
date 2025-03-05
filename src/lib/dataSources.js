@@ -39,8 +39,15 @@ export function getSrcAttr(container, attr, srcConverters) {
   return {
     key,
     value,
+    originalValue: value,
     attr,
   };
+}
+
+export function getAdjustedSrcAttr(srcAttr) {
+  return Array.isArray(srcAttr.value) && srcAttr.value.length === 1
+    ? {...srcAttr, value: srcAttr.value[0]}
+    : srcAttr;
 }
 
 export function getData(trace, srcAttr, dataSources) {

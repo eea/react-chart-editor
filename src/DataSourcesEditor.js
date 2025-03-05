@@ -4,7 +4,7 @@ import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import {HyperFormula} from 'hyperformula';
 import Handsontable from 'handsontable/base';
-import {getAttrsPath, getData, getSrcAttr, inSrcAttr} from 'lib';
+import {getAdjustedSrcAttr, getAttrsPath, getData, getSrcAttr, inSrcAttr} from 'lib';
 import {
   registerPlugin,
   AutoColumnSize,
@@ -184,7 +184,7 @@ class DataSourcesEditor extends Component {
         }
         if (changes) {
           self.onUpdate({
-            editedColumns: changes.map((change) => self.colHeaders[change[1]]),
+            editedColumns: [...new Set(changes.map((change) => self.colHeaders[change[1]]))],
           });
         }
       },
@@ -363,9 +363,35 @@ class DataSourcesEditor extends Component {
 
         // Handle edited columns
         editedColumns.forEach((col) => {
-          if (inSrcAttr(srcAttr, col)) {
-            const data = getData(container, srcAttr, dataSources);
-            updateAttr(attr, data);
+          if (!inSrcAttr(srcAttr, col)) {
+            return;
+          }
+          if (Array.isArray(srcAttr.value)) {
+            srcAttr.value = srcAttr.value.reduce((acc, value) => {
+              if (getData(container, {...srcAttr, value}, dataSources)) {
+                acc.push(value);
+              }
+              return acc;
+            }, []);
+          }
+          const data = getData(container, srcAttr, dataSources);
+          if (!data) {
+            srcAttr.value = null;
+          } else {
+            srcAttr.value = getAdjustedSrcAttr(srcAttr).value;
+          }
+          updateAttr(attr, data);
+          if (!isEqual(srcAttr.value, srcAttr.originalValue)) {
+            updateAttr(srcAttr.key, srcAttr.value);
+            updateAttr(
+              `meta.columnNames.${attr}`,
+              srcAttr.value
+                ? getColumnNames(
+                    typeof srcAttr.value === 'string' ? [srcAttr.value] : srcAttr.value,
+                    dataSourceOptions
+                  )
+                : null
+            );
           }
         });
 
@@ -373,48 +399,50 @@ class DataSourcesEditor extends Component {
         renamedColumns.forEach((colIndex) => {
           const oldCol = prevColHeaders[colIndex];
           const newCol = this.colHeaders[colIndex];
-          if (inSrcAttr(srcAttr, oldCol)) {
-            if (Array.isArray(srcAttr.value)) {
-              srcAttr.value = srcAttr.value.reduce((acc, value) => {
-                if (value === oldCol) {
-                  acc.push(newCol);
-                } else {
-                  acc.push(value);
-                }
-                return acc;
-              }, []);
-              updateAttr(srcAttr.key, srcAttr.value);
-              updateAttr(
-                `meta.columnNames.${attr}`,
-                getColumnNames(srcAttr.value, dataSourceOptions)
-              );
-            }
-            if (typeof srcAttr.value === 'string' && srcAttr.value === oldCol) {
-              srcAttr.value = newCol;
-              updateAttr(srcAttr.key, newCol);
-              updateAttr(
-                `meta.columnNames.${attr}`,
-                getColumnNames([srcAttr.value], dataSourceOptions)
-              );
-            }
+          if (!inSrcAttr(srcAttr, oldCol)) {
+            return;
+          }
+          if (Array.isArray(srcAttr.value)) {
+            srcAttr.value = srcAttr.value.reduce((acc, value) => {
+              if (value === oldCol) {
+                acc.push(newCol);
+              } else {
+                acc.push(value);
+              }
+              return acc;
+            }, []);
+            updateAttr(srcAttr.key, srcAttr.value);
+            updateAttr(
+              `meta.columnNames.${attr}`,
+              getColumnNames(srcAttr.value, dataSourceOptions)
+            );
+          }
+          if (typeof srcAttr.value === 'string' && srcAttr.value === oldCol) {
+            srcAttr.value = newCol;
+            updateAttr(srcAttr.key, newCol);
+            updateAttr(
+              `meta.columnNames.${attr}`,
+              getColumnNames([srcAttr.value], dataSourceOptions)
+            );
           }
         });
 
         // Handle removed columns
         removedColumns.forEach((col) => {
-          if (inSrcAttr(srcAttr, col)) {
-            let data;
-            if (Array.isArray(srcAttr.value)) {
-              srcAttr.value = srcAttr.value.filter((value) => value !== col);
-              data = getData(container, srcAttr, dataSources);
-            }
-            if (typeof srcAttr.value === 'string' && srcAttr.value === col) {
-              srcAttr.value = null;
-              data = null;
-            }
-            updateAttr(srcAttr.key, srcAttr.value);
-            updateAttr(attr, data);
+          if (!inSrcAttr(srcAttr, col)) {
+            return;
           }
+          let data;
+          if (Array.isArray(srcAttr.value)) {
+            srcAttr.value = srcAttr.value.filter((value) => value !== col);
+            data = getData(container, srcAttr, dataSources);
+          }
+          if (typeof srcAttr.value === 'string' && srcAttr.value === col) {
+            srcAttr.value = null;
+            data = null;
+          }
+          updateAttr(srcAttr.key, srcAttr.value);
+          updateAttr(attr, data);
         });
       });
 
