@@ -32,9 +32,9 @@ class PlotlyEditor extends Component {
     return editor.handleUpdate.bind(editor)({type, payload});
   }
 
-  loadDataSources(dataSources) {
+  loadDataSources(dataSources, update) {
     const editor = this.DataSourcesEditor.current;
-    return editor.loadDataSources.bind(editor)(dataSources);
+    return editor.loadDataSources.bind(editor)(dataSources, update);
   }
 
   onPlotResize() {
