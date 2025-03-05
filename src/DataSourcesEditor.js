@@ -214,12 +214,12 @@ class DataSourcesEditor extends Component {
           });
         }
       },
-      afterCreateCol(index, amount) {
-        self.onUpdate({createdColumns: Array.from({length: amount}, (_, i) => index + i)});
-      },
-      afterCreateRow(index, amount) {
-        self.onUpdate({createdRows: Array.from({length: amount}, (_, i) => index + i)});
-      },
+      // afterCreateCol(index, amount) {
+      //   self.onUpdate({createdColumns: Array.from({length: amount}, (_, i) => index + i)});
+      // },
+      // afterCreateRow(index, amount) {
+      //   self.onUpdate({createdRows: Array.from({length: amount}, (_, i) => index + i)});
+      // },
       afterRemoveCol(index, amount) {
         const columns = Array.from({length: amount}, (_, i) => index + i);
         self.onUpdate({
@@ -440,12 +440,14 @@ class DataSourcesEditor extends Component {
         });
       }
 
-      this.props.onUpdate({
-        type: EDITOR_ACTIONS.UPDATE_DATA_SOURCES,
-        payload: {
-          dataSources,
-        },
-      });
+      if (!isEqual(this.props.dataSources, dataSources)) {
+        this.props.onUpdate({
+          type: EDITOR_ACTIONS.UPDATE_DATA_SOURCES,
+          payload: {
+            dataSources,
+          },
+        });
+      }
     });
   }
 
