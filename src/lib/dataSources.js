@@ -50,7 +50,7 @@ export function getAdjustedSrcAttr(srcAttr) {
     : srcAttr;
 }
 
-export function getData(trace, srcAttr, dataSources) {
+export function getData(container, srcAttr, dataSources) {
   let data;
   const srcAttrValue =
     Array.isArray(srcAttr.value) &&
@@ -64,7 +64,7 @@ export function getData(trace, srcAttr, dataSources) {
   } else {
     data = dataSources[srcAttrValue] || null;
   }
-  return maybeTransposeData(data, srcAttr.key, trace.type);
+  return maybeTransposeData(data, srcAttr.key, container.type);
 }
 
 export function inSrcAttr(srcAttr, value) {

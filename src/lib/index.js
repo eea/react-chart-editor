@@ -15,7 +15,7 @@ import connectLayoutToPlot from './connectLayoutToPlot';
 import connectToContainer, {containerConnectedContextTypes} from './connectToContainer';
 import {computeTraceOptionsFromSchema} from './computeTraceOptionsFromSchema';
 import connectTraceToPlot from './connectTraceToPlot';
-import dereference from './dereference';
+import dereference, {getColumnNames} from './dereference';
 import getAllAxes, {
   axisIdToAxisName,
   traceTypeToAxisType,
@@ -251,6 +251,7 @@ export {
   getAdjustedSrcAttr,
   getAllAxes,
   getAttrsPath,
+  getColumnNames,
   getData,
   getSrcAttr,
   getAxisTitle,
