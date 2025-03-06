@@ -129,8 +129,64 @@ class App extends Component {
     super();
 
     this.state = {
-      data: [],
-      layout: {},
+      data: [
+        {
+          branchvalues: 'total',
+          domain: {
+            x: [0, 1],
+            y: [0, 1],
+          },
+          idssrc: 'ids',
+          insidetextorientation: 'auto',
+          labels: [
+            'Female',
+            'Female',
+            'Female',
+            'Female',
+            'Male',
+            'Male',
+            'Male',
+            'Male',
+            'Fri',
+            'Sat',
+            'Sun',
+            'Thur',
+          ],
+          labelssrc: 'labels',
+          level: '',
+          marker: {
+            line: {
+              color: 'rgb(255, 255, 255)',
+              width: 1,
+            },
+          },
+          meta: {
+            columnNames: {
+              ids: 'ids',
+              labels: 'labels',
+              text: '',
+              values: 'values',
+              parents: 'parents_1',
+            },
+          },
+          name: '',
+          parents: ['Fri', 'Sat', 'Sun', 'Thur', 'Fri', 'Sat', 'Sun', 'Thur', '', '', '', ''],
+          sort: true,
+          textinfo: 'label+percent',
+          type: 'sunburst',
+          values: [
+            127.31, 551.05, 357.7, 534.89, 198.57, 1227.35, 1269.46, 561.4399999999999, 325.88,
+            1778.4, 1627.16, 1096.33,
+          ],
+          valuessrc: 'values',
+          parentssrc: 'parents_1',
+        },
+      ],
+      layout: {
+        mapbox: {
+          style: 'open-street-map',
+        },
+      },
       frames: [],
       dataSources: {
         Day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],

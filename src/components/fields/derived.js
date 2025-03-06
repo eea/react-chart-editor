@@ -782,6 +782,8 @@ export const HovermodeDropdown = connectToContainer(UnconnectedVisibilitySelect,
             {label: _('Closest'), value: 'closest'},
             {label: _('X Axis'), value: 'x'},
             {label: _('Y Axis'), value: 'y'},
+            {label: _('X Unified'), value: 'x unified'},
+            {label: _('Y Unified'), value: 'y unified'},
             {label: _('Disable'), value: false},
           ]
         : [
