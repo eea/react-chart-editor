@@ -39,9 +39,9 @@ export class UnconnectedTextEditor extends Component {
       });
     }
 
-    if (adjustedValue === '<br>') {
-      adjustedValue = null;
-    }
+    // if (adjustedValue === '<br>') {
+    //   adjustedValue = null;
+    // }
 
     updatePlot(adjustedValue);
   }

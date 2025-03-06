@@ -43,8 +43,6 @@ class Dropdown extends Component {
       dropdownStyle.width = width;
     }
 
-    console.log(options, this.props);
-
     const opts = options.map((opt) =>
       typeof opt === 'string' ? {label: opt, [valueKey]: opt} : opt
     );
