@@ -52,14 +52,27 @@ class Dropdown extends Component {
       [className]: className,
     });
 
+    const getOption = (value) => {
+      if (!value) {
+        return null;
+      }
+
+      return opts.find((o) => o[valueKey] === value) || {label: value, [valueKey]: value};
+    };
+
     return (
       <div className={dropdownContainerClass} style={dropdownStyle}>
         <Select
           placeholder={placeholder || _('Select an Option')}
           isClearable={clearable}
-          value={opts.filter((o) =>
-            Array.isArray(value) ? value.includes(o[valueKey]) : value === o[valueKey]
-          )}
+          value={
+            Array.isArray(value)
+              ? value.reduce((acc, v) => {
+                  acc.push(getOption(v));
+                  return acc;
+                }, [])
+              : getOption(value)
+          }
           options={opts}
           isSearchable={searchable}
           onChange={this.onChange}

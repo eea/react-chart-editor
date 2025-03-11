@@ -3730,6 +3730,8 @@
   --ht-wrapper-border-color: var(--color-border-default);
   --ht-wrapper-border-width: 1px;
   --ht-wrapper-border-radius: 0px;
+  --ht-scrollbar-track-color: var(--panel-background);
+  --ht-scrollbar-thumb-color: var(--color-border-default);
 }
 
 .ht-table-wrapper {
@@ -3761,6 +3763,34 @@
 
 .handsontable.ht-wrapper::before {
   content: none;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  .handsontable {
+    scrollbar-color: unset;
+    scrollbar-width: unset;
+  }
+}
+.wtHolder::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.wtHolder::-webkit-scrollbar-track {
+  background-color: var(--ht-scrollbar-track-color);
+}
+
+.wtHolder::-webkit-scrollbar-thumb {
+  background-color: var(--ht-scrollbar-thumb-color);
+  border-radius: 5px;
+}
+
+.wtHolder::-webkit-scrollbar-corner {
+  background-color: var(--ht-scrollbar-track-color);
+}
+
+.handsontable tr td.highlight-cell {
+  background-color: var(--color-background-light);
 }
 
 /*# sourceMappingURL=react-chart-editor.css.map */

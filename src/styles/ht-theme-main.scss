@@ -36,6 +36,10 @@
   --ht-wrapper-border-width: 1px;
   --ht-wrapper-border-radius: 0px;
 
+  // Scrollbar
+  --ht-scrollbar-track-color: var(--panel-background);
+  --ht-scrollbar-thumb-color: var(--color-border-default);
+
   // --ht-font-size: 14px;
   // --ht-line-height: 20px;
   // --ht-font-weight: 400;
@@ -268,4 +272,35 @@
   &::before {
     content: none;
   }
+}
+
+// Scrollbar styling
+
+@supports selector(::-webkit-scrollbar) {
+  .handsontable {
+    scrollbar-color: unset;
+    scrollbar-width: unset;
+  }
+}
+
+.wtHolder::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.wtHolder::-webkit-scrollbar-track {
+  background-color: var(--ht-scrollbar-track-color);
+}
+
+.wtHolder::-webkit-scrollbar-thumb {
+  background-color: var(--ht-scrollbar-thumb-color);
+  border-radius: 5px;
+}
+
+.wtHolder::-webkit-scrollbar-corner {
+  background-color: var(--ht-scrollbar-track-color);
+}
+
+.handsontable tr td.highlight-cell {
+  background-color: var(--color-background-light);
 }

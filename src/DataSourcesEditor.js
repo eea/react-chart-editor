@@ -176,18 +176,52 @@ class DataSourcesEditor extends Component {
         engine: HyperFormula,
       },
       // Hooks
+      beforeChange(changes, source) {
+        if (!['edit'].includes(source)) {
+          return;
+        }
+        changes.forEach((change) => {
+          const newVal = change[3];
+          // Convert numeric strings into real numbers
+          if (!isNaN(newVal) && newVal !== '' && typeof newVal === 'string') {
+            if (/^0\d+/.test(newVal) && !/^0\.\d+$/.test(newVal)) {
+              return;
+            }
+            change[3] = parseFloat(newVal);
+          }
+        });
+      },
       afterChange(changes, source) {
-        if (['updateData', 'loadData'].includes(source)) {
+        if (changes) {
+          changes.forEach((change) => {
+            if (change[3] !== null) {
+              this.setCellMeta(change[0], change[1], 'className', 'highlight-cell');
+            } else {
+              this.setCellMeta(change[0], change[1], 'className', '');
+            }
+          });
+        } else {
+          this.getData().forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+              if (cell !== null) {
+                this.setCellMeta(rowIndex, colIndex, 'className', 'highlight-cell');
+              } else {
+                this.setCellMeta(rowIndex, colIndex, 'className', '');
+              }
+            });
+          });
+        }
+        if (source === 'updateData') {
           self.onUpdate({
             editedColumns: self.colHeaders,
           });
-          return;
         }
-        if (changes) {
+        if (source === 'edit' && changes) {
           self.onUpdate({
             editedColumns: [...new Set(changes.map((change) => self.colHeaders[change[1]]))],
           });
         }
+        this.render();
       },
       afterUpdateSettings(settings) {
         const colHeadersChanged = !isEqual(settings.colHeaders, self.colHeaders);
@@ -241,7 +275,7 @@ class DataSourcesEditor extends Component {
           self.renameColumn(coords.col);
         }, 100);
       },
-      init: () => {
+      init() {
         window.dispatchEvent(new Event('resize'));
       },
     });
@@ -301,7 +335,7 @@ class DataSourcesEditor extends Component {
   loadDataSources(dataSources, update) {
     const data = this.deserialize(dataSources);
     this.colHeaders = Object.keys(dataSources);
-    this.hot.loadData(data);
+    this.hot.updateData(data);
     this.hot.updateSettings({
       colHeaders: this.colHeaders,
     });

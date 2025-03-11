@@ -110,6 +110,9 @@ class PlotlyEditor extends Component {
               onInitialized={(...args) => {
                 this.handleRender(...args);
                 this.onPlotResize();
+                if (this.props.onUpdate) {
+                  this.props.onUpdate(...args[0]);
+                }
                 if (this.props.onInitialized) {
                   this.props.onInitialized(...args);
                 }
