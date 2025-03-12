@@ -42,12 +42,11 @@ class PlotlyEditor extends Component {
     const gridEl = containerEl.querySelector('.grid_panel');
     const previewEl = containerEl.querySelector('.grid_panel__resize-preview');
     const plotEl = containerEl.querySelector('.plot_panel');
-
     requestAnimationFrame(() => {
-      plotEl.style.height =
+      plotEl.style.maxHeight =
         Math.max(
           MIN_PLOT_HEIGHT,
-          containerEl.clientHeight - (gridEl.offsetHeight + previewEl.offsetHeight)
+          containerEl.clientHeight - (gridEl.clientHeight + previewEl.clientHeight) - 1
         ) + 'px';
       window.dispatchEvent(new Event('resize'));
     });
@@ -110,11 +109,13 @@ class PlotlyEditor extends Component {
               onInitialized={(...args) => {
                 this.handleRender(...args);
                 this.onPlotResize();
-                if (this.props.onUpdate) {
-                  this.props.onUpdate(...args[0]);
-                }
+
                 if (this.props.onInitialized) {
                   this.props.onInitialized(...args);
+                }
+
+                if (this.props.onUpdate) {
+                  this.props.onUpdate(...args[0]);
                 }
               }}
               onUpdate={this.handleRender}

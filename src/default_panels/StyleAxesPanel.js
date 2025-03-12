@@ -21,6 +21,7 @@ import {
   VisibilitySelect,
   DropdownCustom,
   TickFormat,
+  DataSelector,
 } from '../components';
 
 import {HoverColor} from '../components/fields/derived';
@@ -142,18 +143,6 @@ class StyleAxesPanel extends Component {
                   {label: _('Boundaries'), value: 'boundaries'},
                 ]}
               />
-              <Radio
-                label={_('Grid Spacing')}
-                attr="tickmode"
-                options={[
-                  {label: _('Auto'), value: 'auto'},
-                  {label: _('Custom'), value: 'linear'},
-                ]}
-              />
-
-              <DTicks label={_('Step Offset')} attr="tick0" />
-              <DTicksInterval label={_('Step Size')} attr="dtick" />
-              <NTicks label={_('Max Number of Lines')} attr="nticks" />
             </VisibilitySelect>
           </PlotlySection>
           <PlotlySection name={_('Zero Line')} attr="zeroline">
@@ -313,18 +302,21 @@ class StyleAxesPanel extends Component {
                 ]}
               />
 
-              <Radio
+              <Dropdown
                 label={_('Tick Spacing')}
                 attr="tickmode"
                 options={[
                   {label: _('Auto'), value: 'auto'},
-                  {label: _('Custom'), value: 'linear'},
+                  {label: _('Linear'), value: 'linear'},
+                  {label: _('Array'), value: 'array'},
                 ]}
               />
 
               <DTicks label={_('Step Offset')} attr="tick0" />
               <DTicksInterval label={_('Step Size')} attr="dtick" />
               <NTicks label={_('Max Number of Labels')} attr="nticks" />
+              <DataSelector label={_('Tick Values')} attr="tickvals" />
+              <DataSelector label={_('Tick Text')} attr="ticktext" />
             </VisibilitySelect>
           </PlotlySection>
         </AxesFold>
@@ -352,18 +344,6 @@ class StyleAxesPanel extends Component {
               <Numeric label={_('Length')} attr="ticklen" units="px" />
               <Numeric label={_('Width')} attr="tickwidth" units="px" />
               <ColorPicker label={_('Color')} attr="tickcolor" />
-              <Radio
-                label={_('Tick Spacing')}
-                attr="tickmode"
-                options={[
-                  {label: _('Auto'), value: 'auto'},
-                  {label: _('Custom'), value: 'linear'},
-                ]}
-              />
-
-              <DTicks label={_('Step Offset')} attr="tick0" />
-              <DTicksInterval label={_('Step Size')} attr="dtick" />
-              <NTicks label={_('Max Number of Markers')} attr="nticks" />
             </VisibilitySelect>
           </PlotlySection>
           <PlotlySection name={_('Multicategory Dividers')} attr="showdividers">

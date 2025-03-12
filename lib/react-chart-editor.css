@@ -3665,10 +3665,12 @@
 }
 .grid_and_plot .grid_panel {
   padding: 1rem 1rem 0;
+  box-sizing: border-box;
 }
 .grid_and_plot .grid_panel__resize-bar {
   position: relative;
   display: flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
   width: calc(100% - 2rem);
@@ -3696,7 +3698,9 @@
   opacity: 0.3;
 }
 .grid_and_plot .plot_panel {
-  height: -webkit-fill-available;
+  height: 100%;
+  min-height: 450px;
+  box-sizing: border-box;
   padding: 0.5rem 1rem;
 }
 
