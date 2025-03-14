@@ -471,7 +471,7 @@ export const PositioningRef = connectToContainer(UnconnectedDropdown, {
 
 export const PositioningNumeric = connectToContainer(UnconnectedNumericOrDate, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer, fullValue, updatePlot} = plotProps;
+    const {fullContainer} = plotProps;
     if (
       fullContainer &&
       (fullContainer[props.attr[0] + 'ref'] === 'paper' ||
@@ -479,20 +479,10 @@ export const PositioningNumeric = connectToContainer(UnconnectedNumericOrDate, {
     ) {
       plotProps.units = '%';
       plotProps.showSlider = true;
-      plotProps.max = 200;
-      plotProps.min = -100;
-      plotProps.step = 1;
-      if (isNumeric(fullValue)) {
-        plotProps.fullValue = Math.round(100 * fullValue);
-      }
-
-      plotProps.updatePlot = (v) => {
-        if (isNumeric(v)) {
-          updatePlot(v / 100);
-        } else {
-          updatePlot(v);
-        }
-      };
+      plotProps.showArrows = true;
+      plotProps.max = 1;
+      plotProps.min = 0;
+      plotProps.step = 0.02;
     }
   },
 });

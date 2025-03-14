@@ -347,8 +347,8 @@ class DataSourcesEditor extends Component {
   onUpdate(changes) {
     requestAnimationFrame(() => {
       const update = {
-        layout: this.update?.layout || {},
-        traces: this.update?.traces || [],
+        layout: {...(this.update?.layout || {})},
+        traces: {...(this.update?.traces || [])},
       };
       const prevColHeaders = this.colHeaders;
       const dataSources = this.serialize();
@@ -486,6 +486,13 @@ class DataSourcesEditor extends Component {
           updateAttr(attr, data);
         });
       });
+
+      console.log(
+        '[DEBUG]',
+        update,
+        'props.dataSources == dataSources',
+        isEqual(this.props.dataSources, dataSources)
+      );
 
       update.traces.forEach((update, i) => {
         if (!Object.keys(update).length) {
