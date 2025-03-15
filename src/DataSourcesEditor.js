@@ -348,7 +348,7 @@ class DataSourcesEditor extends Component {
     requestAnimationFrame(() => {
       const update = {
         layout: {...(this.update?.layout || {})},
-        traces: {...(this.update?.traces || [])},
+        traces: [...(this.update?.traces || [])],
       };
       const prevColHeaders = this.colHeaders;
       const dataSources = this.serialize();
