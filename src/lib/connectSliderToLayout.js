@@ -26,6 +26,7 @@ export default function connectSliderToLayout(WrappedComponent) {
 
     getChildContext() {
       return {
+        getDflt: () => undefined,
         getValObject: (attr) =>
           !this.context.getValObject ? null : this.context.getValObject(`sliders[].${attr}`),
         updateContainer: this.updateSlider,
@@ -68,6 +69,7 @@ export default function connectSliderToLayout(WrappedComponent) {
     container: PropTypes.object,
     fullContainer: PropTypes.object,
     getValObject: PropTypes.func,
+    getDflt: PropTypes.func,
   };
 
   const {plotly_editor_traits} = WrappedComponent;

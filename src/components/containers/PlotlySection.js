@@ -12,6 +12,12 @@ export class Section extends Component {
     this.sectionVisible = true;
   }
 
+  getChildContext() {
+    return {
+      resettable: this.props.resettable ?? this.context.resettable,
+    };
+  }
+
   render() {
     if (!this.sectionVisible) {
       return null;
@@ -35,6 +41,10 @@ Section.propTypes = {
   children: PropTypes.node,
   name: PropTypes.string,
   attr: PropTypes.string,
+  resettable: PropTypes.bool,
+};
+Section.childContextTypes = {
+  resettable: PropTypes.bool,
 };
 
 export default class PlotlySection extends Section {
@@ -80,5 +90,5 @@ export default class PlotlySection extends Section {
   }
 }
 
-PlotlySection.plotly_editor_traits = {no_visibility_forcing: true};
+PlotlySection.plotly_editor_traits = {container_section: true, no_visibility_forcing: true};
 PlotlySection.contextTypes = containerConnectedContextTypes;

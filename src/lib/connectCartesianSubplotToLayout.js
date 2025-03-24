@@ -39,6 +39,7 @@ export default function connectCartesianSubplotToLayout(WrappedComponent) {
 
     getChildContext() {
       return {
+        getDflt: () => undefined,
         getValObject: (attr) =>
           !this.context.getValObject
             ? null
@@ -89,6 +90,7 @@ export default function connectCartesianSubplotToLayout(WrappedComponent) {
     container: PropTypes.object,
     fullContainer: PropTypes.object,
     getValObject: PropTypes.func,
+    getDflt: PropTypes.func,
   };
 
   const {plotly_editor_traits} = WrappedComponent;

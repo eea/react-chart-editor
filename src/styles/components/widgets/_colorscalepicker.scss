@@ -23,6 +23,7 @@ $text-padding: 5px;
   border: none;
   background: none;
   max-height: none;
+  z-index: unset;
 }
 
 // Some more styling adjustments to original react-
@@ -47,11 +48,10 @@ $text-padding: 5px;
 .customPickerContainer {
   text-align: left;
   width: $colorscale-clickable-part-width;
+  padding-top: var(--spacing-quarter-unit);
 }
 
 .customPickerContainer__clickable {
-  margin-top: 5px;
-  min-height: 27px;
   width: $colorscale-clickable-part-width;
 }
 
@@ -74,4 +74,8 @@ $text-padding: 5px;
 
 .customPickerContainer__category-dropdown {
   width: $colorscale-clickable-part-width !important;
+}
+
+.colorList {
+  position: relative;
 }

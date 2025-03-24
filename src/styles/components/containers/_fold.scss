@@ -93,7 +93,7 @@
     &__moving-controls {
       height: 27px;
       margin-top: -7px;
-      margin-right: 5px;
+      margin-left: 5px;
 
       svg {
         font-weight: bold;
@@ -149,9 +149,11 @@
       }
     }
 
-    &__delete {
+    &__delete,
+    &__reset {
       font-size: 18px;
       opacity: 0.75;
+      margin-left: 5px;
       transform: translateY(-2px);
       &:hover {
         opacity: 1;

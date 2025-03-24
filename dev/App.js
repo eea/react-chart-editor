@@ -129,8 +129,67 @@ class App extends Component {
     super();
 
     this.state = {
+      forceRender: {},
       data: [],
-      layout: {},
+      layout: {
+        margin: {
+          t: 0,
+          b: 0,
+          l: 0,
+          r: 0,
+        },
+        xaxis: {
+          automargin: true,
+        },
+        yaxis: {
+          automargin: true,
+        },
+        // template: {
+        //   data: {
+        //     bar: [
+        //       {
+        //         marker: {
+        //           color: '#FF0000',
+        //         },
+        //       },
+        //       {
+        //         marker: {
+        //           color: 'rgb(0,255,0)',
+        //         },
+        //       },
+        //     ],
+        //   },
+        //   layout: {
+        //     margin: {
+        //       t: 0,
+        //     },
+        //     font: {
+        //       size: 16,
+        //       color: 'rgb(255,0,0)',
+        //     },
+        //     annotationdefaults: {
+        //       showarrow: false,
+        //     },
+        //     imagedefaults: {
+        //       layer: 'below',
+        //     },
+        //     colorscale: {
+        //       sequential: [
+        //         [0, '#c8fff8'],
+        //         [0.17, '#a0e5dc'],
+        //         [0.33, '#78cac0'],
+        //         [0.5, '#50b0a4'],
+        //         [0.67, '#289588'],
+        //         [0.83, '#007b6c'],
+        //         [1, '#005248'],
+        //       ],
+        //     },
+        //     yaxis: {
+        //       automargin: true,
+        //     },
+        //   },
+        // },
+      },
       frames: [],
       dataSources: {
         Day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -213,6 +272,7 @@ class App extends Component {
           plotly={plotly}
           onUpdate={this.updateState}
           onUpdateDataSources={(dataSources) => this.setState({dataSources})}
+          forceRender={() => this.setState({forceRender: {}})}
           divId="gd"
           useResizeHandler
           debug

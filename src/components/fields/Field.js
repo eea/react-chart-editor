@@ -106,6 +106,7 @@ Field.propTypes = {
   children: PropTypes.node,
   extraComponent: PropTypes.any,
   fieldContainerClassName: PropTypes.string,
+  resettable: PropTypes.bool,
 };
 
 Field.contextTypes = {

@@ -37,12 +37,12 @@ const Item = ({item, active, handleClick, actions, showActions, complex}) => {
       <div className="trace-item__image">
         {!complex && (
           <div className="trace-item__image__svg">
-            <SimpleIcon />
+            <SimpleIcon className="trace-simple-icon" />
           </div>
         )}
         {complex && (
           <div className="trace-item__image__wrapper">
-            <ComplexIcon />
+            <ComplexIcon className="trace-complex-icon" />
           </div>
         )}
       </div>
@@ -255,7 +255,7 @@ export class TraceTypeSelectorButton extends Component {
     return (
       <div className="trace-type-select-button" onClick={handleClick ? handleClick : null}>
         <div className="trace-type-select-button__icon">
-          <Icon />
+          <Icon className="trace-icon" />
         </div>
         {label}
       </div>

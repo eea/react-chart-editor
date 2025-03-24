@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
   AxesRange,
+  TickMode,
   DTicks,
   DTicksInterval,
   NTicks,
+  TickArrayDataSelector,
   ColorPicker,
   Dropdown,
   FontSelector,
@@ -21,10 +23,8 @@ import {
   VisibilitySelect,
   DropdownCustom,
   TickFormat,
-  DataSelector,
+  SpikeColor,
 } from '../components';
-
-import {HoverColor} from '../components/fields/derived';
 
 class StyleAxesPanel extends Component {
   render() {
@@ -83,6 +83,15 @@ class StyleAxesPanel extends Component {
                 {label: _('Normal'), value: 'normal'},
                 {label: _('To Zero'), value: 'tozero'},
                 {label: _('Non-Negative'), value: 'nonnegative'},
+              ]}
+            />
+          </PlotlySection>
+          <PlotlySection name={_('Zoom Interactivity')} attr="fixedrange">
+            <Radio
+              attr="fixedrange"
+              options={[
+                {label: _('Enable'), value: false},
+                {label: _('Disable'), value: true},
               ]}
             />
           </PlotlySection>
@@ -302,7 +311,7 @@ class StyleAxesPanel extends Component {
                 ]}
               />
 
-              <Dropdown
+              <TickMode
                 label={_('Tick Spacing')}
                 attr="tickmode"
                 options={[
@@ -315,8 +324,8 @@ class StyleAxesPanel extends Component {
               <DTicks label={_('Step Offset')} attr="tick0" />
               <DTicksInterval label={_('Step Size')} attr="dtick" />
               <NTicks label={_('Max Number of Labels')} attr="nticks" />
-              <DataSelector label={_('Tick Values')} attr="tickvals" />
-              <DataSelector label={_('Tick Text')} attr="ticktext" />
+              <TickArrayDataSelector label={_('Tick Values')} attr="tickvals" />
+              <TickArrayDataSelector label={_('Tick Text')} attr="ticktext" />
             </VisibilitySelect>
           </PlotlySection>
         </AxesFold>
@@ -361,7 +370,7 @@ class StyleAxesPanel extends Component {
           </PlotlySection>
         </AxesFold>
 
-        <AxesFold name={_('Range Slider')} axisFilter={(axis) => axis._subplot.includes('xaxis')}>
+        <AxesFold name={_('Range Slider')} axisFilter={(axis) => axis._attr === 'xaxis'}>
           <RangesliderVisible
             attr="rangeslider.visible"
             options={[
@@ -503,7 +512,7 @@ class StyleAxesPanel extends Component {
             ]}
           />
           <Numeric label={_('Thickness')} attr="spikethickness" units="px" />
-          <HoverColor label={_('Color')} attr="spikecolor" defaultColor="#808285" handleEmpty />
+          <SpikeColor label={_('Color')} attr="spikecolor" defaultColor="808285" handleEmpty />
         </AxesFold>
       </LayoutPanel>
     );

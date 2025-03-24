@@ -2,19 +2,51 @@ import FoldEmpty from './FoldEmpty';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import classnames from 'classnames';
-import {CloseIcon, AngleDownIcon} from 'plotly-icons';
+import {CloseIcon, AngleDownIcon, RefreshIcon} from 'plotly-icons';
 import {unpackPlotProps, containerConnectedContextTypes, striptags} from 'lib';
 
 export class Fold extends Component {
   constructor() {
     super();
     this.foldVisible = true;
+    this.resetEl = React.createRef();
+    this.getResettableAttrs = this.getResettableAttrs.bind(this);
   }
 
   getChildContext() {
     return {
+      resettable: this.props.resettable,
       foldInfo: this.props.foldInfo ? this.props.foldInfo : null,
     };
+  }
+
+  getResettableAttrs(children) {
+    let attrs = {};
+    if (!children) {
+      return attrs;
+    }
+    React.Children.forEach(children, (child) => {
+      if (!child) {
+        return;
+      }
+      const {container_section, visibility_select} = child.type?.plotly_editor_traits || {};
+      if ((container_section || visibility_select) && child.props.resettable !== true) {
+        return;
+      }
+      if (!container_section && child.props.resettable !== false && child.props.attr) {
+        attrs[child.props.attr] = null;
+      }
+      if (
+        child.type?.plotly_editor_traits?.container_section ||
+        child.type?.plotly_editor_traits?.visibility_select
+      ) {
+        attrs = {
+          ...attrs,
+          ...this.getResettableAttrs(child.props.children),
+        };
+      }
+    });
+    return attrs;
   }
 
   render() {
@@ -71,9 +103,6 @@ export class Fold extends Component {
             e.stopPropagation();
             deleteContainer(foldInfo);
           }}
-          role="button"
-          tabIndex="0"
-          onKeyUp={() => {}}
         >
           <CloseIcon />
         </div>
@@ -84,7 +113,6 @@ export class Fold extends Component {
         <span
           className={`fold__top__moving-controls--up${canMoveUp ? '' : '--disabled'}`}
           onClick={(e) => {
-            // prevents fold toggle to happen when clicking on moving arrow controls
             e.stopPropagation();
 
             if (canMoveUp) {
@@ -94,16 +122,12 @@ export class Fold extends Component {
               moveContainer('up');
             }
           }}
-          role="button"
-          tabIndex="0"
-          onKeyUp={() => {}}
         >
           <AngleDownIcon />
         </span>
         <span
           className={`fold__top__moving-controls--down${canMoveDown ? '' : '--disabled'}`}
           onClick={(e) => {
-            // prevents fold toggle to happen when clicking on moving arrow controls
             e.stopPropagation();
             if (canMoveDown) {
               if (!moveContainer || typeof moveContainer !== 'function') {
@@ -118,6 +142,37 @@ export class Fold extends Component {
       </div>
     );
 
+    const resetControls = this.props.resettable && (
+      <div
+        className="fold__top__reset js-fold__reset"
+        aria-label={'Reset settings'}
+        data-microtip-position="top-left"
+        data-microtip-size="max-content"
+        role="tooltip"
+        onClick={(e) => {
+          e.stopPropagation();
+          const el = this.resetEl.current;
+
+          if (el) {
+            el.style.transition = 'rotate 0.5s ease-in-out';
+            el.style.rotate = '360deg';
+
+            setTimeout(() => {
+              el.style.transition = 'none';
+              el.style.rotate = '0deg';
+            }, 510); // eslint-disable-line no-magic-numbers
+          }
+          const resettableAttrs = this.getResettableAttrs(this.props.children);
+
+          this.context.updateContainer(resettableAttrs);
+        }}
+      >
+        <div ref={this.resetEl}>
+          <RefreshIcon />
+        </div>
+      </div>
+    );
+
     const foldHeader = !hideHeader && (
       <div className={headerClass} onClick={toggleFold}>
         <div className="fold__top__arrow-title">
@@ -126,6 +181,7 @@ export class Fold extends Component {
           <div className="fold__top__title">{striptags(name)}</div>
         </div>
         {canReorder && movingControls}
+        {resetControls}
         {deleteButton}
       </div>
     );
@@ -173,13 +229,16 @@ Fold.propTypes = {
   name: PropTypes.string,
   canMoveUp: PropTypes.bool,
   canMoveDown: PropTypes.bool,
+  resettable: PropTypes.bool,
 };
 
 Fold.contextTypes = {
+  updateContainer: PropTypes.func,
   deleteContainer: PropTypes.func,
 };
 
 Fold.childContextTypes = {
+  resettable: PropTypes.bool,
   foldInfo: PropTypes.object,
 };
 
@@ -224,6 +283,7 @@ class PlotlyFold extends Fold {
 }
 
 PlotlyFold.plotly_editor_traits = {
+  container_fold: true,
   foldable: true,
 };
 

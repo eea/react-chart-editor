@@ -215,8 +215,9 @@ class DataSourcesEditor extends Component {
           self.onUpdate({
             editedColumns: self.colHeaders,
           });
+          return;
         }
-        if (source === 'edit' && changes) {
+        if (changes?.length) {
           self.onUpdate({
             editedColumns: [...new Set(changes.map((change) => self.colHeaders[change[1]]))],
           });
@@ -487,12 +488,12 @@ class DataSourcesEditor extends Component {
         });
       });
 
-      console.log(
-        '[DEBUG]',
-        update,
-        'props.dataSources == dataSources',
-        isEqual(this.props.dataSources, dataSources)
-      );
+      // console.log(
+      //   '[DEBUG]',
+      //   update,
+      //   'props.dataSources == dataSources',
+      //   isEqual(this.props.dataSources, dataSources)
+      // );
 
       update.traces.forEach((update, i) => {
         if (!Object.keys(update).length) {

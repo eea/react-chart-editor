@@ -11,6 +11,7 @@ export const containerConnectedContextTypes = {
   fullContainer: PropTypes.object,
   fullData: PropTypes.array,
   fullLayout: PropTypes.object,
+  getDflt: PropTypes.func,
   getValObject: PropTypes.func,
   graphDiv: PropTypes.object,
   layout: PropTypes.object,
@@ -20,6 +21,8 @@ export const containerConnectedContextTypes = {
   traceIndexes: PropTypes.array,
   customConfig: PropTypes.object,
   hasValidCustomConfigVisibilityRules: PropTypes.bool,
+  resettable: PropTypes.bool,
+  foldInfo: PropTypes.object,
 };
 
 export default function connectToContainer(WrappedComponent, config = {}) {

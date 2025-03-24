@@ -90,7 +90,16 @@ export default function connectAxesToLayout(WrappedComponent) {
     }
 
     getChildContext() {
+      const {dfltGraphDiv} = this.context;
       return {
+        getDflt: (attr) => {
+          const axesTarget = this.state.axesTarget;
+          // console.log(this.container);
+          return (
+            nestedProperty(dfltGraphDiv._fullLayout[axesTarget]?._template || {}, attr).get() ??
+            nestedProperty(dfltGraphDiv._fullLayout[axesTarget] || {}, attr).get()
+          );
+        },
         getValObject: (attr) =>
           !this.context.getValObject
             ? null
@@ -150,6 +159,7 @@ export default function connectAxesToLayout(WrappedComponent) {
     updateContainer: PropTypes.func,
     localize: PropTypes.func,
     getValObject: PropTypes.func,
+    dfltGraphDiv: PropTypes.any,
   };
 
   AxesConnectedComponent.childContextTypes = {
@@ -160,6 +170,7 @@ export default function connectAxesToLayout(WrappedComponent) {
     defaultContainer: PropTypes.object,
     fullContainer: PropTypes.object,
     updateContainer: PropTypes.func,
+    getDflt: PropTypes.func,
     getValObject: PropTypes.func,
   };
 

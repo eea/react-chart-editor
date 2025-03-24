@@ -733,6 +733,10 @@
   overflow-x: visible;
   overflow-y: visible;
 }
+.editor_controls .sizes-info {
+  padding: var(--spacing-quarter-unit) var(--spacing-half-unit);
+  font-size: var(--font-size-small);
+}
 .editor_controls .fold {
   width: 100%;
   user-select: none;
@@ -815,7 +819,7 @@
 .editor_controls .fold__top__moving-controls {
   height: 27px;
   margin-top: -7px;
-  margin-right: 5px;
+  margin-left: 5px;
 }
 .editor_controls .fold__top__moving-controls svg {
   font-weight: bold;
@@ -867,12 +871,13 @@
 .editor_controls .fold__top__moving-controls--down--disabled svg:hover {
   opacity: 0.3;
 }
-.editor_controls .fold__top__delete {
+.editor_controls .fold__top__delete, .editor_controls .fold__top__reset {
   font-size: 18px;
   opacity: 0.75;
+  margin-left: 5px;
   transform: translateY(-2px);
 }
-.editor_controls .fold__top__delete:hover {
+.editor_controls .fold__top__delete:hover, .editor_controls .fold__top__reset:hover {
   opacity: 1;
 }
 .editor_controls .fold__content {
@@ -1733,6 +1738,7 @@
   border: none;
   background: none;
   max-height: none;
+  z-index: unset;
 }
 .editor_controls .colorscalePickerContainer input:focus {
   outline: none;
@@ -1752,10 +1758,9 @@
 .editor_controls .customPickerContainer {
   text-align: left;
   width: 180px;
+  padding-top: var(--spacing-quarter-unit);
 }
 .editor_controls .customPickerContainer__clickable {
-  margin-top: 5px;
-  min-height: 27px;
   width: 180px;
 }
 .editor_controls .customPickerContainer__expanded-content {
@@ -1772,6 +1777,9 @@
 }
 .editor_controls .customPickerContainer__category-dropdown {
   width: 180px !important;
+}
+.editor_controls .colorList {
+  position: relative;
 }
 .editor_controls .dropdown-container {
   flex-grow: 1;
@@ -3522,6 +3530,10 @@
 .editor_controls [role~=tooltip][data-microtip-size=large]::after {
   white-space: initial;
   width: 260px;
+}
+.editor_controls [role~=tooltip][data-microtip-size=max-content]::after {
+  white-space: initial;
+  width: max-content;
 }
 .editor_controls .datetimepicker-container {
   min-width: 176px;

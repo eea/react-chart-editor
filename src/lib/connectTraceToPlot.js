@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
 import {
@@ -20,6 +21,7 @@ export default function connectTraceToPlot(WrappedComponent) {
       this.deleteTrace = this.deleteTrace.bind(this);
       this.updateTrace = this.updateTrace.bind(this);
       this.moveTrace = this.moveTrace.bind(this);
+      this.getTraceDflt = this.getTraceDflt.bind(this);
       this.setLocals(props, context);
     }
 
@@ -35,6 +37,12 @@ export default function connectTraceToPlot(WrappedComponent) {
       const fullTrace = getFullTrace(props, context);
 
       this.childContext = {
+        getDflt: (attr) => {
+          const dflt = this.props.traceIndexes.map((trIndex) => this.getTraceDflt(trIndex, attr));
+          const allEqual =
+            this.props.traceIndexes.length > 1 ? dflt.every((val) => isEqual(val, dflt[0])) : true;
+          return allEqual ? dflt[0] : undefined;
+        },
         getValObject: (attr) =>
           !plotly
             ? null
@@ -193,6 +201,14 @@ export default function connectTraceToPlot(WrappedComponent) {
       });
     }
 
+    getTraceDflt(trIndex, attr) {
+      const {dfltGraphDiv} = this.context;
+      return (
+        nestedProperty(dfltGraphDiv._fullData[trIndex]._template || {}, attr).get() ??
+        nestedProperty(dfltGraphDiv._fullData[trIndex], attr).get()
+      );
+    }
+
     render() {
       return <WrappedComponent name={this.name} icon={this.icon} {...this.props} />;
     }
@@ -211,9 +227,11 @@ export default function connectTraceToPlot(WrappedComponent) {
     plotly: PropTypes.object,
     onUpdate: PropTypes.func,
     layout: PropTypes.object,
+    dfltGraphDiv: PropTypes.any,
   };
 
   TraceConnectedComponent.childContextTypes = {
+    getDflt: PropTypes.func,
     getValObject: PropTypes.func,
     updateContainer: PropTypes.func,
     deleteContainer: PropTypes.func,

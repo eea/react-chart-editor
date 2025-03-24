@@ -66,7 +66,7 @@ class TraceAccordion extends Component {
 
       dataArrayPositionsByTraceType[traceType].push(trace.index);
       // _expandedIndex is the trace's index in the fullData array
-      fullDataArrayPositionsByTraceType[traceType].push(trace._expandedIndex);
+      fullDataArrayPositionsByTraceType[traceType].push(trace._expandedIndex || trace.index);
     });
 
     return Object.keys(fullDataArrayPositionsByTraceType).map((type, index) => (
@@ -88,7 +88,7 @@ class TraceAccordion extends Component {
           key={i}
           traceIndexes={[d.index]}
           canDelete={this.props.canAdd}
-          fullDataArrayPosition={[d._expandedIndex]}
+          fullDataArrayPosition={[d._expandedIndex || d.index]}
         >
           {this.props.children}
         </TraceFold>

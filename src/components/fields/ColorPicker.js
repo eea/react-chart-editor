@@ -22,7 +22,8 @@ export class UnconnectedColorPicker extends Component {
 
   render() {
     const {localize: _} = this.context;
-    const empty = !this.props.fullValue && this.props.handleEmpty;
+    const handleEmpty = this.props.handleEmpty && this.props.plotProps.handleEmpty !== false;
+    const empty = !this.props.fullValue && handleEmpty;
 
     if (empty) {
       return (
@@ -44,7 +45,7 @@ export class UnconnectedColorPicker extends Component {
 
     return (
       <Field {...this.props}>
-        {this.props.handleEmpty && (
+        {handleEmpty && (
           <div className="js-test-info" style={{marginBottom: '0.5rem'}}>
             This color can be computed from other parts of the figure by{' '}
             <a

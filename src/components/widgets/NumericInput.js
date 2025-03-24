@@ -1,12 +1,44 @@
 import EditableText from './EditableText';
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import isNumeric from 'fast-isnumeric';
-import Slider from 'react-rangeslider';
+import ReactSlider from 'react-rangeslider';
 import {CarretDownIcon, CarretUpIcon} from 'plotly-icons';
 
 export const UP_ARROW = 38;
 export const DOWN_ARROW = 40;
+
+function Slider(props) {
+  const [value, setValue] = React.useState(props.value);
+
+  useEffect(() => {
+    if (props.value !== value) {
+      setValue(props.value);
+    }
+  }, [props.value]);
+
+  return (
+    <ReactSlider
+      min={props.min}
+      max={props.max}
+      step={props.step}
+      value={value}
+      onChange={setValue}
+      onChangeComplete={() => {
+        props.onChange(value);
+      }}
+      tooltip={false}
+    />
+  );
+}
+
+Slider.propTypes = {
+  min: PropTypes.number,
+  max: PropTypes.number,
+  step: PropTypes.number,
+  value: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default class NumericInput extends Component {
   constructor(props) {
@@ -33,7 +65,10 @@ export default class NumericInput extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.state.value) {
-      this.setState({value: nextProps.value});
+      this.setState({
+        value: nextProps.value,
+        numericInputClassName: this.getNumericInputClassName(nextProps.value),
+      });
     }
   }
 
@@ -99,7 +134,7 @@ export default class NumericInput extends Component {
       updatedValue = Math.min(max, updatedValue);
     }
 
-    this.props.onUpdate(updatedValue);
+    this.props.onUpdate(parseFloat(updatedValue.toFixed(4))); // eslint-disable-line no-magic-numbers
   }
 
   incrementValue(direction) {

@@ -27,6 +27,7 @@ export default function connectAggregationToTransform(WrappedComponent) {
 
     getChildContext() {
       return {
+        getDflt: () => undefined,
         getValObject: (attr) =>
           !this.context.getValObject ? null : this.context.getValObject(`aggregations[].${attr}`),
         updateContainer: this.updateAggregation,
@@ -74,6 +75,7 @@ export default function connectAggregationToTransform(WrappedComponent) {
     container: PropTypes.object,
     fullContainer: PropTypes.object,
     getValObject: PropTypes.func,
+    getDflt: PropTypes.func,
   };
 
   const {plotly_editor_traits} = WrappedComponent;

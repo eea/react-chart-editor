@@ -1,7 +1,15 @@
 import React, {Component, createRef} from 'react';
-import createPlotComponent from 'react-plotly.js/factory';
+import pick from 'lodash/pick';
+import isNil from 'lodash/isNil';
 import PropTypes from 'prop-types';
-import {DEFAULT_FONTS, MIN_PLOT_HEIGHT} from 'lib/constants';
+import {
+  DEFAULT_FONTS,
+  MIN_PLOT_HEIGHT,
+  TRACE_SRC_ATTRIBUTES,
+  LAYOUT_SRC_ATTRIBUTES,
+} from 'lib/constants';
+// import createPlotComponent from 'lib/createPlotComponent';
+import createPlotComponent from 'react-plotly.js/factory';
 
 import EditorControls from './EditorControls';
 import DataSourcesEditor from './DataSourcesEditor';
@@ -9,7 +17,16 @@ import DataSourcesEditor from './DataSourcesEditor';
 class PlotlyEditor extends Component {
   constructor(props) {
     super();
-    this.state = {graphDiv: {}};
+    this.state = {
+      graphDiv: {},
+      dfltGraphDiv: {
+        _fullData: [],
+        _fullLayout: {},
+      },
+      dfltData: [],
+      dfltLayout: {},
+      initialized: false,
+    };
     this.EditorControls = createRef();
     this.DataSourcesEditor = createRef();
     this.PlotComponent = createPlotComponent(props.plotly);
@@ -20,10 +37,58 @@ class PlotlyEditor extends Component {
     this.renderSlot = this.renderSlot.bind(this);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.state.initialized) {
+      return;
+    }
+    const {data, layout} = this.props;
+    if (
+      data !== prevProps.data ||
+      layout !== prevProps.layout ||
+      this.state.initialized !== prevState.initialized
+    ) {
+      this.setState({
+        dfltData: data.map((trace) => ({
+          ...pick(trace, [
+            'type',
+            'xaxis',
+            'yaxis',
+            ...TRACE_SRC_ATTRIBUTES.filter((attr) => !attr.includes('.')),
+          ]),
+          ...(!isNil(trace.autocolorscale) ? {autocolorscale: true} : {}),
+        })),
+        dfltLayout: {
+          ...pick(layout, ['template', ...LAYOUT_SRC_ATTRIBUTES]),
+          ...(layout.xaxis?.rangeslider?.visible ? {xaxis: {rangeslider: {visible: true}}} : {}),
+          ...(layout.annotations?.length
+            ? {
+                annotations: layout.annotations.map(() => ({})),
+              }
+            : {}),
+          ...(layout.shapes?.length
+            ? {
+                shapes: layout.shapes.map(() => ({})),
+              }
+            : {}),
+          ...(layout.images?.length
+            ? {
+                images: layout.images.map(() => ({})),
+              }
+            : {}),
+        },
+      });
+    }
+  }
+
   handleRender(fig, graphDiv) {
-    this.setState({graphDiv});
+    if (!this.props.forceRender) {
+      this.setState({graphDiv});
+    }
+    if (this.props.forceRender) {
+      this.props.forceRender(fig, graphDiv);
+    }
     if (this.props.onRender) {
-      this.props.onRender(graphDiv.data, graphDiv.layout, graphDiv._transitionData._frames);
+      this.props.onRender(fig, graphDiv);
     }
   }
 
@@ -64,6 +129,7 @@ class PlotlyEditor extends Component {
             ref={this.EditorControls}
             customColors={this.props.customColors}
             graphDiv={this.state.graphDiv}
+            dfltGraphDiv={this.state.dfltGraphDiv}
             dataSources={this.props.dataSources}
             dataSourceOptions={this.props.dataSourceOptions}
             defaults={this.props.defaults}
@@ -106,22 +172,38 @@ class PlotlyEditor extends Component {
               config={this.props.config}
               useResizeHandler={this.props.useResizeHandler}
               debug={this.props.debug}
-              onInitialized={(...args) => {
-                this.handleRender(...args);
+              onInitialized={(fig, graphDiv) => {
                 this.onPlotResize();
 
-                if (this.props.onInitialized) {
-                  this.props.onInitialized(...args);
-                }
+                this.setState({initialized: true, graphDiv}, () => {
+                  const {data, layout, frames} = fig;
 
-                if (this.props.onUpdate) {
-                  this.props.onUpdate(...args[0]);
-                }
+                  if (this.props.onInitialized) {
+                    this.props.onInitialized(fig, graphDiv);
+                  }
+
+                  if (this.props.onUpdate) {
+                    this.props.onUpdate(data, layout, frames);
+                  }
+                });
               }}
-              onUpdate={this.handleRender}
+              onUpdate={(fig, graphDiv) =>
+                this.state.initialized ? this.handleRender(fig, graphDiv) : null
+              }
               style={{width: '100%', height: '100%'}}
               divId={this.props.divId}
             />
+            {this.state.initialized && (
+              <this.PlotComponent
+                data={this.state.dfltData}
+                layout={this.state.dfltLayout}
+                frames={this.props.frames}
+                config={this.props.config}
+                // style={{display: 'none'}}
+                divId="plotly-dflt"
+                onInitialized={(_, graphDiv) => this.setState({dfltGraphDiv: graphDiv})}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -143,6 +225,7 @@ PlotlyEditor.propTypes = {
   onUpdate: PropTypes.func,
   onUpdateDataSources: PropTypes.func,
   onRender: PropTypes.func,
+  forceRender: PropTypes.func,
   onInitialized: PropTypes.func,
   plotly: PropTypes.object,
   useResizeHandler: PropTypes.bool,

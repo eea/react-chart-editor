@@ -8,7 +8,7 @@ import React, {Component} from 'react';
 
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
-import {CloseIcon, EditIcon, PlusIcon, RotateLeftIcon, TrashIcon} from 'plotly-icons';
+import {CloseIcon, EditIcon, PlusIcon, RotateLeftIcon} from 'plotly-icons';
 
 // CAREFUL: needs to be the same value as $colorscalepicker-width in _colorscalepicker.scss
 const colorscalepickerContainerWidth = 240;
@@ -38,6 +38,7 @@ class Scale extends Component {
   onClick() {
     this.setState((prevState) => ({
       showColorscalePicker: !prevState.showColorscalePicker,
+      ...(this.state.showCustomizeColor && {showCustomizeColor: false}),
     }));
   }
 
@@ -70,7 +71,10 @@ class Scale extends Component {
   }
 
   handleAddColor() {
-    var newColorscale = [...this.props.selected, 'black'];
+    var newColorscale = [
+      ...this.props.selected,
+      this.props.selected[this.props.selected.length - 1],
+    ];
 
     this.props.onColorscaleChange(newColorscale, this.state.selectedColorscaleType);
   }
@@ -158,10 +162,11 @@ class Scale extends Component {
                           draggableId={`color-${index}`}
                           index={index}
                           isDragDisabled={colorComponentVisibility.includes(true)}
+                          style={{position: 'relative'}}
                         >
                           {(provided, snapshot) => {
                             if (snapshot.isDragging) {
-                              const offset = {x: 20, y: 120};
+                              const offset = {x: 20, y: 0};
                               const x = provided.draggableProps.style.left - offset.x;
                               const y = provided.draggableProps.style.top - offset.y;
                               provided.draggableProps.style.left = x;
@@ -179,34 +184,17 @@ class Scale extends Component {
                                 }}
                               >
                                 <ColorPicker
+                                  selectedColorscale={selected}
                                   selectedColor={item}
                                   onColorChange={(color, isVisible) =>
                                     this.handleColorChange(color, index, isVisible)
                                   }
-                                  onVisibilityChange={(isVisible) =>
-                                    this.handleVisibilityChange(index, isVisible)
-                                  }
+                                  onVisibilityChange={(isVisible) => {
+                                    this.handleVisibilityChange(index, isVisible);
+                                    colorComponentVisibility[index] = false;
+                                  }}
+                                  onDeleteColor={() => this.handleDeleteColor(index)}
                                 />
-                                {selected.length > 2 && (
-                                  <div
-                                    style={{
-                                      position: 'absolute',
-                                      top: 0,
-                                      right: 0,
-                                      cursor: 'pointer',
-                                    }}
-                                  >
-                                    <TrashIcon
-                                      onClick={() => {
-                                        this.handleDeleteColor(index);
-                                        colorComponentVisibility[index] = false;
-                                      }}
-                                      size="18px"
-                                      color="var(--color-sienna)"
-                                      style={{cursor: 'pointer', marginLeft: '0.5rem'}}
-                                    />
-                                  </div>
-                                )}
                               </div>
                             );
                           }}
