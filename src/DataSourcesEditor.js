@@ -152,7 +152,7 @@ class DataSourcesEditor extends Component {
     };
 
     this.hot = new Handsontable(this.tableEl.current, {
-      ...(data.length ? {data} : {}),
+      data,
       width: '100%',
       height: 320,
       rowHeaders: true,
@@ -162,12 +162,12 @@ class DataSourcesEditor extends Component {
       autoWrapRow: true,
       autoWrapCol: true,
       contextMenu,
-      autoColumnSize: {
-        useHeaders: true,
-      },
       fillHandle: 'vertical',
       licenseKey: 'non-commercial-and-evaluation',
       // Plugins
+      autoColumnSize: {
+        useHeaders: true,
+      },
       bindRowsWithHeaders: true,
       copyPaste: true,
       manualColumnMove: true,
@@ -288,16 +288,19 @@ class DataSourcesEditor extends Component {
 
   deserialize(dataSources) {
     let col = 0;
-    return Object.entries(dataSources || {}).reduce((acc, [_, value]) => {
-      value.forEach((_, i) => {
-        if (!acc[i]) {
-          acc[i] = [];
-        }
-        acc[i][col] = value[i];
-      });
-      ++col;
-      return acc;
-    }, []);
+    return Object.entries(dataSources || {}).reduce(
+      (acc, [_, value]) => {
+        value.forEach((_, i) => {
+          if (!acc[i]) {
+            acc[i] = [];
+          }
+          acc[i][col] = value[i];
+        });
+        ++col;
+        return acc;
+      },
+      [[]]
+    );
   }
 
   serialize() {

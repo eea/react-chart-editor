@@ -55,10 +55,14 @@ const Sizes = (_, {graphDiv}) => {
   return (
     <div className="sizes-info">
       <div>Size informations for variate elements.</div>
+      <div>
+        Chart height: {cHeight}px so 1% = {(0.01 * cHeight).toFixed(2)}px
+      </div>
+      <div>
+        Chart width: {cWidth}px so 1% = {(0.01 * cWidth).toFixed(2)}px
+      </div>
       <div>Title height: {titleHeight}px</div>
       <div>Annotation height: {annotationHeight}px</div>
-      <div>0.02% of paper height = {0.02 * cHeight}px</div>
-      <div>0.02% of paper width = {0.02 * cWidth}px</div>
     </div>
   );
 };
@@ -109,6 +113,7 @@ const StyleLayoutPanel = (props, {localize: _}) => (
             {label: _('1 234.56'), value: '. '},
             {label: _('1 234,56'), value: ', '},
             {label: _('1.234,56'), value: ',.'},
+            {label: _('1234.56'), value: '.'},
           ]}
           clearable={false}
         />
