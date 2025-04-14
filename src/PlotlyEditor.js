@@ -97,9 +97,9 @@ class PlotlyEditor extends Component {
     return editor.handleUpdate.bind(editor)({type, payload});
   }
 
-  loadDataSources(dataSources, update) {
+  loadDataSources(dataSources, columns, update) {
     const editor = this.DataSourcesEditor.current;
-    return editor.loadDataSources.bind(editor)(dataSources, update);
+    return editor.loadDataSources.bind(editor)(dataSources, columns, update);
   }
 
   onPlotResize() {
@@ -160,6 +160,7 @@ class PlotlyEditor extends Component {
             data={this.props.data}
             layout={this.props.layout}
             dataSources={this.props.dataSourcesSubset || this.props.dataSources}
+            columns={this.props.columns}
             srcConverters={this.props.srcConverters}
             onUpdate={this.onUpdate}
             onPlotResize={this.onPlotResize}
@@ -220,6 +221,7 @@ PlotlyEditor.propTypes = {
   defaults: PropTypes.object,
   dataSources: PropTypes.object,
   dataSourcesSubset: PropTypes.object,
+  columns: PropTypes.array,
   dataSourceOptions: PropTypes.array,
   frames: PropTypes.array,
   onUpdate: PropTypes.func,

@@ -222,8 +222,10 @@ export const TickMode = connectToContainer(UnconnectedDropdown, {
     plotProps.updatePlot = (v) => {
       const update = {};
       if (v !== 'array') {
-        update.tickvals = null;
-        update.ticktext = null;
+        // TODO: find a way to remove these when needed
+        // update.tickvals = null;
+        // update.tickvalssrc = null;
+        // update.ticktext = null;
       }
       if (v !== 'auto') {
         update.nticks = null;

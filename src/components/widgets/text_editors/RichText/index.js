@@ -188,7 +188,10 @@ class RichText extends Component {
 
     // Dispatch changes to plotly.js
     // TODO consider moving to render (plotly.js is a render target)
-    const htmlContent = this.getEditorStateAsHTML(editorState).replace(/<br>\n*/, '<br>');
+    let htmlContent = this.getEditorStateAsHTML(editorState).replace(/<br>\n*/, '<br>');
+    if (htmlContent === '<br>') {
+      htmlContent = ' ';
+    }
     if (this.props.value !== htmlContent) {
       debounce(this.props.onChange, [htmlContent]);
     }

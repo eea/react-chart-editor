@@ -7,8 +7,8 @@
 @use 'variables/colors';
 @use 'variables/layout';
 
-@import 'handsontable/styles/handsontable.min.css';
-@import 'handsontable/styles/ht-theme-main.min.css';
+@import 'handsontable/styles/handsontable.css';
+@import 'handsontable/styles/ht-theme-main.css';
 
 :root {
   --env: $ENV;

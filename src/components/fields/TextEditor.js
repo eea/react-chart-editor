@@ -39,7 +39,7 @@ export class UnconnectedTextEditor extends Component {
       });
     }
 
-    if (['', '<br>'].includes(adjustedValue)) {
+    if ([''].includes(adjustedValue)) {
       adjustedValue = null;
     }
 

@@ -192,13 +192,18 @@ class App extends Component {
       },
       frames: [],
       dataSources: {
-        Day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        'Time of day': ['Morning', 'Afternoon', 'Evening'],
-        'Monday tasks': ['22', '12', '10'],
-        'Tuesday tasks': ['22', '32', '4'],
-        'Wednesday tasks': ['3', '44', '12'],
-        'Thursday tasks': ['3', '43', '22'],
-        'Friday tasks': ['13', '14', '3'],
+        Day: ['Monday', 'Tuesday', 'Wednesday'],
+        x: ['10', '11', '12'],
+        y: [20, 21, 22],
+        // time: ['09/04/2025', '15/04/2025', '29/04/2025', '30/10/2001', 'xx', '01012025'],
+        // sex: [true, false, true],
+        // Day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        // 'Time of day': ['Morning', 'Afternoon', 'Evening'],
+        // 'Monday tasks': ['22', '12', '10'],
+        // 'Tuesday tasks': ['22', '32', '4'],
+        // 'Wednesday tasks': ['3', '44', '12'],
+        // 'Thursday tasks': ['3', '43', '22'],
+        // 'Friday tasks': ['13', '14', '3'],
       },
       currentMockIndex: -1,
       mocks: [],
@@ -207,6 +212,7 @@ class App extends Component {
     this.loadMock = this.loadMock.bind(this);
     this.loadJSON = this.loadJSON.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.editor = React.createRef();
   }
 
   UNSAFE_componentWillMount() {
@@ -263,6 +269,7 @@ class App extends Component {
     return (
       <div className="app">
         <PlotlyEditor
+          ref={this.editor}
           data={this.state.data}
           layout={this.state.layout}
           frames={this.state.frames}

@@ -28,7 +28,6 @@ const extractTextBlocks = (laTeX) => {
     matchStr = matchObj[1].trim().replace('\\n', '');
     matches.push(matchStr);
   }
-
   return matches.join('<br>');
 };
 

@@ -158,7 +158,7 @@ class EditorControls extends Component {
 
       case EDITOR_ACTIONS.UPDATE_DATA_SOURCES:
         if (this.props.onUpdateDataSources) {
-          this.props.onUpdateDataSources(payload.dataSources);
+          this.props.onUpdateDataSources(payload.dataSources, payload.columns);
         }
         break;
 

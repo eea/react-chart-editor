@@ -1,5 +1,5 @@
-@import 'handsontable/styles/handsontable.min.css';
-@import 'handsontable/styles/ht-theme-main.min.css';
+@import 'handsontable/styles/handsontable.css';
+@import 'handsontable/styles/ht-theme-main.css';
 /*
  * Layout
  */
@@ -3748,65 +3748,83 @@
   --ht-wrapper-border-radius: 0px;
   --ht-scrollbar-track-color: var(--panel-background);
   --ht-scrollbar-thumb-color: var(--color-border-default);
+  --ht-checkbox-checked-border-color: var(--color-button-primary-base-fill);
+  --ht-checkbox-checked-background-color: var(--color-button-primary-base-fill);
+  --ht-checkbox-checked-focus-background-color: var(--color-button-primary-base-fill);
+  --ht-checkbox-focus-ring-color: var(--color-button-primary-base-fill);
 }
 
-.ht-table-wrapper {
+.handsontable.ht_clone_top tr.ht__row_odd td,
+.handsontable.ht_clone_top tr.ht__row_even td {
+  --ht-row-cell-odd-background-color: var(--ht-header-background-color);
+}
+
+.handsontable.ht_clone_top tbody td {
+  color: var(--ht-header-foreground-color);
+  font-weight: var(--ht-header-font-weight);
+  overflow: visible;
   position: relative;
-  border-radius: var(--ht-wrapper-border-radius);
-  overflow: hidden;
-}
-.ht-table-wrapper .border {
-  position: absolute;
-  background-color: var(--ht-wrapper-border-color);
-  z-index: 999;
-}
-.ht-table-wrapper .border-top,
-.ht-table-wrapper .border-bottom {
-  width: 100%;
-  height: var(--ht-wrapper-border-width);
-}
-.ht-table-wrapper .border-left,
-.ht-table-wrapper .border-right {
-  width: var(--ht-wrapper-border-width);
-  height: 100%;
-}
-.ht-table-wrapper .border-bottom {
-  bottom: 0;
-}
-.ht-table-wrapper .border-right {
-  right: 0;
-}
-
-.handsontable.ht-wrapper::before {
-  content: none;
-}
-
-@supports selector(::-webkit-scrollbar) {
-  .handsontable {
-    scrollbar-color: unset;
-    scrollbar-width: unset;
-  }
-}
-.wtHolder::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-.wtHolder::-webkit-scrollbar-track {
-  background-color: var(--ht-scrollbar-track-color);
-}
-
-.wtHolder::-webkit-scrollbar-thumb {
-  background-color: var(--ht-scrollbar-thumb-color);
-  border-radius: 5px;
-}
-
-.wtHolder::-webkit-scrollbar-corner {
-  background-color: var(--ht-scrollbar-track-color);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .handsontable tr td.highlight-cell {
-  background-color: var(--color-background-light);
+  background-color: var(--color-rhino-light-3);
+}
+
+.handsontable {
+  scrollbar-color: unset;
+  scrollbar-width: none;
+}
+
+.handsontable .ht_master .wtHolder {
+  overflow: hidden;
+}
+
+.handsontable .scrollbar-v {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  width: 10px;
+  height: 100%;
+  z-index: 170;
+}
+.handsontable .scrollbar-v .scrollbar-v__thumb {
+  width: 10px;
+  height: 0px;
+  opacity: 0;
+  background-color: var(--ht-scrollbar-thumb-color);
+  transition: opacity 0.2s ease-in-out;
+}
+.handsontable .scrollbar-v .scrollbar-v__thumb.active {
+  opacity: 0.5;
+}
+.handsontable .scrollbar-v:hover .scrollbar-v__thumb {
+  opacity: 0.5;
+}
+
+.handsontable .scrollbar-h {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  width: 100%;
+  height: 10px;
+  z-index: 170;
+}
+.handsontable .scrollbar-h .scrollbar-h__thumb {
+  width: 0px;
+  height: 10px;
+  opacity: 0;
+  background-color: var(--ht-scrollbar-thumb-color);
+  transition: opacity 0.2s ease-in-out;
+}
+.handsontable .scrollbar-h .scrollbar-h__thumb.active {
+  opacity: 0.5;
+}
+.handsontable .scrollbar-h:hover .scrollbar-h__thumb {
+  opacity: 0.5;
 }
 
 /*# sourceMappingURL=react-chart-editor.css.map */
