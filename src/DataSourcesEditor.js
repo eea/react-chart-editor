@@ -500,7 +500,7 @@ class DataSourcesEditor extends Component {
       document.removeEventListener('mouseup', this.handleVerticalDragEnd);
       document.removeEventListener('mousemove', this.handleHorizontalDrag);
       document.removeEventListener('mouseup', this.handleHorizontalDragEnd);
-      this.handleScroll.cancel();
+      this.updateScrollBars.cancel();
     }
     this.hot?.destroy();
   }
