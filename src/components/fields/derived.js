@@ -588,6 +588,7 @@ export const HoverTemplateSwitch = connectToContainer(UnconnectedRadio, {
 
 export const HoverTemplateText = connectToContainer(UnconnectedTextEditor, {
   modifyPlotProps: (props, context, plotProps) => {
+    plotProps.emptyValue = ' ';
     if (plotProps.isVisible && plotProps.fullValue === '') {
       plotProps.isVisible = false;
     }

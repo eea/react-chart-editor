@@ -189,8 +189,8 @@ class RichText extends Component {
     // Dispatch changes to plotly.js
     // TODO consider moving to render (plotly.js is a render target)
     let htmlContent = this.getEditorStateAsHTML(editorState).replace(/<br>\n*/, '<br>');
-    if (htmlContent === '<br>') {
-      htmlContent = ' ';
+    if (htmlContent === '<br>' || htmlContent === '') {
+      htmlContent = this.props.emptyValue;
     }
     if (this.props.value !== htmlContent) {
       debounce(this.props.onChange, [htmlContent]);
@@ -350,11 +350,13 @@ RichText.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.any,
+  emptyValue: PropTypes.any,
 };
 
 RichText.defaultProps = {
   placeholder: '',
   value: '',
+  emptyValue: null,
 };
 
 export default RichText;

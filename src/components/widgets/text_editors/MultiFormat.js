@@ -245,6 +245,7 @@ class MultiFormatTextEditor extends Component {
             onChange={onChange}
             placeholder={placeholder}
             value={value}
+            emptyValue={this.props.emptyValue}
           />
         </div>
         {showBottomTab ? BottomTab : null}
@@ -270,12 +271,14 @@ MultiFormatTextEditor.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string,
+  emptyValue: PropTypes.any,
 };
 
 MultiFormatTextEditor.defaultProps = {
   defaultValuePattern: /^$/,
   placeholder: '',
   value: '',
+  emptyValue: null,
 };
 
 MultiFormatTextEditor.contextTypes = {
