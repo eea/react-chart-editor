@@ -484,7 +484,7 @@ class DataSourcesEditor extends Component {
   }
 
   componentWillUnmount() {
-    const container = self.tableEl.current?.querySelector('.ht_master .wtHolder');
+    const container = this.tableEl.current?.querySelector('.ht_master .wtHolder');
     if (container) {
       container.removeEventListener('scroll', this.handleScroll);
       const verticalThumb = container.querySelector('.scrollbar-v__thumb');
