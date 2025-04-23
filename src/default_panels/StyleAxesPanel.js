@@ -222,6 +222,14 @@ class StyleAxesPanel extends Component {
                   {label: _('180'), value: 180},
                 ]}
               />
+              <Radio
+                label={_('Separate thousands')}
+                attr="separatethousands"
+                options={[
+                  {label: _('Yes'), value: true},
+                  {label: _('No'), value: false},
+                ]}
+              />
               <TickFormat
                 label={_('Label Format')}
                 attr="tickformat"
