@@ -459,6 +459,15 @@ class DataSourcesEditor extends Component {
         this.render();
       },
       init() {
+        window.requestAnimationFrame(() => {
+          const dataSources = self.serialize();
+          const columns = this.getSettings().columns.filter(
+            (col) => Boolean(col.key) && col.key in dataSources
+          );
+          if (!isEqual(self.props.columns, columns)) {
+            self.onUpdate({});
+          }
+        });
         window.dispatchEvent(new Event('resize'));
         const container = self.tableEl.current?.querySelector('.ht_master .wtHolder');
         if (container) {
@@ -788,7 +797,9 @@ class DataSourcesEditor extends Component {
         '[DEBUG]',
         update,
         'props.dataSources == dataSources',
-        isEqual(this.props.dataSources, dataSources)
+        isEqual(this.props.dataSources, dataSources),
+        'props.columns == columns',
+        isEqual(this.props.columns, columns)
       );
 
       update.traces.forEach((update, i) => {
