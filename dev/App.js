@@ -6,14 +6,14 @@ import AceEditor from 'react-ace';
 import Select from 'react-select';
 import PlotlyEditor, {DefaultEditor, Panel} from '../src';
 import Inspector from 'react-inspector';
-import dataSources from './dataSources';
+// import dataSources from './dataSources';
 
 // https://github.com/plotly/react-chart-editor#mapbox-access-tokens
 import ACCESS_TOKENS from '../accessTokens';
 
 // import {customConfigTest} from './customConfigTest';
 
-const config = {mapboxAccessToken: ACCESS_TOKENS.MAPBOX, editable: true};
+const config = {mapboxAccessToken: ACCESS_TOKENS.MAPBOX, editable: true, scrollZoom: true};
 
 // eslint-disable-next-line no-unused-vars
 const traceTypesConfig = {
