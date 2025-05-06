@@ -13,7 +13,7 @@ import ACCESS_TOKENS from '../accessTokens';
 
 // import {customConfigTest} from './customConfigTest';
 
-const config = {mapboxAccessToken: ACCESS_TOKENS.MAPBOX, editable: true, scrollZoom: true};
+const config = {mapboxAccessToken: ACCESS_TOKENS.MAPBOX, editable: true};
 
 // eslint-disable-next-line no-unused-vars
 const traceTypesConfig = {

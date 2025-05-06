@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Select from 'react-select';
 import classnames from 'classnames';
+import isNil from 'lodash/isNil';
 
 class Dropdown extends Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class Dropdown extends Component {
     });
 
     const getOption = (value) => {
-      if (!value) {
+      if (isNil(value)) {
         return null;
       }
 
