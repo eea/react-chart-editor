@@ -34,7 +34,7 @@ import {traceTypeToPlotlyInitFigure, plotlyTraceToCustomTrace} from './customTra
 import * as PlotlyIcons from 'plotly-icons';
 import striptags from './striptags';
 import {capitalize, lowerCase, upperCase, removeNonWord, camelCase, pascalCase} from './strings';
-import {getColorscale} from 'react-colorscales';
+import {getColorscale} from '@eeacms/react-colorscales';
 import {templateString} from 'plotly.js/src/lib';
 import * as constants from './constants';
 import {getAdjustedSrcAttr, getAttrsPath, getSrcAttr, getData, inSrcAttr} from './dataSources';
