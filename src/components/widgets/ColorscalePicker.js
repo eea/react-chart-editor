@@ -1,4 +1,4 @@
-import ColorscalePicker, {Colorscale, COLOR_PICKER_CONSTANTS} from 'react-colorscales';
+import ColorscalePicker, {Colorscale, COLOR_PICKER_CONSTANTS} from '@eeacms/react-colorscales';
 import Dropdown from './Dropdown';
 import ColorPicker from './ColorPicker';
 import Button from './Button';
