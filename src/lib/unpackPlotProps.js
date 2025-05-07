@@ -1,10 +1,29 @@
 /* eslint-disable no-console */
 
+import _isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
+import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
 import isNumeric from 'fast-isnumeric';
+import tinycolor from 'tinycolor2';
 import {MULTI_VALUED, MULTI_VALUED_PLACEHOLDER} from './constants';
 
 const hasFullValue = (fullValue) => fullValue !== void 0 && fullValue !== null;
+
+function isEqual(a, b) {
+  if (isString(a) && isString(b)) {
+    const c1 = tinycolor(a);
+    const c2 = tinycolor(b);
+    if (c1.isValid() && c2.isValid()) {
+      return tinycolor.equals(c1, c2);
+    }
+  }
+  if (isArray(a) && isArray(b)) {
+    return a.length === b.length && a.every((v, i) => isEqual(v, b[i]));
+  }
+  return _isEqual(a, b);
+}
 
 export function hasValidCustomConfigVisibilityRules(customConfig) {
   if (
@@ -100,7 +119,7 @@ export function isVisibleGivenCustomConfig(initial, nextProps, nextContext, comp
 }
 
 export default function unpackPlotProps(props, context) {
-  const {container, getValObject, defaultContainer, updateContainer} = context;
+  const {container, getDflt, getValObject, defaultContainer, updateContainer} = context;
 
   if (!props.attr) {
     return {};
@@ -144,9 +163,24 @@ export default function unpackPlotProps(props, context) {
     description = attrMeta.description;
   }
 
-  const updatePlot = (v) => {
+  const updatePlot = (v, _update = {}) => {
+    if (!props.attr || !updateContainer) {
+      return;
+    }
+    const update = {..._update};
+    if ((props.resettable || (context.resettable && props.resettable !== false)) && !isNil(v)) {
+      const dflt = getDflt(props.attr);
+      const equal = isEqual(v, dflt);
+      if (equal && update.autocolorscale === false) {
+        update.autocolorscale = true;
+      }
+      update[props.attr] = equal ? null : v;
+      console.log(`[DEBUG] ${props.attr}`, v, '=', dflt, '=>', equal);
+    } else {
+      update[props.attr] = v;
+    }
     if (updateContainer) {
-      updateContainer({[props.attr]: v});
+      updateContainer(update);
     }
   };
 

@@ -57,6 +57,7 @@ class EditorControls extends Component {
       fullData: gd._fullData,
       fullLayout: gd._fullLayout,
       graphDiv: gd,
+      dfltGraphDiv: this.props.dfltGraphDiv || {},
       layout: gd.layout,
       locale: this.props.locale,
       onUpdate: this.handleUpdate.bind(this),
@@ -72,6 +73,7 @@ class EditorControls extends Component {
       hasValidCustomConfigVisibilityRules: hasValidCustomConfigVisibilityRules(
         this.props.customConfig
       ),
+      ctx: this.props.ctx,
     };
   }
 
@@ -156,7 +158,7 @@ class EditorControls extends Component {
 
       case EDITOR_ACTIONS.UPDATE_DATA_SOURCES:
         if (this.props.onUpdateDataSources) {
-          this.props.onUpdateDataSources(payload.dataSources);
+          this.props.onUpdateDataSources(payload.dataSources, payload.columns);
         }
         break;
 
@@ -420,6 +422,7 @@ EditorControls.propTypes = {
   defaults: PropTypes.object,
   dictionaries: PropTypes.object,
   graphDiv: PropTypes.object,
+  dfltGraphDiv: PropTypes.object,
   locale: PropTypes.string,
   onUpdate: PropTypes.func,
   onUpdateDataSources: PropTypes.func,
@@ -432,6 +435,7 @@ EditorControls.propTypes = {
   fontOptions: PropTypes.array,
   chartHelp: PropTypes.object,
   customConfig: PropTypes.object,
+  ctx: PropTypes.object,
 };
 
 EditorControls.defaultProps = {
@@ -463,6 +467,7 @@ EditorControls.childContextTypes = {
   fullData: PropTypes.array,
   fullLayout: PropTypes.object,
   graphDiv: PropTypes.any,
+  dfltGraphDiv: PropTypes.any,
   layout: PropTypes.object,
   locale: PropTypes.string,
   localize: PropTypes.func,
@@ -477,6 +482,7 @@ EditorControls.childContextTypes = {
   chartHelp: PropTypes.object,
   customConfig: PropTypes.object,
   hasValidCustomConfigVisibilityRules: PropTypes.bool,
+  ctx: PropTypes.object,
 };
 
 export default EditorControls;

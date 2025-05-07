@@ -39,8 +39,8 @@ export class UnconnectedTextEditor extends Component {
       });
     }
 
-    if (adjustedValue === '<br>') {
-      adjustedValue = null;
+    if (adjustedValue === '') {
+      adjustedValue = this.props.emptyValue;
     }
 
     updatePlot(adjustedValue);
@@ -89,6 +89,7 @@ export class UnconnectedTextEditor extends Component {
       editor = (
         <RichText
           value={fullValue}
+          emptyValue={this.props.emptyValue}
           placeholder={placeholder}
           onChange={this.updatePlot.bind(this)}
         />
@@ -102,6 +103,7 @@ export class UnconnectedTextEditor extends Component {
       editor = (
         <MultiFormat
           value={fullValue}
+          emptyValue={this.props.emptyValue}
           placeholder={placeholder}
           onChange={this.updatePlot.bind(this)}
         />
@@ -119,6 +121,7 @@ export class UnconnectedTextEditor extends Component {
 UnconnectedTextEditor.propTypes = {
   ...Field.propTypes,
   fullValue: PropTypes.any,
+  emptyValue: PropTypes.any,
   htmlOnly: PropTypes.bool,
   latexOnly: PropTypes.bool,
   richTextOnly: PropTypes.bool,
@@ -135,6 +138,7 @@ UnconnectedTextEditor.displayName = 'UnconnectedTextEditor';
 
 export default connectToContainer(UnconnectedTextEditor, {
   modifyPlotProps: (props, context, plotProps) => {
+    plotProps.emptyValue = null;
     if (plotProps.isVisible && plotProps.multiValued) {
       plotProps.isVisible = false;
     }

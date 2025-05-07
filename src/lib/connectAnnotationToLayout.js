@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import nestedProperty from 'plotly.js/src/lib/nested_property';
 import {getDisplayName} from '../lib';
 import {EDITOR_ACTIONS} from './constants';
 
@@ -29,7 +30,18 @@ export default function connectAnnotationToLayout(WrappedComponent) {
     }
 
     getChildContext() {
+      const {annotationIndex} = this.props;
+      const {dfltGraphDiv} = this.context;
       return {
+        getDflt: (attr) => {
+          return (
+            nestedProperty(
+              dfltGraphDiv._fullLayout.annotations[annotationIndex]?._template || {},
+              attr
+            ).get() ??
+            nestedProperty(dfltGraphDiv._fullLayout.annotations[annotationIndex], attr).get()
+          );
+        },
         getValObject: (attr) =>
           !this.context.getValObject ? null : this.context.getValObject(`annotations[].${attr}`),
         updateContainer: this.updateAnnotation,
@@ -94,6 +106,7 @@ export default function connectAnnotationToLayout(WrappedComponent) {
     onUpdate: PropTypes.func,
     updateContainer: PropTypes.func,
     getValObject: PropTypes.func,
+    dfltGraphDiv: PropTypes.any,
   };
 
   AnnotationConnectedComponent.childContextTypes = {
@@ -101,6 +114,7 @@ export default function connectAnnotationToLayout(WrappedComponent) {
     deleteContainer: PropTypes.func,
     container: PropTypes.object,
     fullContainer: PropTypes.object,
+    getDflt: PropTypes.func,
     getValObject: PropTypes.func,
     moveContainer: PropTypes.func,
   };

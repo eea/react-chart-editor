@@ -1,9 +1,9 @@
+import isNumber from 'lodash/isNumber';
 import ColorscalePicker from '../widgets/ColorscalePicker';
 import Field from './Field';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {connectToContainer} from 'lib';
-import {EDITOR_ACTIONS} from 'lib/constants';
 
 export class UnconnectedColorscalePicker extends Component {
   constructor() {
@@ -11,7 +11,7 @@ export class UnconnectedColorscalePicker extends Component {
     this.onUpdate = this.onUpdate.bind(this);
   }
 
-  onUpdate(colorscale, colorscaleType) {
+  onUpdate(colorscale) {
     if (Array.isArray(colorscale)) {
       this.props.updatePlot(
         colorscale.map((c, i) => {
@@ -19,19 +19,10 @@ export class UnconnectedColorscalePicker extends Component {
           if (i === 0) {
             step = 0;
           }
-          return [step, c];
+          return [parseFloat(step.toFixed(2)), c];
         }),
-        colorscaleType
+        isNumber(this.props.fullContainer.index) ? {autocolorscale: false} : {}
       );
-      if (this.props.fullContainer.index !== undefined) {
-        this.context.onUpdate({
-          type: EDITOR_ACTIONS.UPDATE_TRACES,
-          payload: {
-            update: {autocolorscale: false},
-            traceIndexes: [this.props.fullContainer.index],
-          },
-        });
-      }
     }
   }
 
@@ -44,7 +35,7 @@ export class UnconnectedColorscalePicker extends Component {
         <ColorscalePicker
           selected={colorscale}
           onColorscaleChange={this.onUpdate}
-          initialCategory={this.props.initialCategory}
+          initialCategory={this.props.initialCategory || 'sequential'}
           disableCategorySwitch={this.props.disableCategorySwitch}
           editable={this.props.editable}
         />

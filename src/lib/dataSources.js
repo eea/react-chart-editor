@@ -1,20 +1,29 @@
 import nestedProperty from 'plotly.js/src/lib/nested_property';
-import {maybeTransposeData} from '.';
+import {maybeTransposeData} from 'lib';
 
 export function getAttrsPath(container, allowedAttributes) {
   const srcAttributes = {};
 
   function recursiveSearch(container, path = '') {
+    if (!container || typeof container !== 'object') {
+      return;
+    }
+
+    if (Array.isArray(container)) {
+      container.forEach((value, index) => {
+        recursiveSearch(value, `${path}[${index}]`);
+      });
+      return;
+    }
+
     Object.entries(container).forEach(([key, value]) => {
       const newPath = path ? `${path}.${key}` : key;
 
-      if (allowedAttributes.includes(newPath) && Array.isArray(value)) {
+      if (allowedAttributes.includes(newPath.replace(/\[\d+\]/g, '[]')) && Array.isArray(value)) {
         srcAttributes[newPath] = value;
       }
 
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        recursiveSearch(value, newPath);
-      }
+      recursiveSearch(value, newPath);
     });
   }
 
@@ -30,11 +39,20 @@ export function getSrcAttr(container, attr, srcConverters) {
   return {
     key,
     value,
+    originalValue: value,
     attr,
   };
 }
 
-export function getData(trace, srcAttr, dataSources) {
+export function getAdjustedSrcAttr(srcAttr) {
+  return Array.isArray(srcAttr.value) &&
+    srcAttr.value.length === 1 &&
+    (srcAttr.attr === 'x' || srcAttr.attr === 'y')
+    ? {...srcAttr, value: srcAttr.value[0] || null}
+    : srcAttr;
+}
+
+export function getData(container, srcAttr, dataSources) {
   let data;
   const srcAttrValue =
     Array.isArray(srcAttr.value) &&
@@ -48,7 +66,7 @@ export function getData(trace, srcAttr, dataSources) {
   } else {
     data = dataSources[srcAttrValue] || null;
   }
-  return maybeTransposeData(data, srcAttr.key, trace.type);
+  return maybeTransposeData(data, srcAttr.key, container.type);
 }
 
 export function inSrcAttr(srcAttr, value) {

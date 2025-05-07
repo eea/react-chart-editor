@@ -148,6 +148,7 @@ Panel.childContextTypes = {
 class PlotlyPanel extends Panel {}
 
 PlotlyPanel.plotly_editor_traits = {
+  container_panel: true,
   no_visibility_forcing: true,
 };
 

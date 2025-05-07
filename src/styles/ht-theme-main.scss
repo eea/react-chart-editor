@@ -31,6 +31,21 @@
   --ht-icon-active-button-border-color: var(--color-button-primary-base-fill);
   --ht-icon-active-button-hover-border-color: var(--color-button-primary-base-fill);
 
+  // Wrapper
+  --ht-wrapper-border-color: var(--color-border-default);
+  --ht-wrapper-border-width: 1px;
+  --ht-wrapper-border-radius: 0px;
+
+  // Scrollbar
+  --ht-scrollbar-track-color: var(--panel-background);
+  --ht-scrollbar-thumb-color: var(--color-border-default);
+
+  // Checkbox
+  --ht-checkbox-checked-border-color: var(--color-button-primary-base-fill);
+  --ht-checkbox-checked-background-color: var(--color-button-primary-base-fill);
+  --ht-checkbox-checked-focus-background-color: var(--color-button-primary-base-fill);
+  --ht-checkbox-focus-ring-color: var(--color-button-primary-base-fill);
+
   // --ht-font-size: 14px;
   // --ht-line-height: 20px;
   // --ht-font-weight: 400;
@@ -225,4 +240,124 @@
 .ht-theme-main-dark,
 .ht-theme-main-dark-auto {
   @include light();
+}
+
+// .ht-table-wrapper {
+//   position: relative;
+//   border-radius: var(--ht-wrapper-border-radius);
+//   overflow: hidden;
+
+//   .border {
+//     position: absolute;
+//     background-color: var(--ht-wrapper-border-color);
+//     z-index: 999;
+//   }
+
+//   .border-top,
+//   .border-bottom {
+//     width: 100%;
+//     height: var(--ht-wrapper-border-width);
+//   }
+
+//   .border-left,
+//   .border-right {
+//     width: var(--ht-wrapper-border-width);
+//     height: 100%;
+//   }
+
+//   .border-bottom {
+//     bottom: 0;
+//   }
+
+//   .border-right {
+//     right: 0;
+//   }
+// }
+
+// .handsontable.ht-wrapper {
+//   &::before {
+//     content: none;
+//   }
+// }
+
+.handsontable.ht_clone_top tr.ht__row_odd td,
+.handsontable.ht_clone_top tr.ht__row_even td {
+  --ht-row-cell-odd-background-color: var(--ht-header-background-color);
+}
+
+.handsontable.ht_clone_top tbody td {
+  color: var(--ht-header-foreground-color);
+  font-weight: var(--ht-header-font-weight);
+  overflow: visible;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.handsontable tr td.highlight-cell {
+  background-color: var(--color-rhino-light-3);
+}
+
+// Scrollbar styling
+.handsontable {
+  scrollbar-color: unset;
+  scrollbar-width: none;
+}
+
+.handsontable .ht_master .wtHolder {
+  overflow: hidden;
+}
+
+.handsontable .scrollbar-v {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--ht-header-background-color);
+  opacity: 0.8;
+  width: 10px;
+  height: 100%;
+  z-index: 170;
+
+  .scrollbar-v__thumb {
+    width: 10px;
+    height: 0px;
+    opacity: 0.9;
+    background-color: var(--ht-scrollbar-thumb-color);
+    transition: opacity 0.2s ease-in-out;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+
+  &:hover .scrollbar-v__thumb {
+    opacity: 1;
+  }
+}
+
+.handsontable .scrollbar-h {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: var(--ht-header-background-color);
+  opacity: 0.8;
+  width: 100%;
+  height: 10px;
+  z-index: 170;
+
+  .scrollbar-h__thumb {
+    width: 0px;
+    height: 10px;
+    opacity: 0.91;
+    background-color: var(--ht-scrollbar-thumb-color);
+    transition: opacity 0.2s ease-in-out;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+
+  &:hover .scrollbar-h__thumb {
+    opacity: 1;
+  }
 }

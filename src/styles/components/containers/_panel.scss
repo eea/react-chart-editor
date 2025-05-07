@@ -102,3 +102,8 @@
     overflow-y: visible;
   }
 }
+
+.sizes-info {
+  padding: var(--spacing-quarter-unit) var(--spacing-half-unit);
+  font-size: var(--font-size-small);
+}

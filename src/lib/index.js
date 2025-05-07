@@ -15,7 +15,7 @@ import connectLayoutToPlot from './connectLayoutToPlot';
 import connectToContainer, {containerConnectedContextTypes} from './connectToContainer';
 import {computeTraceOptionsFromSchema} from './computeTraceOptionsFromSchema';
 import connectTraceToPlot from './connectTraceToPlot';
-import dereference from './dereference';
+import dereference, {getColumnNames} from './dereference';
 import getAllAxes, {
   axisIdToAxisName,
   traceTypeToAxisType,
@@ -37,7 +37,7 @@ import {capitalize, lowerCase, upperCase, removeNonWord, camelCase, pascalCase} 
 import {getColorscale} from 'react-colorscales';
 import {templateString} from 'plotly.js/src/lib';
 import * as constants from './constants';
-import {getAttrsPath, getSrcAttr, getData, inSrcAttr} from './dataSources';
+import {getAdjustedSrcAttr, getAttrsPath, getSrcAttr, getData, inSrcAttr} from './dataSources';
 
 const TOO_LIGHT_FACTOR = 0.8;
 
@@ -248,8 +248,10 @@ export {
   containerConnectedContextTypes,
   constants,
   dereference,
+  getAdjustedSrcAttr,
   getAllAxes,
   getAttrsPath,
+  getColumnNames,
   getData,
   getSrcAttr,
   getAxisTitle,

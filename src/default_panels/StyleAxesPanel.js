@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
   AxesRange,
+  TickMode,
   DTicks,
   DTicksInterval,
   NTicks,
+  TickArrayDataSelector,
   ColorPicker,
   Dropdown,
   FontSelector,
@@ -21,9 +23,8 @@ import {
   VisibilitySelect,
   DropdownCustom,
   TickFormat,
+  SpikeColor,
 } from '../components';
-
-import { HoverColor} from '../components/fields/derived';
 
 class StyleAxesPanel extends Component {
   render() {
@@ -85,6 +86,15 @@ class StyleAxesPanel extends Component {
               ]}
             />
           </PlotlySection>
+          <PlotlySection name={_('Zoom Interactivity')} attr="fixedrange">
+            <Radio
+              attr="fixedrange"
+              options={[
+                {label: _('Enable'), value: false},
+                {label: _('Disable'), value: true},
+              ]}
+            />
+          </PlotlySection>
           <Dropdown
             label={_('Direction')}
             attr="direction"
@@ -142,18 +152,6 @@ class StyleAxesPanel extends Component {
                   {label: _('Boundaries'), value: 'boundaries'},
                 ]}
               />
-              <Radio
-                label={_('Grid Spacing')}
-                attr="tickmode"
-                options={[
-                  {label: _('Auto'), value: 'auto'},
-                  {label: _('Custom'), value: 'linear'},
-                ]}
-              />
-
-              <DTicks label={_('Step Offset')} attr="tick0" />
-              <DTicksInterval label={_('Step Size')} attr="dtick" />
-              <NTicks label={_('Max Number of Lines')} attr="nticks" />
             </VisibilitySelect>
           </PlotlySection>
           <PlotlySection name={_('Zero Line')} attr="zeroline">
@@ -217,10 +215,19 @@ class StyleAxesPanel extends Component {
                 clearable={false}
                 options={[
                   {label: _('Auto'), value: 'auto'},
+                  {label: _('0'), value: 0},
                   {label: _('45'), value: 45},
                   {label: _('90'), value: 90},
                   {label: _('135'), value: 135},
                   {label: _('180'), value: 180},
+                ]}
+              />
+              <Radio
+                label={_('Separate thousands')}
+                attr="separatethousands"
+                options={[
+                  {label: _('Yes'), value: true},
+                  {label: _('No'), value: false},
                 ]}
               />
               <TickFormat
@@ -235,16 +242,8 @@ class StyleAxesPanel extends Component {
                 dafaultOpt=""
                 clearable={false}
               />
-              <Numeric
-                label={_('Label Shift')}
-                attr="ticklabelshift"
-                units="px"
-              />
-              <Numeric
-                label={_('Label Standoff')}
-                attr="ticklabelstandoff"
-                units="px"
-              />
+              <Numeric label={_('Label Shift')} attr="ticklabelshift" units="px" />
+              <Numeric label={_('Label Standoff')} attr="ticklabelstandoff" units="px" />
               <Dropdown
                 label={_('Exponents')}
                 attr="exponentformat"
@@ -320,18 +319,21 @@ class StyleAxesPanel extends Component {
                 ]}
               />
 
-              <Radio
+              <TickMode
                 label={_('Tick Spacing')}
                 attr="tickmode"
                 options={[
                   {label: _('Auto'), value: 'auto'},
-                  {label: _('Custom'), value: 'linear'},
+                  {label: _('Linear'), value: 'linear'},
+                  {label: _('Array'), value: 'array'},
                 ]}
               />
 
               <DTicks label={_('Step Offset')} attr="tick0" />
               <DTicksInterval label={_('Step Size')} attr="dtick" />
               <NTicks label={_('Max Number of Labels')} attr="nticks" />
+              <TickArrayDataSelector label={_('Tick Values')} attr="tickvals" />
+              <TickArrayDataSelector label={_('Tick Text')} attr="ticktext" />
             </VisibilitySelect>
           </PlotlySection>
         </AxesFold>
@@ -359,18 +361,6 @@ class StyleAxesPanel extends Component {
               <Numeric label={_('Length')} attr="ticklen" units="px" />
               <Numeric label={_('Width')} attr="tickwidth" units="px" />
               <ColorPicker label={_('Color')} attr="tickcolor" />
-              <Radio
-                label={_('Tick Spacing')}
-                attr="tickmode"
-                options={[
-                  {label: _('Auto'), value: 'auto'},
-                  {label: _('Custom'), value: 'linear'},
-                ]}
-              />
-
-              <DTicks label={_('Step Offset')} attr="tick0" />
-              <DTicksInterval label={_('Step Size')} attr="dtick" />
-              <NTicks label={_('Max Number of Markers')} attr="nticks" />
             </VisibilitySelect>
           </PlotlySection>
           <PlotlySection name={_('Multicategory Dividers')} attr="showdividers">
@@ -388,10 +378,7 @@ class StyleAxesPanel extends Component {
           </PlotlySection>
         </AxesFold>
 
-        <AxesFold
-          name={_('Range Slider')}
-          axisFilter={(axis) => axis._subplot.includes('xaxis')}
-        >
+        <AxesFold name={_('Range Slider')} axisFilter={(axis) => axis._attr === 'xaxis'}>
           <RangesliderVisible
             attr="rangeslider.visible"
             options={[
@@ -400,26 +387,14 @@ class StyleAxesPanel extends Component {
             ]}
           />
           <NumericFraction label={_('Height')} attr="rangeslider.thickness" />
-          <ColorPicker
-            label={_('Background Color')}
-            attr="rangeslider.bgcolor"
-          />
-          <Numeric
-            label={_('Border Width')}
-            attr="rangeslider.borderwidth"
-            units="px"
-          />
-          <ColorPicker
-            label={_('Border Color')}
-            attr="rangeslider.bordercolor"
-          />
+          <ColorPicker label={_('Background Color')} attr="rangeslider.bgcolor" />
+          <Numeric label={_('Border Width')} attr="rangeslider.borderwidth" units="px" />
+          <ColorPicker label={_('Border Color')} attr="rangeslider.bordercolor" />
         </AxesFold>
 
         <AxesFold
           name={_('Timescale Buttons')}
-          axisFilter={(axis) =>
-            axis._subplot.includes('xaxis') && axis.type === 'date'
-          }
+          axisFilter={(axis) => axis._subplot.includes('xaxis') && axis.type === 'date'}
         >
           <Radio
             attr="rangeselector.visible"
@@ -545,12 +520,7 @@ class StyleAxesPanel extends Component {
             ]}
           />
           <Numeric label={_('Thickness')} attr="spikethickness" units="px" />
-          <HoverColor
-            label={_('Color')}
-            attr="spikecolor"
-            defaultColor="#808285"
-            handleEmpty
-          />
+          <SpikeColor label={_('Color')} attr="spikecolor" defaultColor="808285" handleEmpty />
         </AxesFold>
       </LayoutPanel>
     );

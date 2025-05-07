@@ -31,6 +31,7 @@ export default function connectRangeSelectorToAxis(WrappedComponent) {
 
     getChildContext() {
       return {
+        getDflt: () => undefined,
         getValObject: (attr) =>
           !this.context.getValObject
             ? null
@@ -92,6 +93,7 @@ export default function connectRangeSelectorToAxis(WrappedComponent) {
     container: PropTypes.object,
     fullContainer: PropTypes.object,
     getValObject: PropTypes.func,
+    getDflt: PropTypes.func,
   };
 
   const {plotly_editor_traits} = WrappedComponent;

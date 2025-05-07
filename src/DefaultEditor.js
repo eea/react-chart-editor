@@ -118,6 +118,7 @@ DefaultEditor.contextTypes = {
   fullData: PropTypes.array,
   fullLayout: PropTypes.object,
   layout: PropTypes.object,
+  ctx: PropTypes.object,
 };
 
 export default DefaultEditor;

@@ -11,6 +11,7 @@ import Info from './Info';
 import {UnconnectedColorPicker} from './ColorPicker';
 import {UnconnectedTextEditor} from './TextEditor';
 import {UnconnectedVisibilitySelect} from './VisibilitySelect';
+import {UnconnectedDataSelector} from './DataSelector';
 import {connectToContainer, getAllAxes, getAxisTitle, axisIdToAxisName} from 'lib';
 import PropTypes from 'prop-types';
 import Text from './Text';
@@ -214,6 +215,35 @@ export const AxesRange = connectToContainer(UnconnectedAxisRangeValue, {
   },
 });
 
+export const TickMode = connectToContainer(UnconnectedDropdown, {
+  modifyPlotProps: (props, context, plotProps) => {
+    const {updatePlot} = plotProps;
+
+    plotProps.updatePlot = (v) => {
+      const update = {};
+      if (v !== 'array') {
+        // TODO: find a way to remove these when needed
+        // update.tickvals = null;
+        // update.tickvalssrc = null;
+        // update.ticktext = null;
+      }
+      if (v !== 'auto') {
+        update.nticks = null;
+      }
+      if (v !== 'linear') {
+        update.tick0 = null;
+        update.dtick = null;
+      }
+      if (v === 'array') {
+        update.tickvals = [];
+      }
+      updatePlot(v, update);
+    };
+
+    return plotProps;
+  },
+});
+
 export const NTicks = connectToContainer(UnconnectedNumeric, {
   modifyPlotProps: (props, context, plotProps) => {
     const {fullContainer} = plotProps;
@@ -256,6 +286,26 @@ export const DTicksInterval = connectToContainer(UnconnectedAxisInterval, {
     if (plotProps.isVisible && fullContainer && fullContainer.tickmode !== 'linear') {
       plotProps.isVisible = false;
     }
+    return plotProps;
+  },
+});
+
+export const TickArrayDataSelector = connectToContainer(UnconnectedDataSelector, {
+  modifyPlotProps: (props, context, plotProps) => {
+    const {updateContainer} = context;
+    const {fullContainer} = plotProps;
+    plotProps.isVisible = true;
+    if (fullContainer && fullContainer.tickmode !== 'array') {
+      plotProps.isVisible = false;
+    }
+    plotProps.updateContainer = (update) => {
+      if (updateContainer) {
+        updateContainer({
+          ...update,
+          ...(!update.tickvals ? {tickvals: []} : {}),
+        });
+      }
+    };
     return plotProps;
   },
 });
@@ -405,6 +455,7 @@ export const AnnotationRef = connectToContainer(UnconnectedDropdown, {
       fullContainer: {axref, ayref},
       localize: _,
     } = context;
+    const {updatePlot} = plotProps;
 
     let currentOffsetRef;
     if (props.attr === 'xref') {
@@ -431,7 +482,7 @@ export const AnnotationRef = connectToContainer(UnconnectedDropdown, {
 
     if (currentOffsetRef !== 'pixel') {
       plotProps.updatePlot = (v) => {
-        if (!plotProps.updateContainer) {
+        if (!updatePlot) {
           return;
         }
 
@@ -440,12 +491,12 @@ export const AnnotationRef = connectToContainer(UnconnectedDropdown, {
          * reference to match if the value is an axis value.
          * Behaviour copied from plot.ly/create
          */
-        const update = {[props.attr]: v};
+        const update = {};
         if (v !== 'paper') {
           update[`a${props.attr}`] = v;
         }
 
-        plotProps.updateContainer(update);
+        updatePlot(v, update);
       };
     }
 
@@ -471,28 +522,13 @@ export const PositioningRef = connectToContainer(UnconnectedDropdown, {
 
 export const PositioningNumeric = connectToContainer(UnconnectedNumericOrDate, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer, fullValue, updatePlot} = plotProps;
+    const {fullContainer} = plotProps;
     if (
       fullContainer &&
       (fullContainer[props.attr[0] + 'ref'] === 'paper' ||
         fullContainer[props.attr[props.attr.length - 1] + 'ref'] === 'paper')
     ) {
-      plotProps.units = '%';
-      plotProps.showSlider = true;
-      plotProps.max = 200;
-      plotProps.min = -100;
-      plotProps.step = 1;
-      if (isNumeric(fullValue)) {
-        plotProps.fullValue = Math.round(100 * fullValue);
-      }
-
-      plotProps.updatePlot = (v) => {
-        if (isNumeric(v)) {
-          updatePlot(v / 100);
-        } else {
-          updatePlot(v);
-        }
-      };
+      plotProps.step = 0.02;
     }
   },
 });
@@ -552,6 +588,7 @@ export const HoverTemplateSwitch = connectToContainer(UnconnectedRadio, {
 
 export const HoverTemplateText = connectToContainer(UnconnectedTextEditor, {
   modifyPlotProps: (props, context, plotProps) => {
+    plotProps.emptyValue = ' ';
     if (plotProps.isVisible && plotProps.fullValue === '') {
       plotProps.isVisible = false;
     }
@@ -772,6 +809,22 @@ export const HoveronDropdown = connectToContainer(UnconnectedDropdown, {
   },
 });
 
+export const SizeVisibilitySelect = connectToContainer(UnconnectedVisibilitySelect, {
+  modifyPlotProps: (props, context, plotProps) => {
+    const {fullContainer} = context;
+    const {updatePlot} = plotProps;
+
+    plotProps.updatePlot = (v, _update = {}) => {
+      const update = {..._update};
+      update.width = v ? null : fullContainer.width;
+      update.height = v ? null : fullContainer.height;
+      updatePlot(v, update);
+    };
+
+    return plotProps;
+  },
+});
+
 export const HovermodeDropdown = connectToContainer(UnconnectedVisibilitySelect, {
   modifyPlotProps: (props, context, plotProps) => {
     const {localize: _} = context;
@@ -782,6 +835,8 @@ export const HovermodeDropdown = connectToContainer(UnconnectedVisibilitySelect,
             {label: _('Closest'), value: 'closest'},
             {label: _('X Axis'), value: 'x'},
             {label: _('Y Axis'), value: 'y'},
+            {label: _('X Unified'), value: 'x unified'},
+            {label: _('Y Unified'), value: 'y unified'},
             {label: _('Disable'), value: false},
           ]
         : [
@@ -790,13 +845,23 @@ export const HovermodeDropdown = connectToContainer(UnconnectedVisibilitySelect,
           ];
     plotProps.clearable = false;
     plotProps.dropdown = true;
-    plotProps.showOn = ['closest', 'x', 'y'];
+    plotProps.showOn = ['closest', 'x', 'y', 'x unified', 'y unified'];
   },
 });
 
 export const HoverColor = connectToContainer(UnconnectedColorPicker, {
   modifyPlotProps: (props, context, plotProps) => {
     plotProps.isVisible = Boolean(context.fullLayout.hovermode);
+    if (['x unified', 'y unified'].includes(context.fullLayout.hovermode)) {
+      plotProps.handleEmpty = false;
+    }
+    return plotProps;
+  },
+});
+
+export const SpikeColor = connectToContainer(UnconnectedColorPicker, {
+  modifyPlotProps: (props, context, plotProps) => {
+    plotProps.isVisible = Boolean(context.fullContainer.showspikes);
     return plotProps;
   },
 });

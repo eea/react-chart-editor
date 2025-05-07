@@ -30,6 +30,7 @@ export default function connectLayersToMapbox(WrappedComponent) {
 
     getChildContext() {
       return {
+        getDflt: () => undefined,
         getValObject: (attr) =>
           !this.context.getValObject ? null : this.context.getValObject(`layers[].${attr}`),
         updateContainer: this.updateMapboxLayer,
@@ -107,6 +108,7 @@ export default function connectLayersToMapbox(WrappedComponent) {
     container: PropTypes.object,
     fullContainer: PropTypes.object,
     getValObject: PropTypes.func,
+    getDflt: PropTypes.func,
   };
 
   const {plotly_editor_traits} = WrappedComponent;

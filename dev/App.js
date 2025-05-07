@@ -6,7 +6,7 @@ import AceEditor from 'react-ace';
 import Select from 'react-select';
 import PlotlyEditor, {DefaultEditor, Panel} from '../src';
 import Inspector from 'react-inspector';
-import dataSources from './dataSources';
+// import dataSources from './dataSources';
 
 // https://github.com/plotly/react-chart-editor#mapbox-access-tokens
 import ACCESS_TOKENS from '../accessTokens';
@@ -61,40 +61,67 @@ const traceTypesConfig = {
 
 // eslint-disable-next-line no-unused-vars
 const chartHelp = {
-  area: {
-    helpDoc: 'https://help.plot.ly/make-an-area-graph/',
-    examplePlot: () => {
-      // eslint-disable-next-line no-console
-      console.log('example bar plot!');
-    },
-  },
+  scatter: {helpDoc: 'https://plotly.com/javascript/line-and-scatter/', feedQuery: true},
   bar: {
-    helpDoc: 'https://help.plot.ly/stacked-bar-chart/',
-    examplePlot: () => {
-      // eslint-disable-next-line no-console
-      console.log('example bar plot!');
-    },
+    helpDoc: 'https://plotly.com/javascript/bar-charts/',
+    feedQuery: true,
   },
-  box: {helpDoc: 'https://help.plot.ly/make-a-box-plot/'},
-  candlestick: {helpDoc: 'https://help.plot.ly/make-a-candlestick/'},
-  choropleth: {helpDoc: 'https://help.plot.ly/make-a-choropleth-map/'},
-  contour: {helpDoc: 'https://help.plot.ly/make-a-contour-plot/'},
-  heatmap: {helpDoc: 'https://help.plot.ly/make-a-heatmap/'},
-  histogram2d: {helpDoc: 'https://help.plot.ly/make-a-2d-histogram-heatmap/'},
-  histogram2dcontour: {helpDoc: 'https://help.plot.ly/make-a-histogram/'},
-  line: {helpDoc: 'https://help.plot.ly/make-a-line-graph/'},
-  mesh3d: {helpDoc: null},
-  ohlc: {helpDoc: 'https://help.plot.ly/make-a-ohlc/'},
-  pie: {helpDoc: 'https://help.plot.ly/make-a-pie-chart/'},
-  scatter3d: {helpDoc: 'https://help.plot.ly/make-a-3d-scatter-plot/'},
-  line3d: {helpDoc: null},
-  scatter: {helpDoc: 'https://help.plot.ly/how-to-make-a-scatter-plot/'},
-  scattergeo: {helpDoc: 'https://help.plot.ly/make-scatter-map/'},
-  scattermapbox: {helpDoc: 'https://help.plot.ly/make-a-mapbox-map/'},
-  scatterternary: {helpDoc: 'https://help.plot.ly/ternary-scatter-plot/'},
-  surface: {helpDoc: 'https://help.plot.ly/make-a-3d-surface-plot/'},
-  table: {helpDoc: null},
-  timeseries: {helpDoc: 'https://help.plot.ly/range-slider/'},
+  line: {
+    helpDoc: 'https://plotly.com/javascript/line-charts/',
+    feedQuery: true,
+  },
+  area: {
+    helpDoc: 'https://plotly.com/javascript/filled-area-plots/',
+    feedQuery: true,
+  },
+  heatmap: {helpDoc: 'https://plotly.com/javascript/heatmaps/', feedQuery: true},
+  table: {helpDoc: 'https://plotly.com/javascript/table/', feedQuery: true},
+  contour: {helpDoc: 'https://plotly.com/javascript/contour-plots/', feedQuery: true},
+  pie: {helpDoc: 'https://plotly.com/javascript/pie-charts/', feedQuery: true},
+  box: {helpDoc: 'https://plotly.com/javascript/box-plots/', feedQuery: true},
+  histogram: {helpDoc: 'https://plotly.com/javascript/histograms/', feedQuery: true},
+  histogram2d: {helpDoc: 'https://plotly.com/javascript/2D-Histogram/', feedQuery: true},
+  histogram2dcontour: {
+    helpDoc: 'https://plotly.com/javascript/2d-histogram-contour/',
+    feedQuery: true,
+  },
+  scatter3d: {helpDoc: 'https://plotly.com/javascript/3d-scatter-plots/', feedQuery: true},
+  line3d: {helpDoc: 'https://plotly.com/javascript/3d-line-plots/', feedQuery: true},
+  surface: {helpDoc: 'https://plotly.com/javascript/3d-surface-plots/', feedQuery: true},
+  mesh3d: {helpDoc: 'https://plotly.com/javascript/3d-mesh/', feedQuery: true},
+  cone: {helpDoc: 'https://plotly.com/javascript/cone-plot/', feedQuery: true},
+  streamtube: {helpDoc: 'https://plotly.com/javascript/streamtube-plot/', feedQuery: true},
+  scattermapbox: {
+    helpDoc: 'https://plotly.com/javascript/scatter-tile-maps/',
+    feedQuery: true,
+  },
+  scattergeo: {
+    helpDoc: 'https://plotly.com/javascript/scatter-plots-on-maps/',
+    feedQuery: true,
+  },
+  choroplethmapbox: {
+    helpDoc: 'https://plotly.com/javascript/tile-county-choropleth/',
+    feedQuery: true,
+  },
+  choropleth: {helpDoc: 'https://plotly.com/javascript/choropleth-maps/', feedQuery: true},
+  densitymapbox: {
+    helpDoc: 'https://plotly.com/javascript/tile-density-heatmaps/',
+    feedQuery: true,
+  },
+  candlestick: {helpDoc: 'https://plotly.com/javascript/candlestick-charts/', feedQuery: true},
+  ohlc: {helpDoc: 'https://plotly.com/javascript/ohlc-charts/', feedQuery: true},
+  waterfall: {helpDoc: 'https://plotly.com/javascript/waterfall-charts/', feedQuery: true},
+  funnel: {helpDoc: 'https://plotly.com/javascript/funnel-charts/', feedQuery: true},
+  funnelarea: {
+    helpDoc: 'https://plotly.com/javascript/funnel-charts/#funnelarea-plot',
+    feedQuery: true,
+  },
+  scatterpolar: {helpDoc: 'https://plotly.com/javascript/polar-chart/', feedQuery: true},
+  barpolar: {helpDoc: '', feedQuery: true},
+  scatterternary: {helpDoc: 'https://plotly.com/javascript/ternary-plots/', feedQuery: true},
+  sunburst: {helpDoc: 'https://plotly.com/javascript/sunburst-charts/', feedQuery: true},
+  treemap: {helpDoc: 'https://plotly.com/javascript/treemaps/', feedQuery: true},
+  sankey: {helpDoc: 'https://plotly.com/javascript/sankey-diagram/', feedQuery: true},
 };
 
 class App extends Component {
@@ -102,10 +129,77 @@ class App extends Component {
     super();
 
     this.state = {
+      forceRender: {},
       data: [],
-      layout: {},
+      layout: {
+        margin: {
+          t: 0,
+          b: 0,
+          l: 0,
+          r: 0,
+        },
+        xaxis: {
+          automargin: true,
+        },
+        yaxis: {
+          automargin: true,
+        },
+        // template: {
+        //   data: {
+        //     bar: [
+        //       {
+        //         marker: {
+        //           color: '#FF0000',
+        //         },
+        //       },
+        //       {
+        //         marker: {
+        //           color: 'rgb(0,255,0)',
+        //         },
+        //       },
+        //     ],
+        //   },
+        //   layout: {
+        //     margin: {
+        //       t: 0,
+        //     },
+        //     font: {
+        //       size: 16,
+        //       color: 'rgb(255,0,0)',
+        //     },
+        //     annotationdefaults: {
+        //       showarrow: false,
+        //     },
+        //     imagedefaults: {
+        //       layer: 'below',
+        //     },
+        //     colorscale: {
+        //       sequential: [
+        //         [0, '#c8fff8'],
+        //         [0.17, '#a0e5dc'],
+        //         [0.33, '#78cac0'],
+        //         [0.5, '#50b0a4'],
+        //         [0.67, '#289588'],
+        //         [0.83, '#007b6c'],
+        //         [1, '#005248'],
+        //       ],
+        //     },
+        //     yaxis: {
+        //       automargin: true,
+        //     },
+        //   },
+        // },
+      },
       frames: [],
-      dataSources,
+      dataSources: {
+        Day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        'Time of day': ['Morning', 'Afternoon', 'Evening'],
+        'Monday tasks': ['22', '12', '10'],
+        'Tuesday tasks': ['22', '32', '4'],
+        'Wednesday tasks': ['3', '44', '12'],
+        'Thursday tasks': ['3', '43', '22'],
+        'Friday tasks': ['13', '14', '3'],
+      },
       currentMockIndex: -1,
       mocks: [],
     };
@@ -113,6 +207,7 @@ class App extends Component {
     this.loadMock = this.loadMock.bind(this);
     this.loadJSON = this.loadJSON.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.editor = React.createRef();
   }
 
   UNSAFE_componentWillMount() {
@@ -169,6 +264,7 @@ class App extends Component {
     return (
       <div className="app">
         <PlotlyEditor
+          ref={this.editor}
           data={this.state.data}
           layout={this.state.layout}
           frames={this.state.frames}
@@ -178,16 +274,18 @@ class App extends Component {
           plotly={plotly}
           onUpdate={this.updateState}
           onUpdateDataSources={(dataSources) => this.setState({dataSources})}
+          forceRender={() => this.setState({forceRender: {}})}
           divId="gd"
           useResizeHandler
           debug
           advancedTraceTypeSelector
           showFieldTooltips
+          makeDefaultTrace={() => ({type: 'bar', orientation: 'v'})}
           // glByDefault
           // traceTypesConfig={traceTypesConfig}
           // makeDefaultTrace={() => ({type: 'scattergl', mode: 'markers'})}
           // fontOptions={[{label:'Arial', value: 'arial'}]}
-          // chartHelp={chartHelp}
+          chartHelp={chartHelp}
           // customConfig={customConfigTest}
         >
           <DefaultEditor

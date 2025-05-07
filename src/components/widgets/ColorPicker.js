@@ -2,8 +2,9 @@ import Fields from 'react-color/lib/components/sketch/SketchFields';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import tinycolor from 'tinycolor2';
-import {Hue, Saturation} from 'react-color/lib/components/common';
+import {Alpha, Hue, Saturation} from 'react-color/lib/components/common';
 import {CustomPicker as customPicker} from 'react-color';
+import {TrashIcon} from 'plotly-icons';
 
 // Utility functions for converting ColorPicker color objects or raw strings
 // into TinyColor objects.
@@ -21,6 +22,9 @@ class Custom extends Component {
           <div className="colorpicker__sliders">
             <div className="colorpicker__slider">
               <Hue {...this.props} />
+            </div>
+            <div className="colorpicker__slider">
+              <Alpha {...this.props} />
             </div>
           </div>
         </div>
@@ -105,6 +109,17 @@ class ColorPicker extends Component {
           <div className="colorpicker__selected-color +hover-grey" onClick={this.toggleVisible}>
             {colorText}
           </div>
+
+          {this.props.selectedColorscale?.length > 2 && (
+            <div style={{marginLeft: '0.5rem', flex: '1'}}>
+              <TrashIcon
+                size="20px"
+                onClick={this.props.onDeleteColor}
+                color="var(--color-accent)"
+                style={{cursor: 'pointer', float: 'right'}}
+              />
+            </div>
+          )}
         </div>
 
         {this.state.isVisible && (
@@ -118,7 +133,9 @@ class ColorPicker extends Component {
 ColorPicker.propTypes = {
   onColorChange: PropTypes.func.isRequired,
   onVisibilityChange: PropTypes.func,
+  onDeleteColor: PropTypes.func,
   selectedColor: PropTypes.string,
+  selectedColorscale: PropTypes.array,
 };
 
 export default ColorPicker;

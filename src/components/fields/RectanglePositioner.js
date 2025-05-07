@@ -77,7 +77,7 @@ class UnconnectedRectanglePositioner extends Component {
     }
 
     return (
-      <div style={{marginRight: 25}}>
+      <div style={{marginRight: 25, boxSizing: 'content-box'}}>
         <Field {...this.props} attr={attr}>
           <Field label={_('Snap to Grid')}>
             <RadioBlocks

@@ -10,7 +10,7 @@ class UnconnectedColorwayPicker extends Component {
       <Field {...this.props}>
         <ColorscalePicker
           selected={this.props.fullValue}
-          onColorscaleChange={this.props.updatePlot}
+          onColorscaleChange={(colorscale) => this.props.updatePlot(colorscale)}
           initialCategory={this.props.initialCategory || 'categorical'}
           disableCategorySwitch={this.props.disableCategorySwitch}
           attr={this.props.attr}

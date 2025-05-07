@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -11,7 +12,7 @@ import {
   TextEditor,
   PlotlySection,
   LayoutPanel,
-  VisibilitySelect,
+  SizeVisibilitySelect,
   HovermodeDropdown,
   Flaglist,
   Radio,
@@ -20,20 +21,64 @@ import {
 import {HoverColor} from '../components/fields/derived';
 import DataSelector from '../components/fields/DataSelector';
 
+const Sizes = (_, {graphDiv}) => {
+  if (!graphDiv) {
+    return null;
+  }
+
+  function getHeight(selector, el) {
+    const height = (el || (selector ? graphDiv.querySelector(selector) : null))
+      ?.getBoundingClientRect()
+      .height.toFixed(2);
+    return height ? Math.ceil(height) : 0;
+  }
+
+  const gdWidth = graphDiv._fullLayout.width;
+  const gdHeight = graphDiv._fullLayout.height;
+  const margin = graphDiv._fullLayout.margin;
+
+  const cHeight = gdHeight - (margin.t || 0) - (margin.b || 0);
+  const cWidth = gdWidth - (margin.l || 0) - (margin.r || 0);
+
+  const annotations = graphDiv.querySelectorAll('.infolayer .annotation');
+
+  let annotationHeight = 0;
+  const titleHeight = getHeight('.infolayer .g-gtitle');
+
+  for (const annotation of annotations) {
+    const height = getHeight(null, annotation);
+    if (height > annotationHeight) {
+      annotationHeight = height;
+    }
+  }
+
+  return (
+    <div className="sizes-info">
+      <div>Size informations for variate elements.</div>
+      <div>
+        Chart height: {cHeight}px so 1% = {(0.01 * cHeight).toFixed(2)}px
+      </div>
+      <div>
+        Chart width: {cWidth}px so 1% = {(0.01 * cWidth).toFixed(2)}px
+      </div>
+      <div>Title height: {titleHeight}px</div>
+      <div>Annotation height: {annotationHeight}px</div>
+    </div>
+  );
+};
+
+Sizes.contextTypes = {
+  graphDiv: PropTypes.any,
+};
+
 const StyleLayoutPanel = (props, {localize: _}) => (
   <LayoutPanel {...props}>
     <PlotlyFold name={_('Defaults')}>
       <ColorPicker label={_('Plot Background')} attr="plot_bgcolor" />
       <ColorPicker label={_('Margin Color')} attr="paper_bgcolor" />
       <PlotlySection name={_('Colorscales')} attr="colorway">
-        <ColorwayPicker
-          label={_('Categorical')}
-          attr="colorway"
-          labelWidth={80}
-          editable
-        />
+        <ColorwayPicker label={_('Categorical')} attr="colorway" labelWidth={80} editable />
         <ColorscalePicker
-          initialCategory="sequential"
           label={_('Sequential')}
           attr="colorscale.sequential"
           disableCategorySwitch
@@ -49,8 +94,7 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           editable
         />
         <ColorscalePicker
-          initialCategory="sequential"
-          label={_('Negative Sequential')}
+          label={_('Negative Seq')}
           attr="colorscale.sequentialminus"
           disableCategorySwitch
           labelWidth={80}
@@ -66,9 +110,10 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           attr="separators"
           options={[
             {label: _('1,234.56'), value: '.,'},
-            {label: _('1 234.56'), value: ', '},
+            {label: _('1 234.56'), value: '. '},
             {label: _('1 234,56'), value: ', '},
             {label: _('1.234,56'), value: ',.'},
+            {label: _('1234.56'), value: '.'},
           ]}
           clearable={false}
         />
@@ -91,12 +136,64 @@ const StyleLayoutPanel = (props, {localize: _}) => (
       <FontSelector label={_('Typeface')} attr="title.font.family" clearable={false} />
       <Numeric label={_('Font Size')} attr="title.font.size" units="px" />
       <ColorPicker label={_('Font Color')} attr="title.font.color" />
-      <Numeric label={_('Horizontal Position')} showSlider step={0.02} attr="title.x" />
+      <PlotlySection name={_('Horizontal Positioning')}>
+        <Dropdown
+          label={_('Anchor Point')}
+          attr="title.xanchor"
+          options={[
+            {label: _('Auto'), value: 'auto'},
+            {label: _('Left'), value: 'left'},
+            {label: _('Center'), value: 'center'},
+            {label: _('Right'), value: 'right'},
+          ]}
+        />
+        <Numeric label={_('Position')} showSlider step={0.02} attr="title.x" />
+        <Dropdown
+          label={_('Relative to')}
+          attr="title.xref"
+          options={[
+            {label: _('Container'), value: 'container'},
+            {label: _('Paper'), value: 'paper'},
+          ]}
+        />
+      </PlotlySection>
+      <PlotlySection name={_('Vertical Positioning')}>
+        <Dropdown
+          label={_('Anchor Point')}
+          attr="title.yanchor"
+          options={[
+            {label: _('Auto'), value: 'auto'},
+            {label: _('Top'), value: 'top'},
+            {label: _('Middle'), value: 'middle'},
+            {label: _('Bottom'), value: 'bottom'},
+          ]}
+        />
+        <Numeric
+          label={_('Position')}
+          step={0.02}
+          attr="title.y"
+          visibilityOptions={[
+            {label: 'Auto', value: 'auto', type: 'string'},
+            {label: 'Custom', value: 1, type: 'number'},
+          ]}
+          showOn={1}
+          showArrows
+          showSlider
+        />
+        <Dropdown
+          label={_('Relative to')}
+          attr="title.yref"
+          options={[
+            {label: _('Container'), value: 'container'},
+            {label: _('Paper'), value: 'paper'},
+          ]}
+        />
+      </PlotlySection>
       <PlotlySection name={_('Subtitle')} attr="title.subtitle">
         <TextEditor attr="title.subtitle.text" />
-        <FontSelector label={_('Typeface')} attr="title.subtitle.font.family" clearable={false}/>
+        <FontSelector label={_('Typeface')} attr="title.subtitle.font.family" clearable={false} />
         <Numeric label={_('Font Size')} attr="title.subtitle.font.size" units="px" />
-        <ColorPicker label={_('Font Color')} attr="title.subtitle.font.color"/>
+        <ColorPicker label={_('Font Color')} attr="title.subtitle.font.color" />
       </PlotlySection>
     </PlotlyFold>
 
@@ -113,8 +210,10 @@ const StyleLayoutPanel = (props, {localize: _}) => (
       <ColorPicker label={_('Active Icon Color')} attr="modebar.activecolor" />
       <ColorPicker label={_('Background Color')} attr="modebar.bgcolor" />
     </PlotlyFold>
+
     <PlotlyFold name={_('Size and Margins')}>
-      <VisibilitySelect
+      <Sizes />
+      <SizeVisibilitySelect
         attr="autosize"
         label={_('Size')}
         options={[
@@ -126,13 +225,14 @@ const StyleLayoutPanel = (props, {localize: _}) => (
       >
         <Numeric label={_('Fixed Width')} attr="width" units="px" />
         <Numeric label={_('Fixed height')} attr="height" units="px" />
-      </VisibilitySelect>
+      </SizeVisibilitySelect>
       <Numeric label={_('Top')} attr="margin.t" units="px" />
       <Numeric label={_('Bottom')} attr="margin.b" units="px" />
       <Numeric label={_('Left')} attr="margin.l" units="px" />
       <Numeric label={_('Right')} attr="margin.r" units="px" />
       <Numeric label={_('Padding')} attr="margin.pad" units="px" />
     </PlotlyFold>
+
     <PlotlyFold name={_('Interactions')}>
       <PlotlySection name={_('Drag')} attr="dragmode">
         <Dropdown
@@ -205,6 +305,7 @@ const StyleLayoutPanel = (props, {localize: _}) => (
         </HovermodeDropdown>
       </PlotlySection>
     </PlotlyFold>
+
     <PlotlyFold name={_('Meta Text')}>
       <DataSelector label={_('Custom Data')} attr="meta" />
       <Info>

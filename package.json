@@ -32,7 +32,7 @@
     "draft-js-import-html": "^1.4.1",
     "draft-js-utils": "^1.4.1",
     "fast-isnumeric": "^1.1.4",
-    "handsontable": "^15.0.1",
+    "handsontable": "^15.2.0",
     "hyperformula": "^3.0.0",
     "immutability-helper": "^3.1.1",
     "lodash": "^4.17.21",
@@ -87,16 +87,16 @@
     "jest": "26.6.3",
     "jest-cli": "26.6.3",
     "mkdirp": "3.0.1",
-    "plotly.js": "2.27.0",
+    "plotly.js": "2.35.3",
     "postcss": "8.4.31",
     "postcss-cli": "10.1.0",
     "postcss-combine-duplicated-selectors": "10.0.3",
     "postcss-import": "15.1.0",
     "postcss-preset-env": "9.3.0",
     "prettier": "2.8.4",
-    "react": "16.14.0",
+    "react": "^17.0.2",
     "react-ace": "7.0.5",
-    "react-dom": "16.14.0",
+    "react-dom": "^17.0.2",
     "react-hot-loader": "4.13.1",
     "react-inspector": "5.1.1",
     "react-test-renderer": "16.14.0",
@@ -112,8 +112,8 @@
   },
   "peerDependencies": {
     "plotly.js": ">=1.58.5 <3.0.0",
-    "react": ">=16.14.0",
-    "react-dom": ">=16.14.0"
+    "react": ">=16",
+    "react-dom": ">=16"
   },
   "resolutions": {
     "jackspeak": "2.1.1"
@@ -157,5 +157,6 @@
   "directories": {
     "example": "examples",
     "lib": "lib"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

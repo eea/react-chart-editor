@@ -20,15 +20,30 @@ export class UnconnectedVisibilitySelect extends Component {
     this.setLocals(props);
   }
 
+  getChildContext() {
+    return {
+      visibilityMode: this.mode,
+      resettable: this.props.resettable ?? this.context.resettable,
+    };
+  }
+
   setLocals(props) {
     this.mode =
-      props.fullValue === undefined || props.fullValue === MULTI_VALUED_PLACEHOLDER // eslint-disable-line no-undefined
+      props.fullValue === undefined || props.fullValue === MULTI_VALUED_PLACEHOLDER
         ? this.props.defaultOpt
         : props.fullValue;
   }
 
   setMode(mode) {
-    this.props.updateContainer({[this.props.attr]: mode});
+    const update = {};
+    const {showOn} = this.props;
+    const resettable = this.props.resettable ?? this.context.resettable;
+    if (resettable && !((Array.isArray(showOn) && showOn.includes(mode)) || mode === showOn)) {
+      React.Children.map(this.props.children, (child) => {
+        update[child.props.attr] = null;
+      });
+    }
+    this.props.updatePlot(mode, update);
   }
 
   render() {
@@ -44,7 +59,6 @@ export class UnconnectedVisibilitySelect extends Component {
             fullValue={this.mode}
             updatePlot={this.setMode}
             clearable={clearable}
-            onChange={this.props.onChange}
           />
         ) : (
           <Radio
@@ -53,7 +67,6 @@ export class UnconnectedVisibilitySelect extends Component {
             options={options}
             fullValue={this.mode}
             updatePlot={this.setMode}
-            onChange={this.props.onChange}
           />
         )}
         {(Array.isArray(showOn) && showOn.includes(this.mode)) || this.mode === showOn
@@ -76,6 +89,7 @@ UnconnectedVisibilitySelect.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
+  resettable: PropTypes.bool,
   defaultOpt: PropTypes.oneOfType([PropTypes.number, PropTypes.bool, PropTypes.string]),
   label: PropTypes.string,
   attr: PropTypes.string,
@@ -84,8 +98,19 @@ UnconnectedVisibilitySelect.propTypes = {
 
 UnconnectedVisibilitySelect.contextTypes = {
   updateContainer: PropTypes.func,
+  fullContainer: PropTypes.object,
+  resettable: PropTypes.bool,
+};
+
+UnconnectedVisibilitySelect.childContextTypes = {
+  visibilityMode: PropTypes.any,
+  resettable: PropTypes.bool,
 };
 
 UnconnectedVisibilitySelect.displayName = 'UnconnectedVisibilitySelect';
+
+UnconnectedVisibilitySelect.plotly_editor_traits = {
+  visibility_select: true,
+};
 
 export default connectToContainer(UnconnectedVisibilitySelect);

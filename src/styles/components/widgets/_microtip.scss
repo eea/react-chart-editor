@@ -262,3 +262,8 @@
   white-space: initial;
   width: 260px;
 }
+
+[role~='tooltip'][data-microtip-size='max-content']::after {
+  white-space: initial;
+  width: max-content;
+}

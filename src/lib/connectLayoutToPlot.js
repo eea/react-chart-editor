@@ -7,7 +7,7 @@ import {EDITOR_ACTIONS} from './constants';
 export default function connectLayoutToPlot(WrappedComponent) {
   class LayoutConnectedComponent extends Component {
     getChildContext() {
-      const {layout, fullLayout, plotly, onUpdate} = this.context;
+      const {layout, fullLayout, dfltGraphDiv, plotly, onUpdate} = this.context;
 
       const updateContainer = (update) => {
         if (!onUpdate) {
@@ -22,6 +22,12 @@ export default function connectLayoutToPlot(WrappedComponent) {
       };
 
       return {
+        getDflt: (attr) => {
+          return (
+            nestedProperty(dfltGraphDiv._fullLayout._template || {}, attr).get() ??
+            nestedProperty(dfltGraphDiv._fullLayout, attr).get()
+          );
+        },
         getValObject: (attr) =>
           !plotly
             ? null
@@ -44,9 +50,11 @@ export default function connectLayoutToPlot(WrappedComponent) {
     fullLayout: PropTypes.object,
     plotly: PropTypes.object,
     onUpdate: PropTypes.func,
+    dfltGraphDiv: PropTypes.any,
   };
 
   LayoutConnectedComponent.childContextTypes = {
+    getDflt: PropTypes.func,
     getValObject: PropTypes.func,
     updateContainer: PropTypes.func,
     container: PropTypes.object,
