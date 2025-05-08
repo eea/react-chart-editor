@@ -57,6 +57,7 @@ function isSingleColumnSelected(hot) {
 
   return ranges.length && start - end === 0;
 }
+
 class DataSourcesEditor extends Component {
   constructor() {
     super();
@@ -553,7 +554,7 @@ class DataSourcesEditor extends Component {
         if (!opts.key) {
           return acc;
         }
-        const value = [opts.key, ...(dataSources[opts.key] || [])];
+        const value = [opts.key, ...(dataSources[opts.key] || []).flat()];
         value.forEach((_, i) => {
           if (!acc[i]) {
             acc[i] = [];
@@ -792,15 +793,6 @@ class DataSourcesEditor extends Component {
           updateAttr(attr, data);
         });
       });
-
-      console.log(
-        '[DEBUG]',
-        update,
-        'props.dataSources == dataSources',
-        isEqual(this.props.dataSources, dataSources),
-        'props.columns == columns',
-        isEqual(this.props.columns, columns)
-      );
 
       update.traces.forEach((update, i) => {
         if (!Object.keys(update).length) {
