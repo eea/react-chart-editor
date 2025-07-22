@@ -1,24 +1,24 @@
 import isNumeric from 'fast-isnumeric';
-import {UnconnectedDropdown} from './Dropdown';
-import {UnconnectedDropdownCustom} from './DropdownCustom';
-import {UnconnectedFlaglist} from './Flaglist';
-import {UnconnectedNumeric} from './Numeric';
-import {UnconnectedNumericOrDate} from './NumericOrDate';
-import {UnconnectedAxisRangeValue} from './AxisRangeValue';
-import {UnconnectedRadio} from './Radio';
-import {UnconnectedAxisInterval} from './AxisInterval';
+import { UnconnectedDropdown } from './Dropdown';
+import { UnconnectedDropdownCustom } from './DropdownCustom';
+import { UnconnectedFlaglist } from './Flaglist';
+import { UnconnectedNumeric } from './Numeric';
+import { UnconnectedNumericOrDate } from './NumericOrDate';
+import { UnconnectedAxisRangeValue } from './AxisRangeValue';
+import { UnconnectedRadio } from './Radio';
+import { UnconnectedAxisInterval } from './AxisInterval';
 import Info from './Info';
-import {UnconnectedColorPicker} from './ColorPicker';
-import {UnconnectedTextEditor} from './TextEditor';
-import {UnconnectedVisibilitySelect} from './VisibilitySelect';
-import {UnconnectedDataSelector} from './DataSelector';
-import {connectToContainer, getAllAxes, getAxisTitle, axisIdToAxisName} from 'lib';
+import { UnconnectedColorPicker } from './ColorPicker';
+import { UnconnectedTextEditor } from './TextEditor';
+import { UnconnectedVisibilitySelect } from './VisibilitySelect';
+import { UnconnectedDataSelector } from './DataSelector';
+import { connectToContainer, getAllAxes, getAxisTitle, axisIdToAxisName } from 'lib';
 import PropTypes from 'prop-types';
 import Text from './Text';
 
 export const AxisAnchorDropdown = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
     let options = [];
 
     if (props.attr.startsWith('xaxis')) {
@@ -36,14 +36,14 @@ export const AxisAnchorDropdown = connectToContainer(UnconnectedDropdown, {
         };
       });
     }
-    options.push({label: _('Free'), value: 'free'});
+    options.push({ label: _('Free'), value: 'free' });
     plotProps.options = options;
   },
 });
 
 export const AxisOverlayDropdown = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
     let options = [];
 
     if (props.attr.startsWith('xaxis')) {
@@ -62,7 +62,7 @@ export const AxisOverlayDropdown = connectToContainer(UnconnectedDropdown, {
       });
     }
 
-    options.unshift({label: _('None'), value: false});
+    options.unshift({ label: _('None'), value: false });
 
     // filter out the current axisID, can't overlay over itself
     plotProps.options = options.filter(
@@ -95,24 +95,24 @@ export const AxisSide = connectToContainer(UnconnectedRadio, {
 
     if (plotProps.fullValue === 'left' || plotProps.fullValue === 'right') {
       plotProps.options = [
-        {label: _('Left'), value: 'left'},
-        {label: _('Right'), value: 'right'},
+        { label: _('Left'), value: 'left' },
+        { label: _('Right'), value: 'right' },
       ];
       return;
     }
 
     if (plotProps.fullValue === 'top' || plotProps.fullValue === 'bottom') {
       plotProps.options = [
-        {label: _('Top'), value: 'top'},
-        {label: _('Bottom'), value: 'bottom'},
+        { label: _('Top'), value: 'top' },
+        { label: _('Bottom'), value: 'bottom' },
       ];
       return;
     }
 
     if (plotProps.fullValue === 'clockwise' || plotProps.fullValue === 'counterclockwise') {
       plotProps.options = [
-        {label: _('Clockwise'), value: 'clockwise'},
-        {label: _('Counterclockwise'), value: 'counterclockwise'},
+        { label: _('Clockwise'), value: 'clockwise' },
+        { label: _('Counterclockwise'), value: 'counterclockwise' },
       ];
       return;
     }
@@ -123,7 +123,7 @@ export const AxisSide = connectToContainer(UnconnectedRadio, {
 
 export const ContourNumeric = connectToContainer(UnconnectedNumeric, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = plotProps;
+    const { fullContainer } = plotProps;
     if (plotProps.isVisible && fullContainer && fullContainer.autocontour) {
       plotProps.isVisible = false;
     }
@@ -132,36 +132,36 @@ export const ContourNumeric = connectToContainer(UnconnectedNumeric, {
 
 export const BinningDropdown = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
     const axis =
       plotProps.fullContainer.type === 'histogram2d'
         ? 'Z'
         : plotProps.fullContainer.orientation === 'v'
-        ? 'Y'
-        : 'X';
+          ? 'Y'
+          : 'X';
     plotProps.options = [
-      {label: _('Count ') + axis, value: 'count'},
-      {label: _('Sum ') + axis, value: 'sum'},
-      {label: _('Average ') + axis, value: 'avg'},
-      {label: _('Minimum ') + axis, value: 'min'},
-      {label: _('Maximum ') + axis, value: 'max'},
+      { label: _('Count ') + axis, value: 'count' },
+      { label: _('Sum ') + axis, value: 'sum' },
+      { label: _('Average ') + axis, value: 'avg' },
+      { label: _('Minimum ') + axis, value: 'min' },
+      { label: _('Maximum ') + axis, value: 'max' },
     ];
   },
 });
 
 export const TickFormat = connectToContainer(UnconnectedDropdownCustom, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
     if (plotProps.fullContainer.type === 'date') {
       plotProps.options = [
-        {label: _('Default'), value: ''},
-        {label: _('Advanced (d3-time-format)'), value: '%x'},
+        { label: _('Default'), value: '' },
+        { label: _('Advanced (d3-time-format)'), value: '%x' },
       ];
       plotProps.customOpt = '%x';
     } else {
       plotProps.options = [
-        {label: _('Simple'), value: ''},
-        {label: _('Advanced (d3-format)'), value: 's'},
+        { label: _('Simple'), value: '' },
+        { label: _('Advanced (d3-format)'), value: 's' },
       ];
       plotProps.customOpt = 's';
     }
@@ -207,7 +207,7 @@ export const Histogram2d = connectToContainer(Info, {
 
 export const AxesRange = connectToContainer(UnconnectedAxisRangeValue, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = plotProps;
+    const { fullContainer } = plotProps;
     if (plotProps.isVisible && fullContainer && fullContainer.autorange) {
       plotProps.isVisible = false;
     }
@@ -217,7 +217,7 @@ export const AxesRange = connectToContainer(UnconnectedAxisRangeValue, {
 
 export const TickMode = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {updatePlot} = plotProps;
+    const { updatePlot } = plotProps;
 
     plotProps.updatePlot = (v) => {
       const update = {};
@@ -246,7 +246,7 @@ export const TickMode = connectToContainer(UnconnectedDropdown, {
 
 export const NTicks = connectToContainer(UnconnectedNumeric, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = plotProps;
+    const { fullContainer } = plotProps;
     if (plotProps.isVisible && fullContainer && fullContainer.tickmode !== 'auto') {
       plotProps.isVisible = false;
     }
@@ -256,7 +256,7 @@ export const NTicks = connectToContainer(UnconnectedNumeric, {
 
 export const DTicks = connectToContainer(UnconnectedAxisRangeValue, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = plotProps;
+    const { fullContainer } = plotProps;
     if (
       fullContainer &&
       fullContainer._name &&
@@ -274,7 +274,7 @@ export const DTicks = connectToContainer(UnconnectedAxisRangeValue, {
 
 export const DTicksInterval = connectToContainer(UnconnectedAxisInterval, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = plotProps;
+    const { fullContainer } = plotProps;
     if (
       fullContainer &&
       fullContainer._name &&
@@ -292,8 +292,8 @@ export const DTicksInterval = connectToContainer(UnconnectedAxisInterval, {
 
 export const TickArrayDataSelector = connectToContainer(UnconnectedDataSelector, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {updateContainer} = context;
-    const {fullContainer} = plotProps;
+    const { updateContainer } = context;
+    const { fullContainer } = plotProps;
     plotProps.isVisible = true;
     if (fullContainer && fullContainer.tickmode !== 'array') {
       plotProps.isVisible = false;
@@ -302,7 +302,7 @@ export const TickArrayDataSelector = connectToContainer(UnconnectedDataSelector,
       if (updateContainer) {
         updateContainer({
           ...update,
-          ...(!update.tickvals ? {tickvals: []} : {}),
+          ...(!update.tickvals ? { tickvals: [] } : {}),
         });
       }
     };
@@ -310,7 +310,7 @@ export const TickArrayDataSelector = connectToContainer(UnconnectedDataSelector,
   },
 });
 
-class UnconnectedNumericFraction extends UnconnectedNumeric {}
+class UnconnectedNumericFraction extends UnconnectedNumeric { }
 UnconnectedNumericFraction.propTypes = UnconnectedNumeric.propTypes;
 UnconnectedNumericFraction.defaultProps = {
   units: '%',
@@ -319,7 +319,7 @@ UnconnectedNumericFraction.defaultProps = {
 UnconnectedNumericFraction.displayName = 'UnconnectedNumericFraction';
 
 const numericFractionModifyPlotProps = (props, context, plotProps) => {
-  const {attrMeta, fullValue, updatePlot} = plotProps;
+  const { attrMeta, fullValue, updatePlot } = plotProps;
   const min = (attrMeta && attrMeta.min) || 0;
   const max = (attrMeta && attrMeta.max) || 1;
   if (isNumeric(fullValue)) {
@@ -352,7 +352,7 @@ export const NumericFractionDomain = connectToContainer(UnconnectedNumericFracti
 
 export const NumericFractionInverse = connectToContainer(UnconnectedNumericFraction, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {attrMeta, fullValue, updatePlot} = plotProps;
+    const { attrMeta, fullValue, updatePlot } = plotProps;
     if (isNumeric(fullValue)) {
       plotProps.fullValue = Math.round((1 - fullValue) * 100);
     }
@@ -380,7 +380,7 @@ export const NumericFractionInverse = connectToContainer(UnconnectedNumericFract
 
 export const NumericReciprocal = connectToContainer(UnconnectedNumeric, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullValue, updatePlot} = plotProps;
+    const { fullValue, updatePlot } = plotProps;
 
     if (isNumeric(fullValue)) {
       plotProps.fullValue = 1 / fullValue;
@@ -400,12 +400,12 @@ export const NumericReciprocal = connectToContainer(UnconnectedNumeric, {
 
 export const AnnotationArrowRef = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
     if (!context.fullContainer) {
       return;
     }
     const {
-      fullContainer: {xref, yref},
+      fullContainer: { xref, yref },
     } = context;
 
     let currentAxisRef;
@@ -427,7 +427,7 @@ export const AnnotationArrowRef = connectToContainer(UnconnectedDropdown, {
       const axes = getAllAxes(context.fullLayout).filter((a) => a._id);
       if (axes.length > 0) {
         plotProps.options = [
-          {label: _('in pixels'), value: 'pixel'},
+          { label: _('in pixels'), value: 'pixel' },
           ...computeAxesRefOptions(axes, props.attr),
         ];
       } else {
@@ -437,8 +437,8 @@ export const AnnotationArrowRef = connectToContainer(UnconnectedDropdown, {
       // If currentAxesRef is an actual axes then offer that value as the only
       // axes option.
       plotProps.options = [
-        {label: _('in pixels'), value: 'pixel'},
-        {label: _('according to axis'), value: currentAxisRef},
+        { label: _('in pixels'), value: 'pixel' },
+        { label: _('according to axis'), value: currentAxisRef },
       ];
     }
 
@@ -452,10 +452,10 @@ export const AnnotationRef = connectToContainer(UnconnectedDropdown, {
       return;
     }
     const {
-      fullContainer: {axref, ayref},
+      fullContainer: { axref, ayref },
       localize: _,
     } = context;
-    const {updatePlot} = plotProps;
+    const { updatePlot } = plotProps;
 
     let currentOffsetRef;
     if (props.attr === 'xref') {
@@ -465,15 +465,15 @@ export const AnnotationRef = connectToContainer(UnconnectedDropdown, {
     } else {
       throw new Error(
         _('AnnotationRef must be given either "xref" or "yref" as attrs. Instead was given') +
-          props.attr +
-          '.'
+        props.attr +
+        '.'
       );
     }
 
     const axes = getAllAxes(context.fullLayout).filter((a) => a._id);
     if (axes.length > 0) {
       plotProps.options = [
-        {label: _('Canvas'), value: 'paper'},
+        { label: _('Canvas'), value: 'paper' },
         ...computeAxesRefOptions(axes, props.attr),
       ];
     } else {
@@ -509,7 +509,7 @@ export const PositioningRef = connectToContainer(UnconnectedDropdown, {
     const axes = getAllAxes(context.fullLayout).filter((a) => a._id);
     if (axes.length > 0) {
       plotProps.options = [
-        {label: 'Canvas', value: 'paper'},
+        { label: 'Canvas', value: 'paper' },
         ...computeAxesRefOptions(axes, props.attr),
       ];
 
@@ -522,7 +522,7 @@ export const PositioningRef = connectToContainer(UnconnectedDropdown, {
 
 export const PositioningNumeric = connectToContainer(UnconnectedNumericOrDate, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = plotProps;
+    const { fullContainer } = plotProps;
     if (
       fullContainer &&
       (fullContainer[props.attr[0] + 'ref'] === 'paper' ||
@@ -539,7 +539,7 @@ function computeAxesRefOptions(axes, propsAttr) {
     const ax = axes[i];
     if (ax._id.charAt(0) === propsAttr.charAt(0) || ax._id.charAt(0) === propsAttr.charAt(1)) {
       const label = getAxisTitle(ax);
-      options.push({label, value: ax._id});
+      options.push({ label, value: ax._id });
     }
   }
 
@@ -548,26 +548,26 @@ function computeAxesRefOptions(axes, propsAttr) {
 
 export const TextInfo = connectToContainer(UnconnectedFlaglist, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _, container} = context;
+    const { localize: _, container } = context;
 
     let options = [
-      {label: _('Label'), value: 'label'},
-      {label: _('Value'), value: 'value'},
-      {label: _('%'), value: 'percent'},
+      { label: _('Label'), value: 'label' },
+      { label: _('Value'), value: 'value' },
+      { label: _('%'), value: 'percent' },
     ];
 
     if (container.type === 'funnel') {
       options = [
-        {label: _('Label'), value: 'label'},
-        {label: _('Value'), value: 'value'},
-        {label: _('% initial'), value: 'percent initial'},
-        {label: _('% previous'), value: 'percent previous'},
-        {label: _('% total'), value: 'percent total'},
+        { label: _('Label'), value: 'label' },
+        { label: _('Value'), value: 'value' },
+        { label: _('% initial'), value: 'percent initial' },
+        { label: _('% previous'), value: 'percent previous' },
+        { label: _('% total'), value: 'percent total' },
       ];
     }
 
     if (container.text) {
-      options.push({label: _('Text'), value: 'text'});
+      options.push({ label: _('Text'), value: 'text' });
     }
 
     plotProps.options = options;
@@ -576,11 +576,11 @@ export const TextInfo = connectToContainer(UnconnectedFlaglist, {
 
 export const HoverTemplateSwitch = connectToContainer(UnconnectedRadio, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
 
     plotProps.options = [
-      {label: _('Values'), value: ''},
-      {label: _('Template'), value: plotProps.fullValue || ' '},
+      { label: _('Values'), value: '' },
+      { label: _('Template'), value: plotProps.fullValue || ' ' },
     ];
     return plotProps;
   },
@@ -598,10 +598,10 @@ export const HoverTemplateText = connectToContainer(UnconnectedTextEditor, {
 
 export const HoverInfo = connectToContainer(UnconnectedFlaglist, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _, container} = context;
+    const { localize: _, container } = context;
     let options = [
-      {label: _('X'), value: 'x'},
-      {label: _('Y'), value: 'y'},
+      { label: _('X'), value: 'x' },
+      { label: _('Y'), value: 'y' },
     ];
 
     if (
@@ -617,75 +617,75 @@ export const HoverInfo = connectToContainer(UnconnectedFlaglist, {
         'mesh3d',
       ].includes(container.type)
     ) {
-      options.push({label: _('Z'), value: 'z'});
+      options.push({ label: _('Z'), value: 'z' });
     } else if (container.type === 'choropleth') {
       options = [
-        {label: _('Location'), value: 'location'},
-        {label: _('Values'), value: 'z'},
+        { label: _('Location'), value: 'location' },
+        { label: _('Values'), value: 'z' },
       ];
     } else if (container.type === 'scattergeo') {
       if (container.locations) {
-        options = [{label: _('Location'), value: 'location'}];
+        options = [{ label: _('Location'), value: 'location' }];
       } else if (container.lat || container.lon) {
         options = [
-          {label: _('Longitude'), value: 'lon'},
-          {label: _('Latitude'), value: 'lat'},
+          { label: _('Longitude'), value: 'lon' },
+          { label: _('Latitude'), value: 'lat' },
         ];
       }
     } else if (container.type === 'scattermapbox') {
       options = [
-        {label: _('Longitude'), value: 'lon'},
-        {label: _('Latitude'), value: 'lat'},
+        { label: _('Longitude'), value: 'lon' },
+        { label: _('Latitude'), value: 'lat' },
       ];
     } else if (container.type === 'densitymapbox') {
       options = [
-        {label: _('Longitude'), value: 'lon'},
-        {label: _('Latitude'), value: 'lat'},
-        {label: _('Z'), value: 'z'},
+        { label: _('Longitude'), value: 'lon' },
+        { label: _('Latitude'), value: 'lat' },
+        { label: _('Z'), value: 'z' },
       ];
     } else if (container.type === 'scatterternary') {
       options = [
-        {label: _('A'), value: 'a'},
-        {label: _('B'), value: 'b'},
-        {label: _('C'), value: 'c'},
+        { label: _('A'), value: 'a' },
+        { label: _('B'), value: 'b' },
+        { label: _('C'), value: 'c' },
       ];
     } else if (['scatterpolar', 'scatterpolargl', 'barpolar'].includes(container.type)) {
       options = [
-        {label: _('R'), value: 'r'},
-        {label: _('Theta'), value: 'theta'},
+        { label: _('R'), value: 'r' },
+        { label: _('Theta'), value: 'theta' },
       ];
     } else if (container.type === 'pie') {
-      options = [{label: _('Percent'), value: 'percent'}];
+      options = [{ label: _('Percent'), value: 'percent' }];
     } else if (container.type === 'table') {
       plotProps.isVisible = false;
     } else if (['cone', 'streamtube'].includes(container.type)) {
       options = [
-        {label: _('X'), value: 'x'},
-        {label: _('Y'), value: 'y'},
-        {label: _('Z'), value: 'z'},
-        {label: _('U'), value: 'u'},
-        {label: _('V'), value: 'v'},
-        {label: _('W'), value: 'w'},
-        {label: _('Norm'), value: 'norm'},
-        {label: _('Divergence'), value: 'divergence'},
+        { label: _('X'), value: 'x' },
+        { label: _('Y'), value: 'y' },
+        { label: _('Z'), value: 'z' },
+        { label: _('U'), value: 'u' },
+        { label: _('V'), value: 'v' },
+        { label: _('W'), value: 'w' },
+        { label: _('Norm'), value: 'norm' },
+        { label: _('Divergence'), value: 'divergence' },
       ];
     } else if (container.type === 'sunburst' || container.type === 'treemap') {
       options = [];
     }
 
     if (container.labels && ['pie', 'sunburst', 'treemap', 'funnelarea'].includes(container.type)) {
-      options.push({label: _('Label'), value: 'label'});
+      options.push({ label: _('Label'), value: 'label' });
     }
 
     if (container.values && ['pie', 'sunburst', 'treemap', 'funnelarea'].includes(container.type)) {
-      options.push({label: _('Value'), value: 'value'});
+      options.push({ label: _('Value'), value: 'value' });
     }
 
     if (container.text) {
-      options.push({label: _('Text'), value: 'text'});
+      options.push({ label: _('Text'), value: 'text' });
     }
 
-    options.push({label: _('Trace name'), value: 'name'});
+    options.push({ label: _('Trace name'), value: 'name' });
 
     plotProps.options = options;
   },
@@ -693,14 +693,14 @@ export const HoverInfo = connectToContainer(UnconnectedFlaglist, {
 
 export const FillDropdown = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
 
     let options = [
-      {label: _('None'), value: 'none'},
-      {label: _('Y = 0'), value: 'tozeroy'},
-      {label: _('X = 0'), value: 'tozerox'},
-      {label: _('Previous Y'), value: 'tonexty'},
-      {label: _('Previous X'), value: 'tonextx'},
+      { label: _('None'), value: 'none' },
+      { label: _('Y = 0'), value: 'tozeroy' },
+      { label: _('X = 0'), value: 'tozerox' },
+      { label: _('Previous Y'), value: 'tonexty' },
+      { label: _('Previous X'), value: 'tonextx' },
     ];
 
     if (
@@ -709,17 +709,17 @@ export const FillDropdown = connectToContainer(UnconnectedDropdown, {
       context.container.type === 'scatterpolar'
     ) {
       options = [
-        {label: _('None'), value: 'none'},
-        {label: _('To Self'), value: 'toself'},
-        {label: _('To Next'), value: 'tonext'},
+        { label: _('None'), value: 'none' },
+        { label: _('To Self'), value: 'toself' },
+        { label: _('To Next'), value: 'tonext' },
       ];
     } else if (
       context.container.type === 'scattergeo' ||
       context.container.type === 'scattermapbox'
     ) {
       options = [
-        {label: _('None'), value: 'none'},
-        {label: _('To Self'), value: 'toself'},
+        { label: _('None'), value: 'none' },
+        { label: _('To Self'), value: 'toself' },
       ];
     }
 
@@ -730,7 +730,7 @@ export const FillDropdown = connectToContainer(UnconnectedDropdown, {
 
 export const MapboxSourceArray = connectToContainer(Text, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullValue, updatePlot} = plotProps;
+    const { fullValue, updatePlot } = plotProps;
     if (plotProps.fullValue && plotProps.fullValue.length > 0) {
       plotProps.fullValue = fullValue[0];
     }
@@ -747,27 +747,27 @@ export const MapboxSourceArray = connectToContainer(Text, {
 
 export const MapboxStyleDropdown = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {mapBoxAccess, localize: _} = context;
+    const { mapBoxAccess, localize: _ } = context;
 
     plotProps.options = (
       !mapBoxAccess
         ? []
         : [
-            {label: _('Mapbox Basic'), value: 'basic'},
-            {label: _('Mapbox Outdoors'), value: 'outdoors'},
-            {label: _('Mapbox Light'), value: 'light'},
-            {label: _('Mapbox Dark'), value: 'dark'},
-            {label: _('Mapbox Satellite'), value: 'satellite'},
-            {label: _('Mapbox Satellite with Streets'), value: 'satellite-streets'},
-          ]
+          { label: _('Mapbox Basic'), value: 'basic' },
+          { label: _('Mapbox Outdoors'), value: 'outdoors' },
+          { label: _('Mapbox Light'), value: 'light' },
+          { label: _('Mapbox Dark'), value: 'dark' },
+          { label: _('Mapbox Satellite'), value: 'satellite' },
+          { label: _('Mapbox Satellite with Streets'), value: 'satellite-streets' },
+        ]
     ).concat([
-      {label: _('No tiles (white background)'), value: 'white-bg'},
-      {label: _('Open Street Map'), value: 'open-street-map'},
-      {label: _('Carto Positron'), value: 'carto-positron'},
-      {label: _('Carto Dark Matter'), value: 'carto-darkmatter'},
-      {label: _('Stamen Terrain'), value: 'stamen-terrain'},
-      {label: _('Stamen Toner'), value: 'stamen-toner'},
-      {label: _('Stamen Watercolor'), value: 'stamen-watercolor'},
+      { label: _('No tiles (white background)'), value: 'white-bg' },
+      { label: _('Open Street Map'), value: 'open-street-map' },
+      { label: _('Carto Positron'), value: 'carto-positron' },
+      { label: _('Carto Dark Matter'), value: 'carto-darkmatter' },
+      { label: _('Stamen Terrain'), value: 'stamen-terrain' },
+      { label: _('Stamen Toner'), value: 'stamen-toner' },
+      { label: _('Stamen Watercolor'), value: 'stamen-watercolor' },
     ]);
     plotProps.clearable = false;
   },
@@ -779,28 +779,28 @@ MapboxStyleDropdown.contextTypes = {
 
 export const HoveronDropdown = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
 
     let options;
     if (context.container.type === 'box') {
       options = [
-        {label: _('Boxes'), value: 'boxes'},
-        {label: _('Points'), value: 'points'},
-        {label: _('Boxes and Points'), value: 'boxes+points'},
+        { label: _('Boxes'), value: 'boxes' },
+        { label: _('Points'), value: 'points' },
+        { label: _('Boxes and Points'), value: 'boxes+points' },
       ];
     } else if (context.container.type === 'violin') {
       options = [
-        {label: _('Violins'), value: 'violins'},
-        {label: _('Points'), value: 'points'},
-        {label: _('KDE'), value: 'kde'},
-        {label: _('Violins and Points'), value: 'violins+points'},
-        {label: _('Violins, Points and KDE'), value: 'violins+points+kde'},
+        { label: _('Violins'), value: 'violins' },
+        { label: _('Points'), value: 'points' },
+        { label: _('KDE'), value: 'kde' },
+        { label: _('Violins and Points'), value: 'violins+points' },
+        { label: _('Violins, Points and KDE'), value: 'violins+points+kde' },
       ];
     } else {
       options = [
-        {label: _('Points'), value: 'points'},
-        {label: _('Fills'), value: 'fills'},
-        {label: _('Points and Fills'), value: 'points+fills'},
+        { label: _('Points'), value: 'points' },
+        { label: _('Fills'), value: 'fills' },
+        { label: _('Points and Fills'), value: 'points+fills' },
       ];
     }
 
@@ -811,11 +811,11 @@ export const HoveronDropdown = connectToContainer(UnconnectedDropdown, {
 
 export const SizeVisibilitySelect = connectToContainer(UnconnectedVisibilitySelect, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {fullContainer} = context;
-    const {updatePlot} = plotProps;
+    const { fullContainer } = context;
+    const { updatePlot } = plotProps;
 
     plotProps.updatePlot = (v, _update = {}) => {
-      const update = {..._update};
+      const update = { ..._update };
       update.width = v ? null : fullContainer.width;
       update.height = v ? null : fullContainer.height;
       updatePlot(v, update);
@@ -827,22 +827,22 @@ export const SizeVisibilitySelect = connectToContainer(UnconnectedVisibilitySele
 
 export const HovermodeDropdown = connectToContainer(UnconnectedVisibilitySelect, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {localize: _} = context;
+    const { localize: _ } = context;
 
     plotProps.options =
       context.container.xaxis && Object.keys(context.container.xaxis).length > 0
         ? [
-            {label: _('Closest'), value: 'closest'},
-            {label: _('X Axis'), value: 'x'},
-            {label: _('Y Axis'), value: 'y'},
-            {label: _('X Unified'), value: 'x unified'},
-            {label: _('Y Unified'), value: 'y unified'},
-            {label: _('Disable'), value: false},
-          ]
+          { label: _('Closest'), value: 'closest' },
+          { label: _('X Axis'), value: 'x' },
+          { label: _('Y Axis'), value: 'y' },
+          { label: _('X Unified'), value: 'x unified' },
+          { label: _('Y Unified'), value: 'y unified' },
+          { label: _('Disable'), value: false },
+        ]
         : [
-            {label: _('Closest'), value: 'closest'},
-            {label: _('Disable'), value: false},
-          ];
+          { label: _('Closest'), value: 'closest' },
+          { label: _('Disable'), value: false },
+        ];
     plotProps.clearable = false;
     plotProps.dropdown = true;
     plotProps.showOn = ['closest', 'x', 'y', 'x unified', 'y unified'];
@@ -872,9 +872,21 @@ export const LevelRendered = connectToContainer(UnconnectedDropdown, {
 
     if (context.container.ids && context.container.ids.length) {
       plotProps.isVisible = true;
-      plotProps.options = [{label: _('Root'), value: ''}].concat(
-        context.container.ids.map((i) => ({label: i, value: i}))
+      plotProps.options = [{ label: _('Root'), value: '' }].concat(
+        context.container.ids.map((i) => ({ label: i, value: i }))
       );
     }
+  },
+});
+
+export const DatasetDropdown = connectToContainer(UnconnectedDropdown, {
+  modifyPlotProps: (props, context, plotProps) => {
+    const datasets = Array.from(new Set(context.data.filter(trace => Boolean(trace.dataset)).map(trace => trace.dataset))).map((d) => ({ label: d, value: d }));
+    plotProps.isVisible = true;
+    plotProps.creatable = true;
+    plotProps.searchable = true;
+    plotProps.options = datasets;
+    plotProps.fullValue = context.container.dataset
+    plotProps.description = "Assigns a grouping key to each trace. Traces with the same value are exported together into one CSV file."
   },
 });

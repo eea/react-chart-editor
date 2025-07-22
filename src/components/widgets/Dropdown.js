@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import Select from 'react-select';
+import React, { Component } from 'react';
+import SelectBasic from 'react-select';
+import SelectCreatable from 'react-select/creatable';
 import classnames from 'classnames';
 import isNil from 'lodash/isNil';
 
@@ -9,10 +10,11 @@ class Dropdown extends Component {
     super(props);
 
     this.onChange = this.onChange.bind(this);
+    this.onCreate = this.onCreate.bind(this);
   }
 
   onChange(selection) {
-    const {multi, onChange, valueKey} = this.props;
+    const { multi, onChange, valueKey } = this.props;
 
     if (!selection) {
       return onChange(null);
@@ -21,11 +23,22 @@ class Dropdown extends Component {
     return multi ? onChange(selection.map((s) => s[valueKey])) : onChange(selection[valueKey]);
   }
 
+  onCreate(value) {
+    const { onCreate } = this.props;
+
+    if (!value) {
+      return onCreate(null);
+    }
+
+    return onCreate(value);
+  }
+
   render() {
     const {
       minWidth,
       placeholder,
       clearable,
+      creatable,
       value,
       options,
       searchable,
@@ -37,15 +50,15 @@ class Dropdown extends Component {
       width,
     } = this.props;
 
-    const {localize: _} = this.context;
+    const { localize: _ } = this.context;
 
-    const dropdownStyle = {minWidth};
+    const dropdownStyle = { minWidth };
     if (width) {
       dropdownStyle.width = width;
     }
 
     const opts = options.map((opt) =>
-      typeof opt === 'string' ? {label: opt, [valueKey]: opt} : opt
+      typeof opt === 'string' ? { label: opt, [valueKey]: opt } : opt
     );
 
     const dropdownContainerClass = classnames('dropdown-container', {
@@ -58,8 +71,10 @@ class Dropdown extends Component {
         return null;
       }
 
-      return opts.find((o) => o[valueKey] === value) || {label: value, [valueKey]: value};
+      return opts.find((o) => o[valueKey] === value) || { label: value, [valueKey]: value };
     };
+
+    const Select = creatable ? SelectCreatable : SelectBasic;
 
     return (
       <div className={dropdownContainerClass} style={dropdownStyle}>
@@ -69,14 +84,15 @@ class Dropdown extends Component {
           value={
             Array.isArray(value)
               ? value.reduce((acc, v) => {
-                  acc.push(getOption(v));
-                  return acc;
-                }, [])
+                acc.push(getOption(v));
+                return acc;
+              }, [])
               : getOption(value)
           }
           options={opts}
           isSearchable={searchable}
           onChange={this.onChange}
+          onCreateOption={this.onCreate}
           isMulti={multi}
           noOptionsMessage={() => noResultsText || _('No Results')}
           getOptionValue={(o) => o[valueKey]}
@@ -93,6 +109,7 @@ class Dropdown extends Component {
 
 Dropdown.defaultProps = {
   clearable: true,
+  creatable: false,
   multi: false,
   searchable: false,
   minWidth: '120px',
@@ -103,7 +120,9 @@ Dropdown.defaultProps = {
 Dropdown.propTypes = {
   backgroundDark: PropTypes.bool,
   clearable: PropTypes.bool,
+  creatable: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onCreate: PropTypes.func,
   options: PropTypes.array.isRequired,
   placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   searchable: PropTypes.bool,
