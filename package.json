@@ -15,7 +15,7 @@
     "build:js": "mkdirp lib && babel src --out-dir lib --ignore=__tests__/* --source-maps",
     "build": "BABEL_ENV=production rimraf lib && mkdir lib && npm run build:js && npm run build:css && npm run build:combined-translation-keys",
     "watch": "webpack serve --hot --mode development",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "yarn add mkdirp && npm run build",
     "storybook": "storybook dev -p 9001 -c .storybook",
     "test": "npm run test:lint && npm run test:pretty && npm run test:js",
     "test:js": "jest --setupTestFrameworkScriptFile=raf/polyfill --maxWorkers=2",
@@ -26,6 +26,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@eeacms/react-colorscales": "2.1.1",
     "@plotly/draft-js-export-html": "^1.2.0",
     "classnames": "^2.3.2",
     "draft-js": "^0.11.7",
@@ -41,7 +42,6 @@
     "raf": "^3.4.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-color": "^2.19.3",
-    "@eeacms/react-colorscales": "2.1.1",
     "react-day-picker": "^7.4.10",
     "react-dropzone": "^14.2.3",
     "react-plotly.js": "^2.6.0",
@@ -86,7 +86,7 @@
     "glob": "8.1.0",
     "jest": "26.6.3",
     "jest-cli": "26.6.3",
-    "mkdirp": "3.0.1",
+    "mkdirp": "^3.0.1",
     "plotly.js": "2.35.3",
     "postcss": "8.4.31",
     "postcss-cli": "10.1.0",
