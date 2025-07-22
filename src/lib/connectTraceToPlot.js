@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
@@ -10,8 +10,8 @@ import {
   getFullTrace,
   getParsedTemplateString,
 } from '../lib';
-import {deepCopyPublic, setMultiValuedContainer} from './multiValues';
-import {EDITOR_ACTIONS, SUBPLOT_TO_ATTR} from 'lib/constants';
+import { deepCopyPublic, setMultiValuedContainer } from './multiValues';
+import { EDITOR_ACTIONS, SUBPLOT_TO_ATTR } from 'lib/constants';
 
 export default function connectTraceToPlot(WrappedComponent) {
   class TraceConnectedComponent extends Component {
@@ -30,8 +30,8 @@ export default function connectTraceToPlot(WrappedComponent) {
     }
 
     setLocals(props, context) {
-      const {traceIndexes} = props;
-      const {data, fullData, plotly} = context;
+      const { traceIndexes } = props;
+      const { data, fullData, plotly } = context;
 
       const trace = data[traceIndexes[0]];
       const fullTrace = getFullTrace(props, context);
@@ -79,7 +79,7 @@ export default function connectTraceToPlot(WrappedComponent) {
 
       if (trace && fullTrace) {
         this.icon = renderTraceIcon(plotlyTraceToCustomTrace(trace));
-        this.name = getParsedTemplateString(fullTrace.name, {meta: fullTrace.meta});
+        this.name = getParsedTemplateString(fullTrace.name, { meta: fullTrace.meta });
       }
     }
 
@@ -155,7 +155,7 @@ export default function connectTraceToPlot(WrappedComponent) {
             (trace) =>
               (trace[SUBPLOT_TO_ATTR[subplotType].data] === subplotName ||
                 ((subplotType === 'xaxis' || subplotType === 'yaxis') && subplotName.charAt(1)) ===
-                  '' ||
+                '' ||
                 (subplotName.split(subplotType)[1] === '' &&
                   trace[SUBPLOT_TO_ATTR[subplotType].data] === null)) &&
               trace.index !== this.props.traceIndexes[0]
@@ -202,7 +202,7 @@ export default function connectTraceToPlot(WrappedComponent) {
     }
 
     getTraceDflt(trIndex, attr) {
-      const {dfltGraphDiv} = this.context;
+      const { dfltGraphDiv } = this.context;
       return (
         nestedProperty(dfltGraphDiv._fullData[trIndex]._template || {}, attr).get() ??
         nestedProperty(dfltGraphDiv._fullData[trIndex], attr).get()
@@ -242,7 +242,7 @@ export default function connectTraceToPlot(WrappedComponent) {
     moveContainer: PropTypes.func,
   };
 
-  const {plotly_editor_traits} = WrappedComponent;
+  const { plotly_editor_traits } = WrappedComponent;
   TraceConnectedComponent.plotly_editor_traits = plotly_editor_traits;
 
   return TraceConnectedComponent;

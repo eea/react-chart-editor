@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MenuPanel from '../containers/MenuPanel';
 import classnames from 'classnames';
-import {bem} from 'lib';
-import {getMultiValueText} from 'lib/constants';
-import {CloseIcon} from 'plotly-icons';
+import { bem } from 'lib';
+import { getMultiValueText } from 'lib/constants';
+import { CloseIcon } from 'plotly-icons';
 
 export class FieldDelete extends Component {
   render() {
-    const {onClick} = this.props;
+    const { onClick } = this.props;
     return (
       <div className="field__delete" onClick={onClick}>
         <CloseIcon />
@@ -31,7 +31,7 @@ class Field extends Component {
       labelWidth,
     } = this.props;
 
-    const {localize: _} = this.context;
+    const { localize: _ } = this.context;
 
     let fieldClass;
     if (!label) {
@@ -58,7 +58,7 @@ class Field extends Component {
         {label ? (
           <div
             className={bem('field', 'title')}
-            style={labelWidth ? {minWidth: labelWidth + 'px'} : {}}
+            style={labelWidth ? { minWidth: labelWidth + 'px' } : {}}
           >
             {this.context.showFieldTooltips ? (
               <div

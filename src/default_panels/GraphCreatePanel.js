@@ -19,9 +19,10 @@ import {
   HistogramInfoVertical,
   HistogramInfoHorizontal,
   Histogram2d,
+  DatasetDropdown
 } from '../components/fields/derived';
 
-const GraphCreatePanel = (props, {localize: _, setPanel}) => {
+const GraphCreatePanel = (props, { localize: _, setPanel }) => {
   return (
     <TraceAccordion
       traceFilterCondition={(t) =>
@@ -31,6 +32,10 @@ const GraphCreatePanel = (props, {localize: _, setPanel}) => {
       canReorder
     >
       <TraceSelector label={_('Type')} attr="type" show />
+
+      <Numeric label={_('Dataset')} attr="dataset" min={0} max={50} showSlider />
+
+      <DatasetDropdown label={_('Dataset')} attr="dataset" />
 
       <Dropzone attr="geojson" fileType="geojson" />
       <LocationSelector attr="type" />
@@ -45,8 +50,8 @@ const GraphCreatePanel = (props, {localize: _, setPanel}) => {
         label={_('Parent Value Mode')}
         attr="branchvalues"
         options={[
-          {label: _('Total'), value: 'total'},
-          {label: _('Remainder'), value: 'remainder'},
+          { label: _('Total'), value: 'total' },
+          { label: _('Remainder'), value: 'remainder' },
         ]}
         clearable={false}
       />
@@ -79,8 +84,8 @@ const GraphCreatePanel = (props, {localize: _, setPanel}) => {
         label={_('GeoJSON Location Field')}
         attr="featureidkey"
         options={[
-          {label: _('id'), value: 'id'},
-          {label: _('Custom'), value: 'custom'},
+          { label: _('id'), value: 'id' },
+          { label: _('Custom'), value: 'custom' },
         ]}
         customOpt="custom"
         dafaultOpt=""
@@ -105,8 +110,8 @@ const GraphCreatePanel = (props, {localize: _, setPanel}) => {
         label={_('Orientation')}
         attr="orientation"
         options={[
-          {label: _('Vertical'), value: 'v'},
-          {label: _('Horizontal'), value: 'h'},
+          { label: _('Vertical'), value: 'v' },
+          { label: _('Horizontal'), value: 'h' },
         ]}
       />
       <HistogramInfoVertical>
@@ -161,9 +166,9 @@ const GraphCreatePanel = (props, {localize: _, setPanel}) => {
         <Dropdown
           label={_('Theta Unit')}
           options={[
-            {label: _('Radians'), value: 'radians'},
-            {label: _('Degrees'), value: 'degrees'},
-            {label: _('Gradians'), value: 'gradians'},
+            { label: _('Radians'), value: 'radians' },
+            { label: _('Degrees'), value: 'degrees' },
+            { label: _('Gradians'), value: 'gradians' },
           ]}
           attr="thetaunit"
           clearable={false}
@@ -198,8 +203,8 @@ const GraphCreatePanel = (props, {localize: _, setPanel}) => {
           label={_('Transpose')}
           attr="transpose"
           options={[
-            {label: _('No'), value: false},
-            {label: _('Yes'), value: true},
+            { label: _('No'), value: false },
+            { label: _('Yes'), value: true },
           ]}
         />
       </PlotlySection>
