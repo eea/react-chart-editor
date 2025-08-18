@@ -1,9 +1,9 @@
 import PlotlyEditor from './PlotlyEditor';
 import DefaultEditor from './DefaultEditor';
 import EditorControls from './EditorControls';
-import {EDITOR_ACTIONS} from './lib/constants';
+import { EDITOR_ACTIONS } from './lib/constants';
 
-export {DefaultEditor, EditorControls, EDITOR_ACTIONS};
+export { DefaultEditor, EditorControls, EDITOR_ACTIONS };
 
 export * from './lib';
 export * from './components';

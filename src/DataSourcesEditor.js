@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import {HyperFormula} from 'hyperformula';
 import Handsontable from 'handsontable';
 import {
   numericValidator,
@@ -14,8 +13,8 @@ import {
   CheckboxEditor,
   DateEditor,
 } from 'lib/handsontable';
-import {getAdjustedSrcAttr, getAttrsPath, getData, getSrcAttr, inSrcAttr} from 'lib';
-import {getColumnNames} from 'lib/dereference';
+import { getAdjustedSrcAttr, getAttrsPath, getData, getSrcAttr, inSrcAttr } from 'lib';
+import { getColumnNames } from 'lib/dereference';
 import {
   EDITOR_ACTIONS,
   TRACE_SRC_ATTRIBUTES,
@@ -150,13 +149,13 @@ class DataSourcesEditor extends Component {
               row.splice(
                 latestSelection.col + (alterAction === 'insert_col_end' ? 1 : 0),
                 0,
-                ...Array.from({length}, () => null)
+                ...Array.from({ length }, () => null)
               );
             });
             columns.splice(
               latestSelection.col + (alterAction === 'insert_col_end' ? 1 : 0),
               0,
-              ...Array.from({length}, () => ({}))
+              ...Array.from({ length }, () => ({}))
             );
             this.updateSettings({
               columns,
@@ -194,13 +193,13 @@ class DataSourcesEditor extends Component {
               row.splice(
                 latestSelection.col + (alterAction === 'insert_col_end' ? 1 : 0),
                 0,
-                ...Array.from({length}, () => null)
+                ...Array.from({ length }, () => null)
               );
             });
             columns.splice(
               latestSelection.col + (alterAction === 'insert_col_end' ? 1 : 0),
               0,
-              ...Array.from({length}, () => ({}))
+              ...Array.from({ length }, () => ({}))
             );
             this.updateSettings({
               columns,
@@ -359,6 +358,12 @@ class DataSourcesEditor extends Component {
       },
     };
 
+
+    const previewEl = document.querySelector(".grid_panel__resize-bar")
+    const plotEl = document.querySelector(".plot_panel")
+
+    const height = window.innerHeight - (previewEl.clientHeight + plotEl.clientHeight) - 32 // eslint-disable-line
+
     self.hot = new Handsontable(self.tableEl.current, {
       data,
       contextMenu,
@@ -377,7 +382,7 @@ class DataSourcesEditor extends Component {
         return cellProperties;
       },
       width: '100%',
-      height: 320,
+      height,
       rowHeaders: true,
       colHeaders: true,
       fixedRowsTop: 1,
@@ -392,9 +397,6 @@ class DataSourcesEditor extends Component {
       copyPaste: true,
       manualColumnMove: true,
       manualColumnResize: true,
-      formulas: {
-        engine: HyperFormula,
-      },
       // Hooks
       afterChange(changes, source) {
         if (['loadData', 'updateData'].includes(source)) {
@@ -473,7 +475,7 @@ class DataSourcesEditor extends Component {
         const container = self.tableEl.current?.querySelector('.ht_master .wtHolder');
         if (container) {
           container.addEventListener('scroll', self.handleScroll);
-          container.dispatchEvent(new Event('scroll', {bubbles: true}));
+          container.dispatchEvent(new Event('scroll', { bubbles: true }));
         }
         // Set up mouse events for vertical and horizontal thumbs
         const verticalThumb = self.tableEl.current?.querySelector('.scrollbar-v__thumb');
@@ -520,14 +522,14 @@ class DataSourcesEditor extends Component {
     const colsInfo = columns
       .concat(
         Array.from(
-          {length: Math.max(0, MIN_COLS - columns.length, keys.length - columns.length)},
+          { length: Math.max(0, MIN_COLS - columns.length, keys.length - columns.length) },
           () => ({})
         )
       )
       .map((col, i) => {
         const colInfo = {
           ...col,
-          ...(col.key ? {} : {key: keys[i] || null}),
+          ...(col.key ? {} : { key: keys[i] || null }),
         };
         if (!col.key) {
           delete keys[i];
@@ -653,7 +655,7 @@ class DataSourcesEditor extends Component {
   onUpdate(changes) {
     requestAnimationFrame(() => {
       const update = {
-        layout: {...(this.update?.layout || {})},
+        layout: { ...(this.update?.layout || {}) },
         traces: [...(this.update?.traces || [])],
       };
       const dataSources = this.serialize();
@@ -665,7 +667,7 @@ class DataSourcesEditor extends Component {
         .getSettings()
         .columns.filter((col) => Boolean(col.key) && col.key in dataSources);
 
-      const {editedColumns = [], renamedColumns = [], removedColumns = []} = changes;
+      const { editedColumns = [], renamedColumns = [], removedColumns = [] } = changes;
 
       const attrs = [
         ...this.props.data.reduce((acc, trace, index) => {
@@ -690,7 +692,7 @@ class DataSourcesEditor extends Component {
         ),
       ];
 
-      attrs.forEach(({attr, trace, layout, index}) => {
+      attrs.forEach(({ attr, trace, layout, index }) => {
         function updateAttr(attr, value) {
           if (layout && attr.includes('meta.columnNames')) {
             return;
@@ -717,7 +719,7 @@ class DataSourcesEditor extends Component {
           }
           if (Array.isArray(srcAttr.value)) {
             srcAttr.value = srcAttr.value.reduce((acc, value) => {
-              if (getData(container, {...srcAttr, value}, dataSources)) {
+              if (getData(container, { ...srcAttr, value }, dataSources)) {
                 acc.push(value);
               }
               return acc;
@@ -736,9 +738,9 @@ class DataSourcesEditor extends Component {
               `meta.columnNames.${attr}`,
               srcAttr.value
                 ? getColumnNames(
-                    typeof srcAttr.value === 'string' ? [srcAttr.value] : srcAttr.value,
-                    dataSourceOptions
-                  )
+                  typeof srcAttr.value === 'string' ? [srcAttr.value] : srcAttr.value,
+                  dataSourceOptions
+                )
                 : null
             );
           }
@@ -1010,9 +1012,6 @@ class DataSourcesEditor extends Component {
               this.hot.updateSettings({
                 height,
               });
-              requestAnimationFrame(() => {
-                this.props.onPlotResize();
-              });
             };
 
             document.addEventListener('mousemove', handleMouseMove);
@@ -1042,7 +1041,6 @@ DataSourcesEditor.propTypes = {
     fromSrc: PropTypes.func.isRequired,
   }),
   onUpdate: PropTypes.func,
-  onPlotResize: PropTypes.func,
 };
 
 export default DataSourcesEditor;

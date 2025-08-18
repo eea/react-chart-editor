@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connectToContainer} from 'lib';
+import { connectToContainer } from 'lib';
 import Field from './Field';
 import RadioBlocks from '../widgets/RadioBlocks';
 import NumericInput from '../widgets/NumericInput';
@@ -12,6 +12,7 @@ export class UnconnectedHoverLabelNameLength extends Component {
       currentOption: this.getCurrentOption(props),
     };
     this.onOptionChange = this.onOptionChange.bind(this);
+    this.updateHoverTemplate = this.updateHoverTemplate.bind(this);
   }
 
   getCurrentOption(props) {
@@ -22,7 +23,7 @@ export class UnconnectedHoverLabelNameLength extends Component {
     if (nextProps.fullValue !== this.props.fullValue) {
       this.setState({
         currentOption: this.getCurrentOption(nextProps),
-      });
+      }, this.updateHoverTemplate);
     }
   }
 
@@ -43,6 +44,25 @@ export class UnconnectedHoverLabelNameLength extends Component {
     }
   }
 
+  updateHoverTemplate() {
+    const specialTypes = ["pie", "sunburst"];
+    const { type, hovertemplate } = this.props.container;
+
+    if (specialTypes.includes(type) && hovertemplate) {
+      if (this.state.currentOption === "hide" && !hovertemplate.includes("<extra>")) {
+        this.props.updateContainer({
+          hovertemplate: `${hovertemplate}<extra></extra>`,
+        });
+      }
+
+      if (this.state.currentOption !== "hide" && hovertemplate.includes("<extra>")) {
+        this.props.updateContainer({
+          hovertemplate: hovertemplate.replace("<extra></extra>", ""),
+        });
+      }
+    }
+  }
+
   render() {
     const _ = this.context.localize;
 
@@ -51,13 +71,13 @@ export class UnconnectedHoverLabelNameLength extends Component {
         <RadioBlocks
           activeOption={this.state.currentOption}
           options={[
-            {label: _('Clip To'), value: 'clip'},
-            {label: _('No Clip'), value: 'no-clip'},
-            {label: _('Hide'), value: 'hide'},
+            { label: _('Clip To'), value: 'clip' },
+            { label: _('No Clip'), value: 'no-clip' },
+            { label: _('Hide'), value: 'hide' },
           ]}
           onOptionChange={this.onOptionChange}
         />
-        <div style={{height: '10px', width: '100%'}} />
+        <div style={{ height: '10px', width: '100%' }} />
         {this.state.currentOption === 'clip' ? (
           <NumericInput
             value={this.props.fullValue}
@@ -85,7 +105,7 @@ UnconnectedHoverLabelNameLength.displayName = 'UnconnectedHoverLabelNameLength';
 
 export default connectToContainer(UnconnectedHoverLabelNameLength, {
   modifyPlotProps: (props, context, plotProps) => {
-    const {container} = plotProps;
+    const { container } = plotProps;
     plotProps.isVisible =
       (container.hoverinfo && container.hoverinfo.includes('name')) ||
       container.hovertemplate ||

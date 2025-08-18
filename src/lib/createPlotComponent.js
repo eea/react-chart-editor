@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DefaultPlotly from 'plotly.js/dist/plotly';
 
@@ -177,9 +177,9 @@ export default function createPlotComponent(Plotly = DefaultPlotly) {
 
     figureCallback(callback) {
       if (typeof callback === 'function') {
-        const {data, layout} = this.el;
+        const { data, layout } = this.el;
         const frames = this.el._transitionData ? this.el._transitionData._frames : null;
-        const figure = {data, layout, frames};
+        const figure = { data, layout, frames };
         callback(figure, this.el);
       }
     }
@@ -280,7 +280,7 @@ export default function createPlotComponent(Plotly = DefaultPlotly) {
     debug: false,
     useResizeHandler: false,
     data: [],
-    style: {position: 'relative', display: 'inline-block'},
+    style: { position: 'relative', display: 'inline-block' },
   };
 
   return PlotlyComponent;

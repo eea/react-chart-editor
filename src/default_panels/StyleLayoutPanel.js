@@ -18,7 +18,7 @@ import {
   Radio,
   Info,
 } from '../components';
-import {HoverColor} from '../components/fields/derived';
+import {HoverColor, NumericHeight} from '../components/fields/derived';
 import DataSelector from '../components/fields/DataSelector';
 
 const Sizes = (_, {graphDiv}) => {
@@ -226,6 +226,7 @@ const StyleLayoutPanel = (props, {localize: _}) => (
         <Numeric label={_('Fixed Width')} attr="width" units="px" />
         <Numeric label={_('Fixed height')} attr="height" units="px" />
       </SizeVisibilitySelect>
+      <NumericHeight label={_('Fixed height')} attr="_height" units="px" />
       <Numeric label={_('Top')} attr="margin.t" units="px" />
       <Numeric label={_('Bottom')} attr="margin.b" units="px" />
       <Numeric label={_('Left')} attr="margin.l" units="px" />

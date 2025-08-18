@@ -35,7 +35,7 @@ const GraphCreatePanel = (props, { localize: _, setPanel }) => {
 
       <Numeric label={_('Dataset')} attr="dataset" min={0} max={50} showSlider />
 
-      <DatasetDropdown label={_('Dataset')} attr="dataset" />
+      <DatasetDropdown label={_('Dataset')} attr="dataset" placeholder={_('Choose dataset...')} />
 
       <Dropzone attr="geojson" fileType="geojson" />
       <LocationSelector attr="type" />
