@@ -20,7 +20,7 @@ export class UnconnectedDropdown extends Component {
           onChange={this.props.updatePlot}
           onCreate={this.props.updatePlot}
           clearable={this.props.clearable}
-          placeholder={placeholder}
+          placeholder={placeholder || this.props.placeholder}
           disabled={this.props.disabled}
           components={this.props.components}
           creatable={this.props.creatable}

@@ -1,14 +1,9 @@
-import React, {Component, createRef} from 'react';
-// import pick from 'lodash/pick';
-// import isNil from 'lodash/isNil';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   DEFAULT_FONTS,
-  MIN_PLOT_HEIGHT,
-  // TRACE_SRC_ATTRIBUTES,
-  // LAYOUT_SRC_ATTRIBUTES,
+  DEFAULT_PLOT_HEIGHT,
 } from 'lib/constants';
-// import createPlotComponent from 'lib/createPlotComponent';
 import createPlotComponent from 'react-plotly.js/factory';
 
 import EditorControls from './EditorControls';
@@ -33,56 +28,12 @@ class PlotlyEditor extends Component {
     this.handleRender = this.handleRender.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
     this.loadDataSources = this.loadDataSources.bind(this);
-    this.onPlotResize = this.onPlotResize.bind(this);
     this.renderSlot = this.renderSlot.bind(this);
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (!this.state.initialized) {
-  //     return;
-  //   }
-  //   const {data, layout} = this.props;
-  //   if (
-  //     data !== prevProps.data ||
-  //     layout !== prevProps.layout ||
-  //     this.state.initialized !== prevState.initialized
-  //   ) {
-  //     this.setState({
-  //       dfltData: data.map((trace) => ({
-  //         ...pick(trace, [
-  //           'type',
-  //           'xaxis',
-  //           'yaxis',
-  //           ...TRACE_SRC_ATTRIBUTES.filter((attr) => !attr.includes('.')),
-  //         ]),
-  //         ...(!isNil(trace.autocolorscale) ? {autocolorscale: true} : {}),
-  //       })),
-  //       dfltLayout: {
-  //         ...pick(layout, ['template', ...LAYOUT_SRC_ATTRIBUTES]),
-  //         ...(layout.xaxis?.rangeslider?.visible ? {xaxis: {rangeslider: {visible: true}}} : {}),
-  //         ...(layout.annotations?.length
-  //           ? {
-  //               annotations: layout.annotations.map(() => ({})),
-  //             }
-  //           : {}),
-  //         ...(layout.shapes?.length
-  //           ? {
-  //               shapes: layout.shapes.map(() => ({})),
-  //             }
-  //           : {}),
-  //         ...(layout.images?.length
-  //           ? {
-  //               images: layout.images.map(() => ({})),
-  //             }
-  //           : {}),
-  //       },
-  //     });
-  //   }
-  // }
-
   handleRender(fig, graphDiv) {
     if (!this.props.forceRender) {
-      this.setState({graphDiv});
+      this.setState({ graphDiv });
     }
     if (this.props.forceRender) {
       this.props.forceRender(fig, graphDiv);
@@ -92,29 +43,14 @@ class PlotlyEditor extends Component {
     }
   }
 
-  onUpdate({type, payload}) {
+  onUpdate({ type, payload }) {
     const editor = this.EditorControls.current;
-    return editor.handleUpdate.bind(editor)({type, payload});
+    return editor.handleUpdate.bind(editor)({ type, payload });
   }
 
   loadDataSources(dataSources, columns, update) {
     const editor = this.DataSourcesEditor.current;
     return editor.loadDataSources.bind(editor)(dataSources, columns, update);
-  }
-
-  onPlotResize() {
-    const containerEl = document.querySelector('.grid_and_plot');
-    const gridEl = containerEl.querySelector('.grid_panel');
-    const previewEl = containerEl.querySelector('.grid_panel__resize-preview');
-    const plotEl = containerEl.querySelector('.plot_panel');
-    requestAnimationFrame(() => {
-      plotEl.style.maxHeight =
-        Math.max(
-          MIN_PLOT_HEIGHT,
-          containerEl.clientHeight - (gridEl.clientHeight + previewEl.clientHeight) - 1
-        ) + 'px';
-      window.dispatchEvent(new Event('resize'));
-    });
   }
 
   renderSlot(slot) {
@@ -155,17 +91,22 @@ class PlotlyEditor extends Component {
         )}
         <div className="grid_and_plot">
           {this.renderSlot('grid-and-plot')}
-          <DataSourcesEditor
-            ref={this.DataSourcesEditor}
-            data={this.props.data}
-            layout={this.props.layout}
-            dataSources={this.props.dataSourcesSubset || this.props.dataSources}
-            columns={this.props.columns}
-            srcConverters={this.props.srcConverters}
-            onUpdate={this.onUpdate}
-            onPlotResize={this.onPlotResize}
-          />
-          <div className="plot_panel">
+          {this.state.initialized && (
+            <DataSourcesEditor
+              ref={this.DataSourcesEditor}
+              data={this.props.data}
+              layout={this.props.layout}
+              dataSources={this.props.dataSourcesSubset || this.props.dataSources}
+              columns={this.props.columns}
+              srcConverters={this.props.srcConverters}
+              onUpdate={this.onUpdate}
+            />
+          )}
+          <div className="plot_panel" style={{
+            '--svg-container-height': `${this.props.layout._height ||
+              this.props.layout.height ||
+              DEFAULT_PLOT_HEIGHT}px`,
+          }}>
             <this.PlotComponent
               data={this.props.data}
               layout={this.props.layout}
@@ -174,10 +115,8 @@ class PlotlyEditor extends Component {
               useResizeHandler={this.props.useResizeHandler}
               debug={this.props.debug}
               onInitialized={(fig, graphDiv) => {
-                this.onPlotResize();
-
-                this.setState({initialized: true, graphDiv}, () => {
-                  const {data, layout, frames} = fig;
+                this.setState({ initialized: true, graphDiv }, () => {
+                  const { data, layout, frames } = fig;
 
                   if (this.props.onInitialized) {
                     this.props.onInitialized(fig, graphDiv);
@@ -191,20 +130,9 @@ class PlotlyEditor extends Component {
               onUpdate={(fig, graphDiv) =>
                 this.state.initialized ? this.handleRender(fig, graphDiv) : null
               }
-              style={{width: '100%', height: '100%'}}
+              style={{ width: '100%', height: '100%' }}
               divId={this.props.divId}
             />
-            {/* {this.state.initialized && (
-              <this.PlotComponent
-                data={this.state.dfltData}
-                layout={this.state.dfltLayout}
-                frames={this.props.frames}
-                config={this.props.config}
-                // style={{display: 'none'}}
-                divId="plotly-dflt"
-                onInitialized={(_, graphDiv) => this.setState({dfltGraphDiv: graphDiv})}
-              />
-            )} */}
           </div>
         </div>
       </div>

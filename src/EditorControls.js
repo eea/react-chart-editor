@@ -1,6 +1,6 @@
 import DefaultEditor from './DefaultEditor';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   bem,
   localizeString,
@@ -20,12 +20,12 @@ import {
   shamefullyAdjustAxisDirection,
   shamefullyAdjustMapbox,
 } from './shame';
-import {EDITOR_ACTIONS} from './lib/constants';
+import { EDITOR_ACTIONS } from './lib/constants';
 import isNumeric from 'fast-isnumeric';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
-import {categoryLayout, traceTypes} from 'lib/traceTypes';
-import {ModalProvider} from 'components/containers';
-import {DEFAULT_FONTS} from 'lib/constants';
+import { categoryLayout, traceTypes } from 'lib/traceTypes';
+import { ModalProvider } from 'components/containers';
+import { DEFAULT_FONTS } from 'lib/constants';
 
 class EditorControls extends Component {
   constructor(props, context) {
@@ -77,8 +77,8 @@ class EditorControls extends Component {
     };
   }
 
-  handleUpdate({type, payload}) {
-    const {graphDiv} = this.props;
+  handleUpdate({ type, payload }) {
+    const { graphDiv } = this.props;
 
     switch (type) {
       case EDITOR_ACTIONS.UPDATE_TRACES:
@@ -174,9 +174,9 @@ class EditorControls extends Component {
             this.props.makeDefaultTrace
               ? this.props.makeDefaultTrace()
               : {
-                  type: `scatter${this.props.glByDefault ? 'gl' : ''}`,
-                  mode: 'markers',
-                }
+                type: `scatter${this.props.glByDefault ? 'gl' : ''}`,
+                mode: 'markers',
+              }
           );
         } else {
           const prevTrace = graphDiv.data[graphDiv.data.length - 1];

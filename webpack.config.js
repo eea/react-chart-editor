@@ -25,6 +25,7 @@ module.exports = () => ({
   },
   plugins: [new webpack.IgnorePlugin({resourceRegExp: /vertx/})],
   devServer: {
+    port: 4000,
     open: false,
     static: './dev',
     client: {overlay: {errors: true, warnings: false}},

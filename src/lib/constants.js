@@ -18,11 +18,11 @@ export const getMultiValueText = (key, _) => {
     title: _('Multiple Values'),
     text: _(
       'This input has multiple values associated with it. ' +
-        'Changing this setting will override these custom inputs.'
+      'Changing this setting will override these custom inputs.'
     ),
     subText: _(
       "Common Case: An 'All' tab might display this message " +
-        'because the X and Y tabs contain different settings.'
+      'because the X and Y tabs contain different settings.'
     ),
   };
   return multiValueText[key];
@@ -43,9 +43,9 @@ export const EDITOR_ACTIONS = {
 };
 
 export const DEFAULT_FONTS = [
-  {label: 'Sans Serif', value: 'sans-serif'},
-  {label: 'Serif', value: 'serif'},
-  {label: 'Monospaced', value: 'monospace'},
+  { label: 'Sans Serif', value: 'sans-serif' },
+  { label: 'Serif', value: 'serif' },
+  { label: 'Monospaced', value: 'monospace' },
 ];
 
 export const RETURN_KEY = 'Enter';
@@ -85,30 +85,30 @@ export const TRACE_TO_AXIS = {
 
 // Note: scene, and xaxis/yaxis were added for convenience sake even though they're not subplot types
 export const SUBPLOT_TO_ATTR = {
-  cartesian: {data: ['xaxis', 'yaxis'], layout: ['x', 'y']},
-  xaxis: {data: 'xaxis', layout: 'x'},
-  yaxis: {data: 'yaxis', layout: 'y'},
-  x: {data: 'xaxis', layout: 'x'},
-  y: {data: 'yaxis', layout: 'y'},
-  ternary: {data: 'subplot', layout: 'ternary'},
-  gl3d: {data: 'scene', layout: 'scene'},
-  scene: {data: 'scene', layout: 'scene'},
-  geo: {data: 'geo', layout: 'geo'},
-  mapbox: {data: 'subplot', layout: 'mapbox'},
-  polar: {data: 'subplot', layout: 'polar'},
+  cartesian: { data: ['xaxis', 'yaxis'], layout: ['x', 'y'] },
+  xaxis: { data: 'xaxis', layout: 'x' },
+  yaxis: { data: 'yaxis', layout: 'y' },
+  x: { data: 'xaxis', layout: 'x' },
+  y: { data: 'yaxis', layout: 'y' },
+  ternary: { data: 'subplot', layout: 'ternary' },
+  gl3d: { data: 'scene', layout: 'scene' },
+  scene: { data: 'scene', layout: 'scene' },
+  geo: { data: 'geo', layout: 'geo' },
+  mapbox: { data: 'subplot', layout: 'mapbox' },
+  polar: { data: 'subplot', layout: 'polar' },
 };
 
 export const subplotName = (type, _) =>
-  ({
-    x: _('X'),
-    y: _('Y'),
-    ternary: _('Ternary'),
-    gl3d: _('Scene'),
-    scene: _('Scene'),
-    geo: _('Map'),
-    mapbox: _('Tile Map'),
-    polar: _('Polar'),
-  }[type]);
+({
+  x: _('X'),
+  y: _('Y'),
+  ternary: _('Ternary'),
+  gl3d: _('Scene'),
+  scene: _('Scene'),
+  geo: _('Map'),
+  mapbox: _('Tile Map'),
+  polar: _('Polar'),
+}[type]);
 
 export const TRANSFORMS_LIST = ['filter', 'groupby', 'aggregate', 'sort'];
 
@@ -217,3 +217,4 @@ export const LAYOUT_SRC_ATTRIBUTES = ['meta', 'tickvals', 'ticktext'];
 
 export const MIN_GRID_HEIGHT = 50;
 export const MIN_PLOT_HEIGHT = 450;
+export const DEFAULT_PLOT_HEIGHT = 450;

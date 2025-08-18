@@ -398,6 +398,25 @@ export const NumericReciprocal = connectToContainer(UnconnectedNumeric, {
   },
 });
 
+export const NumericHeight = connectToContainer(UnconnectedNumeric, {
+  modifyPlotProps: (props, context, plotProps) => {
+    if (props.attr !== '_height') {
+      return
+    }
+    plotProps.description = "Set's the plot height (in px)."
+    const { fullLayout } = context
+    if (fullLayout.autosize) {
+      plotProps.isVisible = true
+      if (!plotProps.container._height) {
+        plotProps.updatePlot(fullLayout.height)
+      }
+      plotProps.fullValue = plotProps.container._height
+    } else if (plotProps.container._height) {
+      plotProps.updatePlot(null)
+    }
+  }
+})
+
 export const AnnotationArrowRef = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
     const { localize: _ } = context;
