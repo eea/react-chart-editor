@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import plotly from 'plotly.js/dist/plotly';
+import React, { Component } from 'react';
+import plotly from 'plotly.js/dist/plotly-with-meta';
 import PlotlyEditor from 'react-chart-editor';
 import 'react-chart-editor/lib/react-chart-editor.css';
 
@@ -14,12 +14,12 @@ const dataSourceOptions = Object.keys(dataSources).map((name) => ({
   label: name,
 }));
 
-const config = {editable: true};
+const config = { editable: true };
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {data: [], layout: {}, frames: []};
+    this.state = { data: [], layout: {}, frames: [] };
   }
 
   render() {
@@ -33,7 +33,7 @@ class App extends Component {
           dataSources={dataSources}
           dataSourceOptions={dataSourceOptions}
           plotly={plotly}
-          onUpdate={(data, layout, frames) => this.setState({data, layout, frames})}
+          onUpdate={(data, layout, frames) => this.setState({ data, layout, frames })}
           useResizeHandler
           debug
           advancedTraceTypeSelector

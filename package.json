@@ -1,7 +1,7 @@
 {
   "name": "@eeacms/react-chart-editor",
   "description": "plotly.js chart editor react component UI",
-  "version": "0.47.5",
+  "version": "0.47.6",
   "author": "Plotly, Inc.",
   "bugs": {
     "url": "https://github.com/plotly/react-chart-editor/issues"
@@ -43,7 +43,6 @@
     "react-color": "^2.19.3",
     "react-day-picker": "^7.4.10",
     "react-dropzone": "^14.2.3",
-    "react-plotly.js": "^2.6.0",
     "react-rangeslider": "^2.2.0",
     "react-resizable-rotatable-draggable": "^0.2.0",
     "react-select": "^5.7.4",

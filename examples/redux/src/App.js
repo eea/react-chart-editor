@@ -1,10 +1,10 @@
 import 'react-chart-editor/lib/react-chart-editor.css';
 import PlotlyEditor from 'react-chart-editor';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import plotly from 'plotly.js/dist/plotly';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import plotly from 'plotly.js/dist/plotly-with-meta';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import * as actions from './actions';
 
 const dataSources = {
@@ -17,19 +17,19 @@ const dataSourceOptions = Object.keys(dataSources).map((name) => ({
   label: name,
 }));
 
-const config = {editable: true};
+const config = { editable: true };
 
 class App extends Component {
   constructor(props) {
     super(props);
-    const {actions} = props;
+    const { actions } = props;
 
     actions.sourcesUpdate(dataSources);
     actions.dataSourceOptionsUpdate(dataSourceOptions);
   }
 
   render() {
-    const {actions, dataSources, dataSourceOptions, data, layout, frames} = this.props;
+    const { actions, dataSources, dataSourceOptions, data, layout, frames } = this.props;
 
     return (
       <div className="app">

@@ -1,9 +1,9 @@
 import React from 'react';
-import {TestEditor, setupGraphDiv, fixtures} from 'lib/test-utils';
-import plotly from 'plotly.js/dist/plotly';
+import { TestEditor, setupGraphDiv, fixtures } from 'lib/test-utils';
+import plotly from 'plotly.js/dist/plotly-with-meta';
 
-import {PanelMenuWrapper} from '../components';
-import {customConfigTest} from '../../dev/customConfigTest';
+import { PanelMenuWrapper } from '../components';
+import { customConfigTest } from '../../dev/customConfigTest';
 
 import * as mocks from '../../dev/percy';
 import * as panels from '../default_panels/';
@@ -36,7 +36,7 @@ window.URL.createObjectURL = function () {
 };
 
 // eslint-disable-next-line react/prop-types
-const PanelFixture = ({panel, group, name, figure, customConfig}) => {
+const PanelFixture = ({ panel, group, name, figure, customConfig }) => {
   const gd = setupGraphDiv(figure, plotly);
   gd._context = plotly.setPlotConfig();
   gd._context.setBackground = () => null;
@@ -60,7 +60,7 @@ const PanelFixture = ({panel, group, name, figure, customConfig}) => {
   );
 };
 
-const meta = {component: PanelFixture, title: 'Panels'};
+const meta = { component: PanelFixture, title: 'Panels' };
 export default meta;
 
 const stories = {};

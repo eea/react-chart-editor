@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import plotly from 'plotly.js/dist/plotly';
+import React, { Component } from 'react';
+import plotly from 'plotly.js/dist/plotly-with-meta';
 import PlotlyEditor from 'react-chart-editor';
 import CustomEditor from './CustomEditor';
 import 'react-chart-editor/lib/react-chart-editor.css';
@@ -14,7 +14,7 @@ const dataSourceOptions = Object.keys(dataSources).map((name) => ({
   label: name,
 }));
 
-const config = {editable: true};
+const config = { editable: true };
 
 class App extends Component {
   constructor() {
@@ -25,7 +25,7 @@ class App extends Component {
           type: 'scatter',
           x: dataSources.col1,
           y: dataSources.col2,
-          marker: {color: dataSources.col3},
+          marker: { color: dataSources.col3 },
         },
       ],
       layout: {},
@@ -44,7 +44,7 @@ class App extends Component {
           dataSources={dataSources}
           dataSourceOptions={dataSourceOptions}
           plotly={plotly}
-          onUpdate={(data, layout, frames) => this.setState({data, layout, frames})}
+          onUpdate={(data, layout, frames) => this.setState({ data, layout, frames })}
           useResizeHandler
           debug
           advancedTraceTypeSelector
