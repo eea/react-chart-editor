@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import plotly from 'plotly.js/dist/plotly';
+import React, { Component } from 'react';
+import plotly from 'plotly.js/dist/plotly-with-meta';
 import PlotlyEditor from 'react-chart-editor';
 import 'react-chart-editor/lib/react-chart-editor.css';
 import Nav from './Nav';
@@ -10,7 +10,7 @@ const dataSourceOptions = Object.keys(dataSources).map((name) => ({
   label: name,
 }));
 
-const config = {editable: true};
+const config = { editable: true };
 
 class App extends Component {
   constructor() {
@@ -30,13 +30,13 @@ class App extends Component {
   UNSAFE_componentWillMount() {
     fetch('https://api.github.com/repos/plotly/plotly.js/contents/test/image/mocks')
       .then((response) => response.json())
-      .then((mocks) => this.setState({mocks}));
+      .then((mocks) => this.setState({ mocks }));
   }
 
   loadMock(mockIndex) {
     const mock = this.state.mocks[mockIndex];
     fetch(mock.url, {
-      headers: new Headers({Accept: 'application/vnd.github.v3.raw'}),
+      headers: new Headers({ Accept: 'application/vnd.github.v3.raw' }),
     })
       .then((response) => response.json())
       .then((figure) => {
@@ -60,7 +60,7 @@ class App extends Component {
           dataSources={dataSources}
           dataSourceOptions={dataSourceOptions}
           plotly={plotly}
-          onUpdate={(data, layout, frames) => this.setState({data, layout, frames})}
+          onUpdate={(data, layout, frames) => this.setState({ data, layout, frames })}
           useResizeHandler
           debug
           advancedTraceTypeSelector

@@ -4,7 +4,7 @@ import {
   DEFAULT_FONTS,
   DEFAULT_PLOT_HEIGHT,
 } from 'lib/constants';
-import createPlotComponent from 'react-plotly.js/factory';
+import createPlotComponent from 'lib/createPlotComponent';
 
 import EditorControls from './EditorControls';
 import DataSourcesEditor from './DataSourcesEditor';
