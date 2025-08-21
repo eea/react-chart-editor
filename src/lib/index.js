@@ -12,32 +12,33 @@ import connectTransformToTrace from './connectTransformToTrace';
 import connectAggregationToTransform from './connectAggregationToTransform';
 import connectAxesToLayout from './connectAxesToLayout';
 import connectLayoutToPlot from './connectLayoutToPlot';
-import connectToContainer, {containerConnectedContextTypes} from './connectToContainer';
-import {computeTraceOptionsFromSchema} from './computeTraceOptionsFromSchema';
+import connectToContainer, { containerConnectedContextTypes } from './connectToContainer';
+import { computeTraceOptionsFromSchema } from './computeTraceOptionsFromSchema';
 import connectTraceToPlot from './connectTraceToPlot';
-import dereference, {getColumnNames} from './dereference';
+import dereference, { getColumnNames } from './dereference';
 import getAllAxes, {
   axisIdToAxisName,
   traceTypeToAxisType,
   getAxisTitle,
   getSubplotTitle,
 } from './getAllAxes';
-import localize, {localizeString} from './localize';
+import localize, { localizeString } from './localize';
 import tinyColor from 'tinycolor2';
 import unpackPlotProps, {
   computeCustomConfigVisibility,
   hasValidCustomConfigVisibilityRules,
   isVisibleGivenCustomConfig,
 } from './unpackPlotProps';
-import walkObject, {isPlainObject} from './walkObject';
-import {traceTypeToPlotlyInitFigure, plotlyTraceToCustomTrace} from './customTraceType';
+import walkObject, { isPlainObject } from './walkObject';
+import { traceTypeToPlotlyInitFigure, plotlyTraceToCustomTrace } from './customTraceType';
 import * as PlotlyIcons from 'plotly-icons';
 import striptags from './striptags';
-import {capitalize, lowerCase, upperCase, removeNonWord, camelCase, pascalCase} from './strings';
-import {getColorscale} from '@eeacms/react-colorscales';
-import {templateString} from 'plotly.js/src/lib';
+import { capitalize, lowerCase, upperCase, removeNonWord, camelCase, pascalCase } from './strings';
+import { getColorscale } from '@eeacms/react-colorscales';
+import { templateString } from 'plotly.js/src/lib';
 import * as constants from './constants';
-import {getAdjustedSrcAttr, getAttrsPath, getSrcAttr, getData, inSrcAttr} from './dataSources';
+import { getAdjustedSrcAttr, getAttrsPath, getSrcAttr, getData, inSrcAttr } from './dataSources';
+import createPlotComponent from './createPlotComponent';
 
 const TOO_LIGHT_FACTOR = 0.8;
 
@@ -247,6 +248,7 @@ export {
   connectUpdateMenuToLayout,
   containerConnectedContextTypes,
   constants,
+  createPlotComponent,
   dereference,
   getAdjustedSrcAttr,
   getAllAxes,
