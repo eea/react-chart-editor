@@ -9,15 +9,14 @@ import {
   FontSelector,
   PlotlyFold,
   Numeric,
-  CustomNumeric,
   TextEditor,
   PlotlySection,
   LayoutPanel,
   SizeVisibilitySelect,
-  ScaleVisibilitySelect,
   HovermodeDropdown,
   Flaglist,
   Radio,
+  ScaleRadio,
   Info
 } from '../components';
 import { HoverColor, NumericHeight } from '../components/fields/derived';
@@ -215,19 +214,6 @@ const StyleLayoutPanel = (props, { localize: _ }) => (
 
     <PlotlyFold name={_('Size and Margins')}>
       <Sizes />
-      <ScaleVisibilitySelect
-        attr="autoscale"
-        label={_('Autoscale')}
-        options={[
-          { label: _('Enabled'), value: true },
-          { label: _('Disabled'), value: false },
-        ]}
-        showOn={true}
-        defaultOpt={false}
-        show
-      >
-        <CustomNumeric label={_('Autoscale breakpoint')} attr="autoscale_breakpoint" units="px" defaultValue={0} />
-      </ScaleVisibilitySelect>
       <SizeVisibilitySelect
         attr="autosize"
         label={_('Size')}
@@ -238,6 +224,28 @@ const StyleLayoutPanel = (props, { localize: _ }) => (
         showOn={false}
         defaultOpt={true}
       >
+        <ScaleRadio
+          attr="autoscale"
+          label={_('Autoscale')}
+          options={[
+            { label: _('Enabled'), value: true },
+            { label: _('Disabled'), value: false },
+          ]}
+          defaultValue={false}
+          show
+        />
+        {/* <ScaleVisibilitySelect
+          attr="autoscale"
+          label={_('Autoscale')}
+          options={[
+            { label: _('Enabled'), value: true },
+            { label: _('Disabled'), value: false },
+          ]}
+          showOn={true}
+          defaultOpt={false}
+          show
+        >
+        </ScaleVisibilitySelect> */}
         <Numeric label={_('Fixed Width')} attr="width" units="px" />
         <Numeric label={_('Fixed height')} attr="height" units="px" />
       </SizeVisibilitySelect>

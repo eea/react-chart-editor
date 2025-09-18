@@ -121,6 +121,15 @@ export const AxisSide = connectToContainer(UnconnectedRadio, {
   },
 });
 
+export const ScaleRadio = connectToContainer(UnconnectedRadio, {
+  modifyPlotProps: (props, context, plotProps) => {
+    const { container } = context;
+    plotProps.fullValue = container.autoscale ?? props.defaultValue;
+    plotProps.description = "Enables autoscaling of the plot based on initial container size.";
+  },
+});
+
+
 export const ContourNumeric = connectToContainer(UnconnectedNumeric, {
   modifyPlotProps: (props, context, plotProps) => {
     const { fullContainer } = plotProps;
@@ -420,6 +429,7 @@ export const NumericHeight = connectToContainer(UnconnectedNumeric, {
 export const CustomNumeric = connectToContainer(UnconnectedNumeric, {
   modifyPlotProps: (props, context, plotProps) => {
     plotProps.fullValue = plotProps.container[props.attr]
+    plotProps.description = props.description
     plotProps.isVisible = true
   }
 })
@@ -837,34 +847,18 @@ export const HoveronDropdown = connectToContainer(UnconnectedDropdown, {
 
 export const SizeVisibilitySelect = connectToContainer(UnconnectedVisibilitySelect, {
   modifyPlotProps: (props, context, plotProps) => {
-    const { fullContainer } = context;
+    const { fullContainer, container } = context;
     const { updatePlot } = plotProps;
 
     plotProps.updatePlot = (v, _update = {}) => {
       const update = { ..._update };
       update.width = v ? null : fullContainer.width;
       update.height = v ? null : fullContainer.height;
+      update.autoscale = v ? null : container.autoscale;
       updatePlot(v, update);
     };
 
     return plotProps;
-  },
-});
-
-export const ScaleVisibilitySelect = connectToContainer(UnconnectedVisibilitySelect, {
-  modifyPlotProps: (props, context, plotProps) => {
-    const { container, fullContainer } = context;
-    const { updatePlot } = plotProps;
-
-    plotProps.updatePlot = (v, _update = {}) => {
-      const update = { ..._update };
-      update.autoscale_breakpoint = v ? fullContainer.width : null;
-      updatePlot(v, update);
-    };
-
-    plotProps.fullValue = container.autoscale;
-
-    plotProps.description = "Enables autoscaling of the plot based on initial container size or breakpoint.";
   },
 });
 
