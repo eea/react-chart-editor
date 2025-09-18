@@ -417,6 +417,13 @@ export const NumericHeight = connectToContainer(UnconnectedNumeric, {
   }
 })
 
+export const CustomNumeric = connectToContainer(UnconnectedNumeric, {
+  modifyPlotProps: (props, context, plotProps) => {
+    plotProps.fullValue = plotProps.container[props.attr]
+    plotProps.isVisible = true
+  }
+})
+
 export const AnnotationArrowRef = connectToContainer(UnconnectedDropdown, {
   modifyPlotProps: (props, context, plotProps) => {
     const { localize: _ } = context;
@@ -841,6 +848,23 @@ export const SizeVisibilitySelect = connectToContainer(UnconnectedVisibilitySele
     };
 
     return plotProps;
+  },
+});
+
+export const ScaleVisibilitySelect = connectToContainer(UnconnectedVisibilitySelect, {
+  modifyPlotProps: (props, context, plotProps) => {
+    const { container, fullContainer } = context;
+    const { updatePlot } = plotProps;
+
+    plotProps.updatePlot = (v, _update = {}) => {
+      const update = { ..._update };
+      update.autoscale_breakpoint = v ? fullContainer.width : null;
+      updatePlot(v, update);
+    };
+
+    plotProps.fullValue = container.autoscale;
+
+    plotProps.description = "Enables autoscaling of the plot based on initial container size or breakpoint.";
   },
 });
 

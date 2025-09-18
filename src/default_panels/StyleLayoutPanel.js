@@ -9,19 +9,21 @@ import {
   FontSelector,
   PlotlyFold,
   Numeric,
+  CustomNumeric,
   TextEditor,
   PlotlySection,
   LayoutPanel,
   SizeVisibilitySelect,
+  ScaleVisibilitySelect,
   HovermodeDropdown,
   Flaglist,
   Radio,
-  Info,
+  Info
 } from '../components';
-import {HoverColor, NumericHeight} from '../components/fields/derived';
+import { HoverColor, NumericHeight } from '../components/fields/derived';
 import DataSelector from '../components/fields/DataSelector';
 
-const Sizes = (_, {graphDiv}) => {
+const Sizes = (_, { graphDiv }) => {
   if (!graphDiv) {
     return null;
   }
@@ -71,7 +73,7 @@ Sizes.contextTypes = {
   graphDiv: PropTypes.any,
 };
 
-const StyleLayoutPanel = (props, {localize: _}) => (
+const StyleLayoutPanel = (props, { localize: _ }) => (
   <LayoutPanel {...props}>
     <PlotlyFold name={_('Defaults')}>
       <ColorPicker label={_('Plot Background')} attr="plot_bgcolor" />
@@ -109,11 +111,11 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Number format')}
           attr="separators"
           options={[
-            {label: _('1,234.56'), value: '.,'},
-            {label: _('1 234.56'), value: '. '},
-            {label: _('1 234,56'), value: ', '},
-            {label: _('1.234,56'), value: ',.'},
-            {label: _('1234.56'), value: '.'},
+            { label: _('1,234.56'), value: '.,' },
+            { label: _('1 234.56'), value: '. ' },
+            { label: _('1 234,56'), value: ', ' },
+            { label: _('1.234,56'), value: ',.' },
+            { label: _('1234.56'), value: '.' },
           ]}
           clearable={false}
         />
@@ -121,9 +123,9 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Uniform Text Mode')}
           attr="uniformtext.mode"
           options={[
-            {label: _('Off'), value: false},
-            {label: _('Show'), value: 'show'},
-            {label: _('Hide'), value: 'hide'},
+            { label: _('Off'), value: false },
+            { label: _('Show'), value: 'show' },
+            { label: _('Hide'), value: 'hide' },
           ]}
           clearable={false}
         />
@@ -141,10 +143,10 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Anchor Point')}
           attr="title.xanchor"
           options={[
-            {label: _('Auto'), value: 'auto'},
-            {label: _('Left'), value: 'left'},
-            {label: _('Center'), value: 'center'},
-            {label: _('Right'), value: 'right'},
+            { label: _('Auto'), value: 'auto' },
+            { label: _('Left'), value: 'left' },
+            { label: _('Center'), value: 'center' },
+            { label: _('Right'), value: 'right' },
           ]}
         />
         <Numeric label={_('Position')} showSlider step={0.02} attr="title.x" />
@@ -152,8 +154,8 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Relative to')}
           attr="title.xref"
           options={[
-            {label: _('Container'), value: 'container'},
-            {label: _('Paper'), value: 'paper'},
+            { label: _('Container'), value: 'container' },
+            { label: _('Paper'), value: 'paper' },
           ]}
         />
       </PlotlySection>
@@ -162,10 +164,10 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Anchor Point')}
           attr="title.yanchor"
           options={[
-            {label: _('Auto'), value: 'auto'},
-            {label: _('Top'), value: 'top'},
-            {label: _('Middle'), value: 'middle'},
-            {label: _('Bottom'), value: 'bottom'},
+            { label: _('Auto'), value: 'auto' },
+            { label: _('Top'), value: 'top' },
+            { label: _('Middle'), value: 'middle' },
+            { label: _('Bottom'), value: 'bottom' },
           ]}
         />
         <Numeric
@@ -173,8 +175,8 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           step={0.02}
           attr="title.y"
           visibilityOptions={[
-            {label: 'Auto', value: 'auto', type: 'string'},
-            {label: 'Custom', value: 1, type: 'number'},
+            { label: 'Auto', value: 'auto', type: 'string' },
+            { label: 'Custom', value: 1, type: 'number' },
           ]}
           showOn={1}
           showArrows
@@ -184,8 +186,8 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Relative to')}
           attr="title.yref"
           options={[
-            {label: _('Container'), value: 'container'},
-            {label: _('Paper'), value: 'paper'},
+            { label: _('Container'), value: 'container' },
+            { label: _('Paper'), value: 'paper' },
           ]}
         />
       </PlotlySection>
@@ -202,8 +204,8 @@ const StyleLayoutPanel = (props, {localize: _}) => (
         label={_('Orientation')}
         attr="modebar.orientation"
         options={[
-          {label: _('Horizontal'), value: 'h'},
-          {label: _('Vertical'), value: 'v'},
+          { label: _('Horizontal'), value: 'h' },
+          { label: _('Vertical'), value: 'v' },
         ]}
       />
       <ColorPicker label={_('Icon Color')} attr="modebar.color" />
@@ -213,12 +215,25 @@ const StyleLayoutPanel = (props, {localize: _}) => (
 
     <PlotlyFold name={_('Size and Margins')}>
       <Sizes />
+      <ScaleVisibilitySelect
+        attr="autoscale"
+        label={_('Autoscale')}
+        options={[
+          { label: _('Enabled'), value: true },
+          { label: _('Disabled'), value: false },
+        ]}
+        showOn={true}
+        defaultOpt={false}
+        show
+      >
+        <CustomNumeric label={_('Autoscale breakpoint')} attr="autoscale_breakpoint" units="px" defaultValue={0} />
+      </ScaleVisibilitySelect>
       <SizeVisibilitySelect
         attr="autosize"
         label={_('Size')}
         options={[
-          {label: _('Auto'), value: true},
-          {label: _('Custom'), value: false},
+          { label: _('Auto'), value: true },
+          { label: _('Custom'), value: false },
         ]}
         showOn={false}
         defaultOpt={true}
@@ -240,12 +255,12 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Mode')}
           attr="dragmode"
           options={[
-            {label: _('Zoom'), value: 'zoom'},
-            {label: _('Select'), value: 'select'},
-            {label: _('Pan'), value: 'pan'},
-            {label: _('Lasso'), value: 'lasso'},
-            {label: _('Orbit'), value: 'orbit'},
-            {label: _('Turntable'), value: 'turntable'},
+            { label: _('Zoom'), value: 'zoom' },
+            { label: _('Select'), value: 'select' },
+            { label: _('Pan'), value: 'pan' },
+            { label: _('Lasso'), value: 'lasso' },
+            { label: _('Orbit'), value: 'orbit' },
+            { label: _('Turntable'), value: 'turntable' },
           ]}
           clearable={false}
         />
@@ -253,10 +268,10 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Select Direction')}
           attr="selectdirection"
           options={[
-            {label: _('Any'), value: 'any'},
-            {label: _('Horizontal'), value: 'h'},
-            {label: _('Vertical'), value: 'v'},
-            {label: _('Diagonal'), value: 'd'},
+            { label: _('Any'), value: 'any' },
+            { label: _('Horizontal'), value: 'h' },
+            { label: _('Vertical'), value: 'v' },
+            { label: _('Diagonal'), value: 'd' },
           ]}
           clearable={false}
         />
@@ -266,8 +281,8 @@ const StyleLayoutPanel = (props, {localize: _}) => (
           label={_('Mode')}
           attr="clickmode"
           options={[
-            {label: _('Click Event'), value: 'event'},
-            {label: _('Select Data Point'), value: 'select'},
+            { label: _('Click Event'), value: 'event' },
+            { label: _('Select Data Point'), value: 'select' },
           ]}
         />
       </PlotlySection>
@@ -277,9 +292,9 @@ const StyleLayoutPanel = (props, {localize: _}) => (
             label={_('Text Alignment')}
             attr="hoverlabel.align"
             options={[
-              {label: _('Auto'), value: 'auto'},
-              {label: _('Left'), value: 'left'},
-              {label: _('Right'), value: 'right'},
+              { label: _('Auto'), value: 'auto' },
+              { label: _('Left'), value: 'left' },
+              { label: _('Right'), value: 'right' },
             ]}
             clearable={false}
           />
@@ -317,7 +332,7 @@ const StyleLayoutPanel = (props, {localize: _}) => (
         </p>
         <p>
           {_('Ex: ')}
-          <span style={{letterSpacing: '1px', fontStyle: 'italic', userSelect: 'text'}}>
+          <span style={{ letterSpacing: '1px', fontStyle: 'italic', userSelect: 'text' }}>
             {_('My custom title %{meta[1]}')}
           </span>
         </p>

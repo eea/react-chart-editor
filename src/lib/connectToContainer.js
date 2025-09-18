@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import unpackPlotProps, {isVisibleGivenCustomConfig} from './unpackPlotProps';
-import {getDisplayName} from '../lib';
+import unpackPlotProps, { isVisibleGivenCustomConfig } from './unpackPlotProps';
+import { getDisplayName } from '../lib';
 
 export const containerConnectedContextTypes = {
   localize: PropTypes.func,
@@ -66,7 +66,7 @@ export default function connectToContainer(WrappedComponent, config = {}) {
       // props. However pass plotProps as a specific prop in case inner component
       // is also wrapped by a component that `unpackPlotProps`. That way inner
       // component can skip computation as it can see plotProps is already defined.
-      const {plotProps = this.plotProps, ...props} = Object.assign({}, this.plotProps, this.props);
+      const { plotProps = this.plotProps, ...props } = Object.assign({}, this.plotProps, this.props);
       const wrappedComponentDisplayName =
         WrappedComponent && WrappedComponent.displayName ? WrappedComponent.displayName : null;
 
@@ -93,7 +93,7 @@ export default function connectToContainer(WrappedComponent, config = {}) {
     attr: PropTypes.string,
   };
 
-  const {plotly_editor_traits} = WrappedComponent;
+  const { plotly_editor_traits } = WrappedComponent;
   ContainerConnectedComponent.plotly_editor_traits = plotly_editor_traits;
 
   return ContainerConnectedComponent;

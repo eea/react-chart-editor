@@ -7,7 +7,7 @@ import isArray from 'lodash/isArray';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
 import isNumeric from 'fast-isnumeric';
 import tinycolor from 'tinycolor2';
-import {MULTI_VALUED, MULTI_VALUED_PLACEHOLDER} from './constants';
+import { MULTI_VALUED, MULTI_VALUED_PLACEHOLDER } from './constants';
 
 const hasFullValue = (fullValue) => fullValue !== void 0 && fullValue !== null;
 
@@ -99,12 +99,12 @@ export function computeCustomConfigVisibility(props, customConfig, wrappedCompon
     return isRegexMatch(rule) && !hasException(rule);
   };
 
-  if (customConfig.visibility_rules.blacklist) {
-    isVisible = !customConfig.visibility_rules.blacklist.some(passesTest);
+  if (customConfig?.visibility_rules?.blacklist?.some(passesTest)) {
+    isVisible = false;
   }
 
-  if (customConfig.visibility_rules.whitelist) {
-    isVisible = customConfig.visibility_rules.whitelist.some(passesTest);
+  if (customConfig?.visibility_rules?.whitelist?.some(passesTest)) {
+    isVisible = true;
   }
 
   return isVisible;
@@ -112,14 +112,14 @@ export function computeCustomConfigVisibility(props, customConfig, wrappedCompon
 
 export function isVisibleGivenCustomConfig(initial, nextProps, nextContext, componentDisplayName) {
   let show = initial;
-  if (show && nextContext.hasValidCustomConfigVisibilityRules) {
-    show = computeCustomConfigVisibility(nextProps, nextContext.customConfig, componentDisplayName);
+  if (nextContext.hasValidCustomConfigVisibilityRules) {
+    show = computeCustomConfigVisibility(nextProps, nextContext.customConfig, componentDisplayName) ?? show;
   }
   return show;
 }
 
 export default function unpackPlotProps(props, context) {
-  const {container, getDflt, getValObject, defaultContainer, updateContainer} = context;
+  const { container, getDflt, getValObject, defaultContainer, updateContainer } = context;
 
   if (!props.attr) {
     return {};
@@ -167,7 +167,7 @@ export default function unpackPlotProps(props, context) {
     if (!props.attr || !updateContainer) {
       return;
     }
-    const update = {..._update};
+    const update = { ..._update };
     if ((props.resettable || (context.resettable && props.resettable !== false)) && !isNil(v)) {
       const dflt = getDflt(props.attr);
       const equal = isEqual(v, dflt);

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connectToContainer} from 'lib';
-import {MULTI_VALUED_PLACEHOLDER} from 'lib/constants';
+import { connectToContainer } from 'lib';
+import { MULTI_VALUED_PLACEHOLDER } from 'lib/constants';
 import Field from './Field';
-import Radio from './Radio';
+import { UnconnectedRadio } from './Radio';
 import Dropdown from './Dropdown';
 
 export class UnconnectedVisibilitySelect extends Component {
@@ -36,7 +36,7 @@ export class UnconnectedVisibilitySelect extends Component {
 
   setMode(mode) {
     const update = {};
-    const {showOn} = this.props;
+    const { showOn } = this.props;
     const resettable = this.props.resettable ?? this.context.resettable;
     if (resettable && !((Array.isArray(showOn) && showOn.includes(mode)) || mode === showOn)) {
       React.Children.map(this.props.children, (child) => {
@@ -47,7 +47,7 @@ export class UnconnectedVisibilitySelect extends Component {
   }
 
   render() {
-    const {dropdown, clearable, options, showOn, attr, label} = this.props;
+    const { dropdown, clearable, options, showOn, attr, label } = this.props;
 
     return (
       <>
@@ -61,7 +61,7 @@ export class UnconnectedVisibilitySelect extends Component {
             clearable={clearable}
           />
         ) : (
-          <Radio
+          <UnconnectedRadio
             attr={attr}
             label={label}
             options={options}
