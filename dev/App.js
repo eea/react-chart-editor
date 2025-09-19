@@ -286,7 +286,11 @@ class App extends Component {
           // makeDefaultTrace={() => ({type: 'scattergl', mode: 'markers'})}
           // fontOptions={[{label:'Arial', value: 'arial'}]}
           chartHelp={chartHelp}
-        // customConfig={customConfigTest}
+          customConfig={{
+            // visibility_rules: {
+            //   whitelist: [{ type: 'attrName', regex_match: 'autoscale' }, { type: 'attrName', regex_match: 'autoscale_breakpoint' }],
+            // },
+          }}
         >
           <DefaultEditor
           // menuPanelOrder={[
